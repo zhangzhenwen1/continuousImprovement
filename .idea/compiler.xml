@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="support-web" />
+        <module name="support-cloud-starter-stream-rocketmq" />
+        <module name="support-cloud-sentinel" />
+        <module name="support-dubbo" />
+        <module name="user-server" />
+        <module name="support-oss" />
+        <module name="support-jpa" />
+        <module name="support-cloud-zeus-discovery" />
+        <module name="support-alipay" />
+        <module name="commons" />
+        <module name="uid-generator" />
+        <module name="auth-center-common" />
+        <module name="support-vertx-core" />
+        <module name="support-openfeign" />
+        <module name="support-cloud-bus" />
+        <module name="support-mybatis" />
+        <module name="support-nacos-config" />
+        <module name="auth-center-security-starter" />
+        <module name="rocketmq" />
+        <module name="support-nacos-registry" />
+        <module name="support-cloud-stream-binder-rocketmq" />
+        <module name="support-protobuf" />
+        <module name="support-elastic-job" />
+        <module name="user-common" />
+        <module name="iacaa2_0-admin" />
+        <module name="support-vertx-web" />
+        <module name="auth-center-resource-starter" />
+        <module name="user-sdk" />
+        <module name="auth-center-server" />
+        <module name="support-redis" />
+        <module name="support-vertx-redis" />
+        <module name="gateway" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="ac" target="1.8" />
+      <module name="auth-center-common" target="1.8" />
+      <module name="auth-center-resource-starter" target="1.8" />
+      <module name="auth-center-security-starter" target="1.8" />
+      <module name="auth-center-server" target="1.8" />
+      <module name="base" target="1.8" />
+      <module name="cloud-base" target="1.8" />
+      <module name="commons" target="1.8" />
+      <module name="gateway" target="1.8" />
+      <module name="iacaa2_0" target="1.8" />
+      <module name="iacaa2_0-admin" target="1.8" />
+      <module name="rocketmq" target="1.8" />
+      <module name="support-alipay" target="1.8" />
+      <module name="support-cloud-bus" target="1.8" />
+      <module name="support-cloud-sentinel" target="1.8" />
+      <module name="support-cloud-starter-stream-rocketmq" target="1.8" />
+      <module name="support-cloud-stream-binder-rocketmq" target="1.8" />
+      <module name="support-cloud-zeus-discovery" target="1.8" />
+      <module name="support-dubbo" target="1.8" />
+      <module name="support-elastic-job" target="1.8" />
+      <module name="support-jpa" target="1.8" />
+      <module name="support-mybatis" target="1.8" />
+      <module name="support-nacos-config" target="1.8" />
+      <module name="support-nacos-registry" target="1.8" />
+      <module name="support-openfeign" target="1.8" />
+      <module name="support-oss" target="1.8" />
+      <module name="support-protobuf" target="1.8" />
+      <module name="support-redis" target="1.8" />
+      <module name="support-vertx-core" target="1.8" />
+      <module name="support-vertx-redis" target="1.8" />
+      <module name="support-vertx-web" target="1.8" />
+      <module name="support-web" target="1.8" />
+      <module name="uid-generator" target="1.8" />
+      <module name="user" target="1.8" />
+      <module name="user-common" target="1.8" />
+      <module name="user-sdk" target="1.8" />
+      <module name="user-server" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="auth-center-common" options="-parameters" />
+      <module name="auth-center-resource-starter" options="-parameters" />
+      <module name="auth-center-security-starter" options="-parameters" />
+      <module name="auth-center-server" options="-parameters" />
+      <module name="commons" options="-parameters" />
+      <module name="gateway" options="-parameters" />
+      <module name="iacaa2_0-admin" options="-parameters" />
+      <module name="rocketmq" options="-parameters" />
+      <module name="support-alipay" options="-parameters" />
+      <module name="support-cloud-bus" options="-parameters" />
+      <module name="support-cloud-sentinel" options="-parameters" />
+      <module name="support-cloud-starter-stream-rocketmq" options="-parameters" />
+      <module name="support-cloud-stream-binder-rocketmq" options="-parameters" />
+      <module name="support-cloud-zeus-discovery" options="-parameters" />
+      <module name="support-dubbo" options="-parameters" />
+      <module name="support-elastic-job" options="-parameters" />
+      <module name="support-jpa" options="-parameters" />
+      <module name="support-mybatis" options="-parameters" />
+      <module name="support-nacos-config" options="-parameters" />
+      <module name="support-nacos-registry" options="-parameters" />
+      <module name="support-openfeign" options="-parameters" />
+      <module name="support-oss" options="-parameters" />
+      <module name="support-protobuf" options="-parameters" />
+      <module name="support-redis" options="-parameters" />
+      <module name="support-vertx-core" options="-parameters" />
+      <module name="support-vertx-redis" options="-parameters" />
+      <module name="support-vertx-web" options="-parameters" />
+      <module name="support-web" options="-parameters" />
+      <module name="uid-generator" options="-parameters" />
+      <module name="user-common" options="-parameters" />
+      <module name="user-sdk" options="-parameters" />
+      <module name="user-server" options="-parameters" />
+    </option>
+  </component>
+</project>

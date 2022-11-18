@@ -1,0 +1,195 @@
+2022-11-13 21:07:07.587  INFO 30088 --- [main] com.pzhu.iacaa2_0.Iacaa20Application     : The following profiles are active: jdbc
+2022-11-13 21:07:08.236  WARN 30088 --- [main] o.m.s.mapper.ClassPathMapperScanner      : No MyBatis mapper was found in '[com.pzhu.iacaa2_0]' package. Please check your configuration.
+2022-11-13 21:07:08.279  WARN 30088 --- [main] o.m.s.mapper.ClassPathMapperScanner      : No MyBatis mapper was found in '[com.pzhu.iacaa2_0]' package. Please check your configuration.
+2022-11-13 21:07:08.501  INFO 30088 --- [main] o.s.cloud.context.scope.GenericScope     : BeanFactory id=f4196229-7d45-3570-9e10-3cc94f158de9
+2022-11-13 21:07:08.944  INFO 30088 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 9999 (http)
+2022-11-13 21:07:08.955  INFO 30088 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2022-11-13 21:07:08.955  INFO 30088 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.37]
+2022-11-13 21:07:09.107  INFO 30088 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2022-11-13 21:07:09.107  INFO 30088 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1498 ms
+2022-11-13 21:07:10.396  WARN 30088 --- [main] c.n.c.sources.URLConfigurationSource     : No URLs will be polled as dynamic configuration sources.
+2022-11-13 21:07:10.396  INFO 30088 --- [main] c.n.c.sources.URLConfigurationSource     : To enable URLs as dynamic configuration sources, define System property archaius.configurationSource.additionalUrls or make config.properties available on classpath.
+2022-11-13 21:07:10.400  WARN 30088 --- [main] c.n.c.sources.URLConfigurationSource     : No URLs will be polled as dynamic configuration sources.
+2022-11-13 21:07:10.400  INFO 30088 --- [main] c.n.c.sources.URLConfigurationSource     : To enable URLs as dynamic configuration sources, define System property archaius.configurationSource.additionalUrls or make config.properties available on classpath.
+2022-11-13 21:07:10.552  INFO 30088 --- [main] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
+2022-11-13 21:07:11.010  INFO 30088 --- [main] o.s.s.c.ThreadPoolTaskScheduler          : Initializing ExecutorService 'Nacos-Watch-Task-Scheduler'
+2022-11-13 21:07:11.038  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : enable remote register to Auth-Center-Server
+2022-11-13 21:07:11.041  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : cloudRestTemplate
+2022-11-13 21:07:11.068  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : auto setting AuthResourceServer's config
+2022-11-13 21:07:12.154  INFO 30088 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 9999 (http) with context path ''
+2022-11-13 21:07:12.675  INFO 30088 --- [main] c.a.c.n.registry.NacosServiceRegistry    : nacos registry, DEFAULT_GROUP Iacaa20Server 172.16.3.224:9999 register finished
+2022-11-13 21:07:12.973  INFO 30088 --- [main] com.pzhu.iacaa2_0.Iacaa20Application     : Started Iacaa20Application in 6.982 seconds (JVM running for 7.98)
+2022-11-13 21:07:12.975  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : AuthResourceServerAutoConfiguration listening event:org.springframework.boot.context.event.ApplicationReadyEvent[source=org.springframework.boot.SpringApplication@7a1a3468]
+2022-11-13 21:07:12.990  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : find need auth component:CheckLink, checkLinkController, com.pzhu.iacaa2_0.controller.CheckLinkController@7aaad0
+2022-11-13 21:07:12.991  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : find auth resource:@com.gapache.security.annotation.AuthResource(checkEnabled=true, scope=delete, name=删除单个考核环节)
+2022-11-13 21:07:12.992  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : find auth resource:@com.gapache.security.annotation.AuthResource(checkEnabled=true, scope=list, name=考核环节列表)
+2022-11-13 21:07:12.993  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : find auth resource:@com.gapache.security.annotation.AuthResource(checkEnabled=true, scope=pageList, name=考核环节分页列表)
+2022-11-13 21:07:12.993  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : find auth resource:@com.gapache.security.annotation.AuthResource(checkEnabled=true, scope=saveOrUpdate, name=更新或保存考核环节列表)
+2022-11-13 21:07:12.993  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : find auth resource:@com.gapache.security.annotation.AuthResource(checkEnabled=true, scope=listBySourseTask, name=单个课程目标的考核环节列表)
+2022-11-13 21:07:12.993  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : find need auth component:Course, courseController, com.pzhu.iacaa2_0.controller.CourseController@6097fca9
+2022-11-13 21:07:12.993  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : find auth resource:@com.gapache.security.annotation.AuthResource(checkEnabled=true, scope=update, name=更新课程ByID)
+2022-11-13 21:07:12.993  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : find auth resource:@com.gapache.security.annotation.AuthResource(checkEnabled=true, scope=voList, name=课程Vo列表)
+2022-11-13 21:07:12.993  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : find auth resource:@com.gapache.security.annotation.AuthResource(checkEnabled=true, scope=list, name=课程列表)
+2022-11-13 21:07:12.994  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : find auth resource:@com.gapache.security.annotation.AuthResource(checkEnabled=true, scope=save, name=保存单个课程)
+2022-11-13 21:07:12.994  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : find auth resource:@com.gapache.security.annotation.AuthResource(checkEnabled=true, scope=del, name=删除单个课程)
+2022-11-13 21:07:12.994  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : find auth resource:@com.gapache.security.annotation.AuthResource(checkEnabled=true, scope=voListAll, name=课程Vo列表所有)
+2022-11-13 21:07:12.994  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : find auth resource:@com.gapache.security.annotation.AuthResource(checkEnabled=true, scope=authList, name=权限课程列表)
+2022-11-13 21:07:12.994  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : find auth resource:@com.gapache.security.annotation.AuthResource(checkEnabled=true, scope=changeEditStatus, name=改变课程编辑状态)
+2022-11-13 21:07:12.994  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : find auth resource:@com.gapache.security.annotation.AuthResource(checkEnabled=true, scope=adminList, name=admin课程列表)
+2022-11-13 21:07:12.994  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : find need auth component:CourseTarget, courseTargetController, com.pzhu.iacaa2_0.controller.CourseTargetController@64518270
+2022-11-13 21:07:12.994  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : find auth resource:@com.gapache.security.annotation.AuthResource(checkEnabled=true, scope=list, name=课程-指标点列表)
+2022-11-13 21:07:12.994  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : find auth resource:@com.gapache.security.annotation.AuthResource(checkEnabled=true, scope=saveOrUpdate, name=保存或更新课程-指标点)
+2022-11-13 21:07:12.995  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : find auth resource:@com.gapache.security.annotation.AuthResource(checkEnabled=true, scope=voList, name=课程-指标点Vo列表)
+2022-11-13 21:07:12.995  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : find auth resource:@com.gapache.security.annotation.AuthResource(checkEnabled=true, scope=thisYearvoList, name=本年度课程-指标点Vo列表)
+2022-11-13 21:07:12.995  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : find auth resource:@com.gapache.security.annotation.AuthResource(checkEnabled=true, scope=deleteOne, name=删除单个课程-指标点)
+2022-11-13 21:07:12.995  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : find need auth component:CourseTaskCheckLink, courseTaskCheckLinkController, com.pzhu.iacaa2_0.controller.CourseTaskCheckLinkController@3b7c58e7
+2022-11-13 21:07:12.995  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : find auth resource:@com.gapache.security.annotation.AuthResource(checkEnabled=true, scope=delete, name=删除CourseTaskCheckLink)
+2022-11-13 21:07:12.996  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : find auth resource:@com.gapache.security.annotation.AuthResource(checkEnabled=true, scope=saveOrUpdate, name=保存或更新CourseTaskCheckLink列表)
+2022-11-13 21:07:12.996  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : find auth resource:@com.gapache.security.annotation.AuthResource(checkEnabled=true, scope=voList, name=CourseTaskCheckLinkVo列表)
+2022-11-13 21:07:12.996  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : find need auth component:CourseTask, courseTaskController, com.pzhu.iacaa2_0.controller.CourseTaskController@79627d27
+2022-11-13 21:07:12.996  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : find auth resource:@com.gapache.security.annotation.AuthResource(checkEnabled=true, scope=delete, name=删除单个课程目标)
+2022-11-13 21:07:12.996  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : find auth resource:@com.gapache.security.annotation.AuthResource(checkEnabled=true, scope=list, name=课程目标列表)
+2022-11-13 21:07:12.996  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : find auth resource:@com.gapache.security.annotation.AuthResource(checkEnabled=true, scope=saveOrUpdate, name=保存或更新课程目标列表)
+2022-11-13 21:07:12.996  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : find auth resource:@com.gapache.security.annotation.AuthResource(checkEnabled=true, scope=voList, name=课程目标Vo列表)
+2022-11-13 21:07:12.996  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : find auth resource:@com.gapache.security.annotation.AuthResource(checkEnabled=true, scope=getOne, name=获取单个课程目标)
+2022-11-13 21:07:12.997  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : find auth resource:@com.gapache.security.annotation.AuthResource(checkEnabled=true, scope=summaryCourseTaskByCourseId, name=同步课程目标成绩数据ById)
+2022-11-13 21:07:12.997  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : find auth resource:@com.gapache.security.annotation.AuthResource(checkEnabled=true, scope=summaryCourseTask, name=同步课程目标成绩数据)
+2022-11-13 21:07:12.997  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : find need auth component:GradRequirement, gradRequirementController, com.pzhu.iacaa2_0.controller.GradRequirementController@6371cf2f
+2022-11-13 21:07:12.997  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : find auth resource:@com.gapache.security.annotation.AuthResource(checkEnabled=true, scope=update, name=更新毕业要求)
+2022-11-13 21:07:12.997  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : find auth resource:@com.gapache.security.annotation.AuthResource(checkEnabled=true, scope=list, name=毕业要求列表)
+2022-11-13 21:07:12.997  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : find auth resource:@com.gapache.security.annotation.AuthResource(checkEnabled=true, scope=save, name=保存毕业要求)
+2022-11-13 21:07:12.997  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : find auth resource:@com.gapache.security.annotation.AuthResource(checkEnabled=true, scope=voListAll, name=毕业要求Vo全部列表)
+2022-11-13 21:07:12.997  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : find auth resource:@com.gapache.security.annotation.AuthResource(checkEnabled=true, scope=voList, name=毕业要求Vo列表)
+2022-11-13 21:07:12.998  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : find auth resource:@com.gapache.security.annotation.AuthResource(checkEnabled=true, scope=deleteOne, name=删除单个毕业要求)
+2022-11-13 21:07:12.998  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : find auth resource:@com.gapache.security.annotation.AuthResource(checkEnabled=true, scope=summaryAll, name=同步本年度成绩数据)
+2022-11-13 21:07:12.998  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : find auth resource:@com.gapache.security.annotation.AuthResource(checkEnabled=true, scope=getOne, name=获取单个毕业要求)
+2022-11-13 21:07:12.998  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : find auth resource:@com.gapache.security.annotation.AuthResource(checkEnabled=true, scope=exportTemplate, name=导出模板)
+2022-11-13 21:07:12.998  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : find auth resource:@com.gapache.security.annotation.AuthResource(checkEnabled=true, scope=deleteList, name=删除毕业要求列表)
+2022-11-13 21:07:12.998  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : find need auth component:Menue, menuController, com.pzhu.iacaa2_0.controller.MenuController@b5b9333
+2022-11-13 21:07:12.998  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : find auth resource:@com.gapache.security.annotation.AuthResource(checkEnabled=true, scope=CourseTask, name=课程目标管理)
+2022-11-13 21:07:12.998  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : find auth resource:@com.gapache.security.annotation.AuthResource(checkEnabled=true, scope=GradRequirement, name=毕业要求管理)
+2022-11-13 21:07:12.998  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : find auth resource:@com.gapache.security.annotation.AuthResource(checkEnabled=true, scope=Score, name=课程成绩管理)
+2022-11-13 21:07:12.998  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : find auth resource:@com.gapache.security.annotation.AuthResource(checkEnabled=true, scope=AdminCourse, name=课程管理)
+2022-11-13 21:07:12.999  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : find auth resource:@com.gapache.security.annotation.AuthResource(checkEnabled=true, scope=Target, name=指标点管理)
+2022-11-13 21:07:12.999  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : find auth resource:@com.gapache.security.annotation.AuthResource(checkEnabled=true, scope=yearData, name=年度数据分析)
+2022-11-13 21:07:12.999  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : find need auth component:StuScore, stuScoreController, com.pzhu.iacaa2_0.controller.StuScoreController@52b959df
+2022-11-13 21:07:12.999  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : find auth resource:@com.gapache.security.annotation.AuthResource(checkEnabled=true, scope=delete, name=删除学生成绩)
+2022-11-13 21:07:12.999  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : find auth resource:@com.gapache.security.annotation.AuthResource(checkEnabled=true, scope=list, name=学生成绩列表)
+2022-11-13 21:07:12.999  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : find auth resource:@com.gapache.security.annotation.AuthResource(checkEnabled=true, scope=saveOrUpdate, name=保存或更新学生成绩列表)
+2022-11-13 21:07:12.999  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : find auth resource:@com.gapache.security.annotation.AuthResource(checkEnabled=true, scope=exportTemplate, name=成绩导入模板)
+2022-11-13 21:07:12.999  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : find auth resource:@com.gapache.security.annotation.AuthResource(checkEnabled=true, scope=importScore, name=导入课程成绩)
+2022-11-13 21:07:12.999  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : find need auth component:Target, targetController, com.pzhu.iacaa2_0.controller.TargetController@38588dea
+2022-11-13 21:07:12.999  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : find auth resource:@com.gapache.security.annotation.AuthResource(checkEnabled=true, scope=update, name=更新单个指标点)
+2022-11-13 21:07:12.999  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : find auth resource:@com.gapache.security.annotation.AuthResource(checkEnabled=true, scope=pageList, name=指标点分页列表)
+2022-11-13 21:07:13.000  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : find auth resource:@com.gapache.security.annotation.AuthResource(checkEnabled=true, scope=save, name=保存单个指标点)
+2022-11-13 21:07:13.000  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : find auth resource:@com.gapache.security.annotation.AuthResource(checkEnabled=true, scope=del, name=删除多个指标点)
+2022-11-13 21:07:13.000  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : find auth resource:@com.gapache.security.annotation.AuthResource(checkEnabled=true, scope=list, name=指标点列表)
+2022-11-13 21:07:13.000  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : find auth resource:@com.gapache.security.annotation.AuthResource(checkEnabled=true, scope=deleteOne, name=删除单个指标点)
+2022-11-13 21:07:13.000  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : find auth resource:@com.gapache.security.annotation.AuthResource(checkEnabled=true, scope=summaryAll, name=同步指标点年度成绩数据)
+2022-11-13 21:07:13.000  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : find auth resource:@com.gapache.security.annotation.AuthResource(checkEnabled=true, scope=getOne, name=获取单个指标点)
+2022-11-13 21:07:13.001  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : $$------AuthResource------AuthResourceDTO(id=null, scope=CourseTask:delete, name=删除单个课程目标)
+2022-11-13 21:07:13.001  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : $$------AuthResource------AuthResourceDTO(id=null, scope=CourseTask:list, name=课程目标列表)
+2022-11-13 21:07:13.001  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : $$------AuthResource------AuthResourceDTO(id=null, scope=CourseTask:saveOrUpdate, name=保存或更新课程目标列表)
+2022-11-13 21:07:13.001  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : $$------AuthResource------AuthResourceDTO(id=null, scope=CourseTask:voList, name=课程目标Vo列表)
+2022-11-13 21:07:13.001  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : $$------AuthResource------AuthResourceDTO(id=null, scope=CourseTask:getOne, name=获取单个课程目标)
+2022-11-13 21:07:13.001  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : $$------AuthResource------AuthResourceDTO(id=null, scope=CourseTask:summaryCourseTaskByCourseId, name=同步课程目标成绩数据ById)
+2022-11-13 21:07:13.001  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : $$------AuthResource------AuthResourceDTO(id=null, scope=CourseTask:summaryCourseTask, name=同步课程目标成绩数据)
+2022-11-13 21:07:13.001  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : $$------AuthResource------AuthResourceDTO(id=null, scope=CheckLink:delete, name=删除单个考核环节)
+2022-11-13 21:07:13.001  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : $$------AuthResource------AuthResourceDTO(id=null, scope=CheckLink:list, name=考核环节列表)
+2022-11-13 21:07:13.001  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : $$------AuthResource------AuthResourceDTO(id=null, scope=CheckLink:pageList, name=考核环节分页列表)
+2022-11-13 21:07:13.002  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : $$------AuthResource------AuthResourceDTO(id=null, scope=CheckLink:saveOrUpdate, name=更新或保存考核环节列表)
+2022-11-13 21:07:13.002  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : $$------AuthResource------AuthResourceDTO(id=null, scope=CheckLink:listBySourseTask, name=单个课程目标的考核环节列表)
+2022-11-13 21:07:13.002  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : $$------AuthResource------AuthResourceDTO(id=null, scope=CourseTarget:list, name=课程-指标点列表)
+2022-11-13 21:07:13.002  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : $$------AuthResource------AuthResourceDTO(id=null, scope=CourseTarget:saveOrUpdate, name=保存或更新课程-指标点)
+2022-11-13 21:07:13.002  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : $$------AuthResource------AuthResourceDTO(id=null, scope=CourseTarget:voList, name=课程-指标点Vo列表)
+2022-11-13 21:07:13.002  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : $$------AuthResource------AuthResourceDTO(id=null, scope=CourseTarget:thisYearvoList, name=本年度课程-指标点Vo列表)
+2022-11-13 21:07:13.002  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : $$------AuthResource------AuthResourceDTO(id=null, scope=CourseTarget:deleteOne, name=删除单个课程-指标点)
+2022-11-13 21:07:13.002  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : $$------AuthResource------AuthResourceDTO(id=null, scope=GradRequirement:update, name=更新毕业要求)
+2022-11-13 21:07:13.002  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : $$------AuthResource------AuthResourceDTO(id=null, scope=GradRequirement:list, name=毕业要求列表)
+2022-11-13 21:07:13.002  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : $$------AuthResource------AuthResourceDTO(id=null, scope=GradRequirement:save, name=保存毕业要求)
+2022-11-13 21:07:13.002  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : $$------AuthResource------AuthResourceDTO(id=null, scope=GradRequirement:voListAll, name=毕业要求Vo全部列表)
+2022-11-13 21:07:13.002  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : $$------AuthResource------AuthResourceDTO(id=null, scope=GradRequirement:voList, name=毕业要求Vo列表)
+2022-11-13 21:07:13.002  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : $$------AuthResource------AuthResourceDTO(id=null, scope=GradRequirement:deleteOne, name=删除单个毕业要求)
+2022-11-13 21:07:13.002  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : $$------AuthResource------AuthResourceDTO(id=null, scope=GradRequirement:summaryAll, name=同步本年度成绩数据)
+2022-11-13 21:07:13.002  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : $$------AuthResource------AuthResourceDTO(id=null, scope=GradRequirement:getOne, name=获取单个毕业要求)
+2022-11-13 21:07:13.002  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : $$------AuthResource------AuthResourceDTO(id=null, scope=GradRequirement:exportTemplate, name=导出模板)
+2022-11-13 21:07:13.002  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : $$------AuthResource------AuthResourceDTO(id=null, scope=GradRequirement:deleteList, name=删除毕业要求列表)
+2022-11-13 21:07:13.002  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : $$------AuthResource------AuthResourceDTO(id=null, scope=Target:update, name=更新单个指标点)
+2022-11-13 21:07:13.002  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : $$------AuthResource------AuthResourceDTO(id=null, scope=Target:pageList, name=指标点分页列表)
+2022-11-13 21:07:13.002  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : $$------AuthResource------AuthResourceDTO(id=null, scope=Target:save, name=保存单个指标点)
+2022-11-13 21:07:13.002  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : $$------AuthResource------AuthResourceDTO(id=null, scope=Target:del, name=删除多个指标点)
+2022-11-13 21:07:13.002  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : $$------AuthResource------AuthResourceDTO(id=null, scope=Target:list, name=指标点列表)
+2022-11-13 21:07:13.002  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : $$------AuthResource------AuthResourceDTO(id=null, scope=Target:deleteOne, name=删除单个指标点)
+2022-11-13 21:07:13.002  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : $$------AuthResource------AuthResourceDTO(id=null, scope=Target:summaryAll, name=同步指标点年度成绩数据)
+2022-11-13 21:07:13.003  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : $$------AuthResource------AuthResourceDTO(id=null, scope=Target:getOne, name=获取单个指标点)
+2022-11-13 21:07:13.003  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : $$------AuthResource------AuthResourceDTO(id=null, scope=StuScore:delete, name=删除学生成绩)
+2022-11-13 21:07:13.003  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : $$------AuthResource------AuthResourceDTO(id=null, scope=StuScore:list, name=学生成绩列表)
+2022-11-13 21:07:13.003  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : $$------AuthResource------AuthResourceDTO(id=null, scope=StuScore:saveOrUpdate, name=保存或更新学生成绩列表)
+2022-11-13 21:07:13.003  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : $$------AuthResource------AuthResourceDTO(id=null, scope=StuScore:exportTemplate, name=成绩导入模板)
+2022-11-13 21:07:13.003  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : $$------AuthResource------AuthResourceDTO(id=null, scope=StuScore:importScore, name=导入课程成绩)
+2022-11-13 21:07:13.003  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : $$------AuthResource------AuthResourceDTO(id=null, scope=Course:update, name=更新课程ByID)
+2022-11-13 21:07:13.003  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : $$------AuthResource------AuthResourceDTO(id=null, scope=Course:voList, name=课程Vo列表)
+2022-11-13 21:07:13.003  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : $$------AuthResource------AuthResourceDTO(id=null, scope=Course:list, name=课程列表)
+2022-11-13 21:07:13.003  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : $$------AuthResource------AuthResourceDTO(id=null, scope=Course:save, name=保存单个课程)
+2022-11-13 21:07:13.003  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : $$------AuthResource------AuthResourceDTO(id=null, scope=Course:del, name=删除单个课程)
+2022-11-13 21:07:13.003  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : $$------AuthResource------AuthResourceDTO(id=null, scope=Course:voListAll, name=课程Vo列表所有)
+2022-11-13 21:07:13.003  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : $$------AuthResource------AuthResourceDTO(id=null, scope=Course:authList, name=权限课程列表)
+2022-11-13 21:07:13.003  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : $$------AuthResource------AuthResourceDTO(id=null, scope=Course:changeEditStatus, name=改变课程编辑状态)
+2022-11-13 21:07:13.003  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : $$------AuthResource------AuthResourceDTO(id=null, scope=Course:adminList, name=admin课程列表)
+2022-11-13 21:07:13.003  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : $$------AuthResource------AuthResourceDTO(id=null, scope=Menue:CourseTask, name=课程目标管理)
+2022-11-13 21:07:13.003  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : $$------AuthResource------AuthResourceDTO(id=null, scope=Menue:GradRequirement, name=毕业要求管理)
+2022-11-13 21:07:13.003  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : $$------AuthResource------AuthResourceDTO(id=null, scope=Menue:Score, name=课程成绩管理)
+2022-11-13 21:07:13.003  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : $$------AuthResource------AuthResourceDTO(id=null, scope=Menue:AdminCourse, name=课程管理)
+2022-11-13 21:07:13.003  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : $$------AuthResource------AuthResourceDTO(id=null, scope=Menue:Target, name=指标点管理)
+2022-11-13 21:07:13.003  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : $$------AuthResource------AuthResourceDTO(id=null, scope=Menue:yearData, name=年度数据分析)
+2022-11-13 21:07:13.003  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : $$------AuthResource------AuthResourceDTO(id=null, scope=CourseTaskCheckLink:delete, name=删除CourseTaskCheckLink)
+2022-11-13 21:07:13.003  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : $$------AuthResource------AuthResourceDTO(id=null, scope=CourseTaskCheckLink:saveOrUpdate, name=保存或更新CourseTaskCheckLink列表)
+2022-11-13 21:07:13.003  INFO 30088 --- [main] .s.c.AuthResourceServerAutoConfiguration : $$------AuthResource------AuthResourceDTO(id=null, scope=CourseTaskCheckLink:voList, name=CourseTaskCheckLinkVo列表)
+2022-11-13 21:07:13.550  INFO 30088 --- [main] c.netflix.config.ChainedDynamicProperty  : Flipping property: auth-center-server.ribbon.ActiveConnectionsLimit to use NEXT property: niws.loadbalancer.availabilityFilteringRule.activeConnectionsLimit = 2147483647
+2022-11-13 21:07:13.563  INFO 30088 --- [main] c.netflix.loadbalancer.BaseLoadBalancer  : Client: auth-center-server instantiated a LoadBalancer: DynamicServerListLoadBalancer:{NFLoadBalancer:name=auth-center-server,current list of Servers=[],Load balancer stats=Zone stats: {},Server stats: []}ServerList:null
+2022-11-13 21:07:13.568  INFO 30088 --- [main] c.n.l.DynamicServerListLoadBalancer      : Using serverListUpdater PollingServerListUpdater
+2022-11-13 21:07:13.612  INFO 30088 --- [main] c.n.l.DynamicServerListLoadBalancer      : DynamicServerListLoadBalancer for client auth-center-server initialized: DynamicServerListLoadBalancer:{NFLoadBalancer:name=auth-center-server,current list of Servers=[],Load balancer stats=Zone stats: {},Server stats: []}ServerList:com.alibaba.cloud.nacos.ribbon.NacosServerList@27ffd9f8
+2022-11-13 21:07:13.628  INFO 30088 --- [main] c.g.s.reporter.RemoteResourceReporter    : repeat 1 times reporting resource
+2022-11-13 21:07:13.645 ERROR 30088 --- [main] o.s.boot.SpringApplication               : Application run failed
+
+java.lang.IllegalStateException: No instances available for auth-center-server
+	at org.springframework.cloud.netflix.ribbon.RibbonLoadBalancerClient.execute(RibbonLoadBalancerClient.java:119) ~[spring-cloud-netflix-ribbon-2.2.2.RELEASE.jar:2.2.2.RELEASE]
+	at org.springframework.cloud.netflix.ribbon.RibbonLoadBalancerClient.execute(RibbonLoadBalancerClient.java:99) ~[spring-cloud-netflix-ribbon-2.2.2.RELEASE.jar:2.2.2.RELEASE]
+	at org.springframework.cloud.client.loadbalancer.LoadBalancerInterceptor.intercept(LoadBalancerInterceptor.java:58) ~[spring-cloud-commons-2.2.2.RELEASE.jar:2.2.2.RELEASE]
+	at org.springframework.http.client.InterceptingClientHttpRequest$InterceptingRequestExecution.execute(InterceptingClientHttpRequest.java:93) ~[spring-web-5.2.8.RELEASE.jar:5.2.8.RELEASE]
+	at org.springframework.http.client.InterceptingClientHttpRequest.executeInternal(InterceptingClientHttpRequest.java:77) ~[spring-web-5.2.8.RELEASE.jar:5.2.8.RELEASE]
+	at org.springframework.http.client.AbstractBufferingClientHttpRequest.executeInternal(AbstractBufferingClientHttpRequest.java:48) ~[spring-web-5.2.8.RELEASE.jar:5.2.8.RELEASE]
+	at org.springframework.http.client.AbstractClientHttpRequest.execute(AbstractClientHttpRequest.java:53) ~[spring-web-5.2.8.RELEASE.jar:5.2.8.RELEASE]
+	at org.springframework.web.client.RestTemplate.doExecute(RestTemplate.java:739) ~[spring-web-5.2.8.RELEASE.jar:5.2.8.RELEASE]
+	at org.springframework.web.client.RestTemplate.execute(RestTemplate.java:674) ~[spring-web-5.2.8.RELEASE.jar:5.2.8.RELEASE]
+	at org.springframework.web.client.RestTemplate.postForObject(RestTemplate.java:418) ~[spring-web-5.2.8.RELEASE.jar:5.2.8.RELEASE]
+	at com.gapache.security.reporter.RemoteResourceReporter.getResult(RemoteResourceReporter.java:52) ~[classes/:na]
+	at com.gapache.security.reporter.RemoteResourceReporter.reporting(RemoteResourceReporter.java:41) ~[classes/:na]
+	at com.gapache.security.config.AuthResourceServerAutoConfiguration.listening(AuthResourceServerAutoConfiguration.java:139) ~[classes/:na]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.8.0_341]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[na:1.8.0_341]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.8.0_341]
+	at java.lang.reflect.Method.invoke(Method.java:498) ~[na:1.8.0_341]
+	at org.springframework.context.event.ApplicationListenerMethodAdapter.doInvoke(ApplicationListenerMethodAdapter.java:305) ~[spring-context-5.2.8.RELEASE.jar:5.2.8.RELEASE]
+	at org.springframework.context.event.ApplicationListenerMethodAdapter.processEvent(ApplicationListenerMethodAdapter.java:190) ~[spring-context-5.2.8.RELEASE.jar:5.2.8.RELEASE]
+	at org.springframework.context.event.ApplicationListenerMethodAdapter.onApplicationEvent(ApplicationListenerMethodAdapter.java:153) ~[spring-context-5.2.8.RELEASE.jar:5.2.8.RELEASE]
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.doInvokeListener(SimpleApplicationEventMulticaster.java:172) ~[spring-context-5.2.8.RELEASE.jar:5.2.8.RELEASE]
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.invokeListener(SimpleApplicationEventMulticaster.java:165) ~[spring-context-5.2.8.RELEASE.jar:5.2.8.RELEASE]
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.multicastEvent(SimpleApplicationEventMulticaster.java:139) ~[spring-context-5.2.8.RELEASE.jar:5.2.8.RELEASE]
+	at org.springframework.context.support.AbstractApplicationContext.publishEvent(AbstractApplicationContext.java:404) ~[spring-context-5.2.8.RELEASE.jar:5.2.8.RELEASE]
+	at org.springframework.context.support.AbstractApplicationContext.publishEvent(AbstractApplicationContext.java:361) ~[spring-context-5.2.8.RELEASE.jar:5.2.8.RELEASE]
+	at org.springframework.boot.context.event.EventPublishingRunListener.running(EventPublishingRunListener.java:108) ~[spring-boot-2.3.3.RELEASE.jar:2.3.3.RELEASE]
+	at org.springframework.boot.SpringApplicationRunListeners.running(SpringApplicationRunListeners.java:77) ~[spring-boot-2.3.3.RELEASE.jar:2.3.3.RELEASE]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:330) [spring-boot-2.3.3.RELEASE.jar:2.3.3.RELEASE]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1237) [spring-boot-2.3.3.RELEASE.jar:2.3.3.RELEASE]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1226) [spring-boot-2.3.3.RELEASE.jar:2.3.3.RELEASE]
+	at com.pzhu.iacaa2_0.Iacaa20Application.main(Iacaa20Application.java:14) [classes/:na]
+
+2022-11-13 21:07:13.839  INFO 30088 --- [main] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+2022-11-13 21:07:13.840  INFO 30088 --- [main] c.g.s.f.AccessCardPersistenceFilter      : destroy accessCardPersistenceFilter
+2022-11-13 21:07:13.845  INFO 30088 --- [main] o.s.s.c.ThreadPoolTaskScheduler          : Shutting down ExecutorService 'Nacos-Watch-Task-Scheduler'
+2022-11-13 21:07:13.849  INFO 30088 --- [main] c.a.c.n.registry.NacosServiceRegistry    : De-registering from Nacos Server now...
+2022-11-13 21:07:13.950  INFO 30088 --- [main] c.a.c.n.registry.NacosServiceRegistry    : De-registration finished.
+2022-11-13 21:07:23.035  WARN 30088 --- [main] o.s.b.f.support.DisposableBeanAdapter    : Destroy method 'close' on bean with name 'nacosServiceRegistry' threw an exception: java.lang.NullPointerException
+2022-11-13 21:07:23.035  INFO 30088 --- [main] o.s.s.concurrent.ThreadPoolTaskExecutor  : Shutting down ExecutorService 'applicationTaskExecutor'
+2022-11-13 21:07:23.037  INFO 30088 --- [main] c.g.s.f.AccessCardPersistenceFilter      : destroy accessCardPersistenceFilter

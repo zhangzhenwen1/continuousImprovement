@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/IACAA.iml" filepath="$PROJECT_DIR$/.idea/IACAA.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ac/ac.iml" filepath="$PROJECT_DIR$/ac/ac.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ac/auth-center-common/auth-center-common.iml" filepath="$PROJECT_DIR$/ac/auth-center-common/auth-center-common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ac/auth-center-resource-starter/auth-center-resource-starter.iml" filepath="$PROJECT_DIR$/ac/auth-center-resource-starter/auth-center-resource-starter.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ac/auth-center-security-starter/auth-center-security-starter.iml" filepath="$PROJECT_DIR$/ac/auth-center-security-starter/auth-center-security-starter.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ac/auth-center-server/auth-center-server.iml" filepath="$PROJECT_DIR$/ac/auth-center-server/auth-center-server.iml" />
+      <module fileurl="file://$PROJECT_DIR$/base/base.iml" filepath="$PROJECT_DIR$/base/base.iml" />
+      <module fileurl="file://$PROJECT_DIR$/base/cloud-base/cloud-base.iml" filepath="$PROJECT_DIR$/base/cloud-base/cloud-base.iml" />
+      <module fileurl="file://$PROJECT_DIR$/base/commons/commons.iml" filepath="$PROJECT_DIR$/base/commons/commons.iml" />
+      <module fileurl="file://$PROJECT_DIR$/gateway/gateway.iml" filepath="$PROJECT_DIR$/gateway/gateway.iml" />
+      <module fileurl="file://$PROJECT_DIR$/iacaa-server/iacaa2_0.iml" filepath="$PROJECT_DIR$/iacaa-server/iacaa2_0.iml" />
+      <module fileurl="file://$PROJECT_DIR$/iacaa-server/iacaa2_0-admin/iacaa2_0-admin.iml" filepath="$PROJECT_DIR$/iacaa-server/iacaa2_0-admin/iacaa2_0-admin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/base/rocketmq/rocketmq.iml" filepath="$PROJECT_DIR$/base/rocketmq/rocketmq.iml" />
+      <module fileurl="file://$PROJECT_DIR$/base/support-alipay/support-alipay.iml" filepath="$PROJECT_DIR$/base/support-alipay/support-alipay.iml" />
+      <module fileurl="file://$PROJECT_DIR$/base/support-cloud-bus/support-cloud-bus.iml" filepath="$PROJECT_DIR$/base/support-cloud-bus/support-cloud-bus.iml" />
+      <module fileurl="file://$PROJECT_DIR$/base/support-cloud-sentinel/support-cloud-sentinel.iml" filepath="$PROJECT_DIR$/base/support-cloud-sentinel/support-cloud-sentinel.iml" />
+      <module fileurl="file://$PROJECT_DIR$/base/support-cloud-starter-stream-rocketmq/support-cloud-starter-stream-rocketmq.iml" filepath="$PROJECT_DIR$/base/support-cloud-starter-stream-rocketmq/support-cloud-starter-stream-rocketmq.iml" />
+      <module fileurl="file://$PROJECT_DIR$/base/support-cloud-stream-binder-rocketmq/support-cloud-stream-binder-rocketmq.iml" filepath="$PROJECT_DIR$/base/support-cloud-stream-binder-rocketmq/support-cloud-stream-binder-rocketmq.iml" />
+      <module fileurl="file://$PROJECT_DIR$/base/support-cloud-zeus-discovery/support-cloud-zeus-discovery.iml" filepath="$PROJECT_DIR$/base/support-cloud-zeus-discovery/support-cloud-zeus-discovery.iml" />
+      <module fileurl="file://$PROJECT_DIR$/base/support-dubbo/support-dubbo.iml" filepath="$PROJECT_DIR$/base/support-dubbo/support-dubbo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/base/support-elastic-job/support-elastic-job.iml" filepath="$PROJECT_DIR$/base/support-elastic-job/support-elastic-job.iml" />
+      <module fileurl="file://$PROJECT_DIR$/base/support-jpa/support-jpa.iml" filepath="$PROJECT_DIR$/base/support-jpa/support-jpa.iml" />
+      <module fileurl="file://$PROJECT_DIR$/base/support-mybatis/support-mybatis.iml" filepath="$PROJECT_DIR$/base/support-mybatis/support-mybatis.iml" />
+      <module fileurl="file://$PROJECT_DIR$/base/support-nacos-config/support-nacos-config.iml" filepath="$PROJECT_DIR$/base/support-nacos-config/support-nacos-config.iml" />
+      <module fileurl="file://$PROJECT_DIR$/base/support-nacos-registry/support-nacos-registry.iml" filepath="$PROJECT_DIR$/base/support-nacos-registry/support-nacos-registry.iml" />
+      <module fileurl="file://$PROJECT_DIR$/base/support-openfeign/support-openfeign.iml" filepath="$PROJECT_DIR$/base/support-openfeign/support-openfeign.iml" />
+      <module fileurl="file://$PROJECT_DIR$/base/support-oss/support-oss.iml" filepath="$PROJECT_DIR$/base/support-oss/support-oss.iml" />
+      <module fileurl="file://$PROJECT_DIR$/base/support-protobuf/support-protobuf.iml" filepath="$PROJECT_DIR$/base/support-protobuf/support-protobuf.iml" />
+      <module fileurl="file://$PROJECT_DIR$/base/support-redis/support-redis.iml" filepath="$PROJECT_DIR$/base/support-redis/support-redis.iml" />
+      <module fileurl="file://$PROJECT_DIR$/base/support-vertx-core/support-vertx-core.iml" filepath="$PROJECT_DIR$/base/support-vertx-core/support-vertx-core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/base/support-vertx-redis/support-vertx-redis.iml" filepath="$PROJECT_DIR$/base/support-vertx-redis/support-vertx-redis.iml" />
+      <module fileurl="file://$PROJECT_DIR$/base/support-vertx-web/support-vertx-web.iml" filepath="$PROJECT_DIR$/base/support-vertx-web/support-vertx-web.iml" />
+      <module fileurl="file://$PROJECT_DIR$/base/support-web/support-web.iml" filepath="$PROJECT_DIR$/base/support-web/support-web.iml" />
+      <module fileurl="file://$PROJECT_DIR$/base/uid-generator/uid-generator.iml" filepath="$PROJECT_DIR$/base/uid-generator/uid-generator.iml" />
+      <module fileurl="file://$PROJECT_DIR$/user/user.iml" filepath="$PROJECT_DIR$/user/user.iml" />
+      <module fileurl="file://$PROJECT_DIR$/user/user-common/user-common.iml" filepath="$PROJECT_DIR$/user/user-common/user-common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/user/user-sdk/user-sdk.iml" filepath="$PROJECT_DIR$/user/user-sdk/user-sdk.iml" />
+      <module fileurl="file://$PROJECT_DIR$/user/user-server/user-server.iml" filepath="$PROJECT_DIR$/user/user-server/user-server.iml" />
+    </modules>
+  </component>
+</project>
