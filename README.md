@@ -3,6 +3,10 @@
 
 ### sql脚本，路径为iacaa-server/iacaa2_0-admin/src/main/resources/iacaa-20210407.sql
 
+### node version 16.18.1
+### python version 2.7.14
+### Redis version 5.0.14 https://github.com/tporadowski/redis/releases
+
 ## 部署基本步骤如下：
 ## 1.使用以上SQL脚本创建数据库
 ## 2.安装Srping-Alibaba Nacos 安装方法参照Nacos官方网站 https://nacos.io/zh-cn/docs/what-is-nacos.html

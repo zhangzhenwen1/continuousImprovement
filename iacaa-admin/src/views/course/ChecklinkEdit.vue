@@ -9,17 +9,17 @@
       <el-table-column
         prop="id"
         label="课程编号"
-        width="100">
+        width="60">
       </el-table-column>
       <el-table-column
         prop="name"
         label="名称"
-        width="200">
+        width="100">
       </el-table-column>
       <el-table-column
         prop="image"
         label="简介"
-        width="600">
+        width="200">
       </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
@@ -32,7 +32,7 @@
       title="考核环节编辑"
       :close-on-click-modal="false"
       :visible.sync="dialogVisible"
-      width="45%"
+      width="50%"
       center>
       <div>
         <el-form :model="editingForm" status-icon ref="ruleForm" class="demo-ruleForm">
@@ -50,7 +50,7 @@
               <el-table-column
                 prop=""
                 label="考核环节"
-                width="480">
+                width="100">
               </el-table-column>
               <el-table-column
                 prop=""
@@ -58,14 +58,14 @@
               </el-table-column>
             </el-table>
             <span v-for="(item,index) in editingForm.checkLinks" type="text" autocomplete="off">
-              <el-select v-model="item.name" placeholder="课程目标" clearable filterable style="width: 60%;margin-top: 10px">
+              <el-select v-model="item.name" placeholder="课程目标" clearable filterable style="width: 40%;margin-top: 10px">
                 <el-option label="期末考试" value="期末考试" />
                 <el-option label="期中考试" value="期中考试" />
                 <el-option label="日常作业" value="日常作业" />
                 <el-option label="课堂表现" value="课堂表现" />
                 <el-option label="日常考勤" value="日常考勤" />
               </el-select>
-              <el-input type="text" autocomplete="off" v-model="item.targetScore" style="width: 35%;margin-top: 10px"></el-input>
+              <el-input type="text" autocomplete="off" v-model="item.targetScore" style="width: 25%;margin-top: 10px"></el-input>
               <el-button type="danger" icon="el-icon-delete" circle @click="handleDeleteChecklink(index)"></el-button>
             </span>
           </el-form-item>
@@ -132,7 +132,7 @@ export default {
       })
     },
     handleAddChecklink() {
-      this.editingForm.checkLinks.push({year: localStorage.getItem('editYear'), name: '', targetScore: 0, courseId: this.editingForm.editingCourse.id})
+      this.editingForm.checkLinks.push({year: this.$store.state.settings.editYear, name: '', targetScore: 0, courseId: this.editingForm.editingCourse.id})
     },
     handleDeleteChecklink(index) {
       var checkLink = this.editingForm.checkLinks[index]
@@ -165,7 +165,7 @@ export default {
     handleEditForm(course) {
       requestByClient(supplierConsumer, 'POST', 'checkLink/list', {
         courseId: course.id,
-        year: localStorage.getItem('editYear')
+        year: this.$store.state.settings.editYear//localStorage.getItem('editYear')
       }, res => {
         if (res.data.succ) {
           this.editingForm.editingCourse = course

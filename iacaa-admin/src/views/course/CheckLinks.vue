@@ -28,7 +28,7 @@
       <el-table-column
         prop="image"
         label="课程描述"
-        width="500"
+        width="200"
       />
       <el-table-column
         prop=""
@@ -56,17 +56,17 @@
         <el-table-column
           type="index"
           label="序号"
-          width="200"
+          width="40"
         />
         <el-table-column
           prop="year"
           label="年份"
-          width="200"
+          width="100"
         />
         <el-table-column
           prop="describes"
           label="课程目标描述"
-          width="500"
+          width="400"
         />
         <el-table-column
           prop=""
@@ -84,7 +84,7 @@
       title="关联课程目标"
       :visible.sync="dialogVisible"
       :close-on-click-modal="false"
-      width="30%"
+      width="50%"
       center>
       <div>
         <el-form ref="ruleForm" :model="ckeckLinkEditForm" status-icon class="demo-ruleForm">

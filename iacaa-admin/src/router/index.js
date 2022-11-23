@@ -71,6 +71,32 @@ export const asyncRoutes = [
       }]
   },
   {
+    path: '/Cultivation',
+    component: Layout,
+    redirect: '/Cultivation',
+    meta: { title: '培养方案', icon: 'chart', affix: true ,roles: ['adminExclusive', 'Iacaa20Server:Menue:yearData']},
+    children: [
+      {
+        path: 'Cultivation',
+        component: () => import('@/views/Cultivation/CultivationEdit'),
+        name: 'CultivationEdit',
+        meta: { title: '培养方案基本信息', icon: 'chart', affix: true, activeMenu: '/article/list' }
+      },
+      {
+        path: 'GradRequirementEdit',
+        component: () => import('@/views/Cultivation/GradRequirementEdit'),
+        name: 'GradRequirementEdit',
+        meta: { title: '毕业要求及指标点管理', icon: 'chart', affix: true }
+      },
+      {
+        path: 'Target',
+        component: () => import('@/views/Cultivation/Target'),
+        name: 'Target',
+        meta: { title: '指标点关联课程', icon: 'chart', affix: true }
+      }
+    ]
+  },
+  {
     path: '/ReqAnalysis',
     component: Layout,
     redirect: '/ReqAnalysis',
@@ -93,34 +119,6 @@ export const asyncRoutes = [
         component: () => import('@/views/analysis/CourseAnalysis'),
         name: 'CourseAnalysis',
         meta: { title: '课程目标', icon: 'chart', affix: true }
-      }
-    ]
-  },
-  {
-    path: '/GradRequirementEdit',
-    component: Layout,
-    redirect: '/GradRequirementEdit',
-    meta: { title: '毕业要求及指标点管理', icon: 'education', affix: true, roles: ['adminExclusive', 'Iacaa20Server:Menue:GradRequirement']},
-    children: [
-      {
-        path: 'GradRequirementEdit',
-        component: () => import('@/views/gradRequirement/GradRequirementEdit'),
-        name: 'GradRequirementEdit',
-        meta: { title: '毕业要求及指标点管理', icon: 'education', affix: true }
-      }
-    ]
-  },
-  {
-    path: '/Target',
-    component: Layout,
-    redirect: '/Target',
-    meta: { title: '指标点关联课程', icon: 'education', affix: true, roles: ['adminExclusive', 'Iacaa20Server:Menue:Target']},
-    children: [
-      {
-        path: 'Target',
-        component: () => import('@/views/target/Target'),
-        name: 'Target',
-        meta: { title: '指标点关联课程', icon: 'star', affix: true }
       }
     ]
   },

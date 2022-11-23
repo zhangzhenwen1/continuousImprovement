@@ -18,17 +18,17 @@
     >
       <el-table-column
         type="selection"
-        width="55"
+        width="45"
       />
       <el-table-column
         prop="year"
         label="年份"
-        width="100"
+        width="70"
       />
       <el-table-column
         prop="name"
         label="毕业要求"
-        width="400"
+        width="100"
       />
       <el-table-column prop="targets" type="expand" label="指标点" width="1000">
         <template slot-scope="scope">
@@ -41,12 +41,12 @@
             <el-table-column
               prop="createdDate"
               label="创建时间"
-              width="200"
+              width="100"
             />
             <el-table-column
               prop="updateDate"
               label="更新时间"
-              width="200"
+              width="100"
             />
             <el-table-column label="操作">
               <template slot-scope="scope1">
@@ -61,7 +61,7 @@
       title="指标点支撑编辑"
       :visible.sync="dialogVisible"
       :close-on-click-modal="false"
-      width="30%"
+      width="50%"
       center
     >
       <div>

@@ -37,27 +37,27 @@
       <el-table-column
         prop="year"
         label="年份"
-        width="80"
+        width="70"
       />
       <el-table-column
         prop="name"
         label="毕业要求"
-        width="200"
+        width="100"
       />
       <el-table-column
         prop="discrible"
         label="描述"
-        width="900"
+        width="400"
       />
       <el-table-column
         prop="stuGrade"
-        label="学生评价成绩"
-        width="120"
+        label="学生自评达成度"
+        width="80"
       />
       <el-table-column
         prop="sysGrade"
-        label="系统计算成绩"
-        width="120"
+        label="计算达成度"
+        width="80"
       />
       <el-table-column label="操作">
         <template slot-scope="scope">
@@ -69,7 +69,7 @@
       title="毕业要求编辑"
       :visible.sync="dialogVisible"
       :close-on-click-modal="false"
-      width="30%"
+      width="50%"
       center
     >
       <div>

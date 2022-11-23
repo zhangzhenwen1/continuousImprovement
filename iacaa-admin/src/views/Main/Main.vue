@@ -1,11 +1,10 @@
 <template>
-  <div style="background:-webkit-linear-gradient(#ffffff,#ffffff,#dcdcdc,#ffffff);">
-    <el-carousel :interval="2000" type="card" height="500px" style="padding: 40px;margin-top: 5%;margin-right: 2%;">
-      <el-carousel-item v-for="item in 6" :key="item">
+  <div style="background:gray;">
+
+
         <div class="medium1">welcome ...</div>
         <div class="medium">IACAA - 2.0</div>
-      </el-carousel-item>
-    </el-carousel>
+
   </div>
 </template>
 
@@ -20,14 +19,14 @@ export default {
 .medium1{
   font-size: 30px;
   color: white;
-  font-family: Abduction2000;
-  padding-top: 35%;
+  font-family: STFangsong;
+  padding-top: 5%;
   margin-left: 5%;
 }
 .medium{
   font-size: 80px;
   color: white;
-  font-family: Abduction2000;
+  font-family: STFangsong;
   margin-top: 5%;
   margin-left: 35%;
 }

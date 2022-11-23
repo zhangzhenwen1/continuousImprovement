@@ -25,12 +25,12 @@
       @selection-change="handleSelectionChange">
       <el-table-column
         type="selection"
-        width="55">
+        width="50">
       </el-table-column>
       <el-table-column
         prop="id"
         label="课程编号"
-        width="100">
+        width="50">
       </el-table-column>
       <el-table-column
         prop="name"
@@ -40,7 +40,7 @@
       <el-table-column
         prop="image"
         label="简介"
-        width="500">
+        width="200">
       </el-table-column>
       <el-table-column
         prop="editUserId"
@@ -77,7 +77,7 @@
       :title="addForm.title"
       :visible.sync="dialogVisible"
       :close-on-click-modal="false"
-      width="30%"
+      width="50%"
       center
     >
       <div>
