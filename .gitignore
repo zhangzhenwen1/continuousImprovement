@@ -87,4 +87,4 @@ typings/
 # DynamoDB Local files
 .dynamodb/
 
-system.log.2022-11-18.0.gz
+system.log.*
