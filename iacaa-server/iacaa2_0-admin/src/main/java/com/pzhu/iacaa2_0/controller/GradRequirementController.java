@@ -178,6 +178,16 @@ public class GradRequirementController{
         return b ? ActionResult.ofSuccess() : ActionResult.ofFail("删除失败");
     }
 
+    @RequestMapping("/delete")
+    @AuthResource(scope = "delete", name = "删除单个毕业要求")
+    public ActionResult delete(@RequestBody GradRequirement gradRequirement) {
+        QueryWrapper<GradRequirement> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("id", gradRequirement.getId());
+        queryWrapper.eq("cultivationId", gradRequirement.getCultivationId());
+        boolean b = gradRequirementService.remove(queryWrapper);
+        return b ? ActionResult.ofSuccess() : ActionResult.ofFail("删除失败");
+    }
+
     @RequestMapping("/exportTemplate")
     @AuthResource(scope = "exportTemplate", name = "导出模板")
     public void exportTemplate(HttpServletResponse response) throws IOException {

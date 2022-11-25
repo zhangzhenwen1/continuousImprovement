@@ -410,7 +410,10 @@ export default {
           type: 'warning'
         }).then(() => {
           let id = attributes.id
-          requestByClient(supplierConsumer, 'POST','gradRequirement/deleteOne', {id: id},res => {
+          requestByClient(supplierConsumer, 'POST','gradRequirement/delete', {
+            id: id,
+            cultivationId: this.addAttributes.cultivationId
+          },res => {
             if (res.data.succ) {
               this.$message({
                 message: '删除成功',
