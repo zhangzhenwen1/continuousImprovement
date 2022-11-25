@@ -6,7 +6,6 @@ import com.pzhu.iacaa2_0.base.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -19,29 +18,26 @@ import java.util.List;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-@TableName("t_cultivation")
-public class Cultivation extends BaseEntity {
+@TableName("t_grad_requirement")
+public class Attributes extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
-
     /**
-     * 培养方案编制年份
+     * 年份
      */
     @TableField("id")
     private Long id;
 
     /**
-     * 培养方案名称
+     * 毕业要求
      */
-    @TableField("cultivationName")
-    private String cultivationName;
+    @TableField("name")
+    private String name;
 
     /**
-     * 培养方案描述
+     * 描述
      */
-    @TableField("cultivationDescribe")
-    private String cultivationDescribe;
-
-
+    @TableField("discrible")
+    private String discrible;
 
 }

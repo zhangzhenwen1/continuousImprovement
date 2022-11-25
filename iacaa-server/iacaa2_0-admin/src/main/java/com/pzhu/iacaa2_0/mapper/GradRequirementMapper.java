@@ -20,4 +20,6 @@ public interface GradRequirementMapper extends BaseMapper<GradRequirement> {
     List<GradRequirementVo> voList(GradRequirementVo vo);
 
     Integer summaryByReqId(Long id);
+
+    Boolean insertBatch(List<GradRequirement> gradRequirementList);
 }

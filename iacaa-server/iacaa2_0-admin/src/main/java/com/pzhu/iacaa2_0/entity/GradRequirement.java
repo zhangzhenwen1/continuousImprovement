@@ -27,6 +27,14 @@ public class GradRequirement extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
 
+    @TableField("cultivationId")
+    private Integer cultivationId;
+    /**
+     * 年份
+     */
+    @TableField("id")
+    private Long id;
+
     /**
      * 毕业要求
      */
@@ -38,6 +46,11 @@ public class GradRequirement extends BaseEntity {
      */
     @TableField("discrible")
     private String discrible;
+
+    /**
+     * 年份
+     */
+
 
     /**
      * 年份
@@ -57,7 +70,16 @@ public class GradRequirement extends BaseEntity {
     @TableField("stu_grade")
     private Double stuGrade;
 
+    @TableField("created_date")
+    private LocalDateTime created_date;
+
+    /**
+     * 更新时间
+     */
+    @TableField("update_date")
+    private LocalDateTime update_date;
+/**
     @TableField(exist = false)
     private List<Target> targets;
-
+ */
 }

@@ -9,6 +9,7 @@ import com.pzhu.iacaa2_0.common.ActionResult;
 import com.pzhu.iacaa2_0.entity.*;
 import com.pzhu.iacaa2_0.entityVo.CheckLinkVo;
 import com.pzhu.iacaa2_0.entityVo.GradRequirementVo;
+import com.pzhu.iacaa2_0.entityVo.CultivationAttributesVo;
 import com.pzhu.iacaa2_0.entityVo.IdsVo;
 import com.pzhu.iacaa2_0.entityVo.TargetVo;
 import com.pzhu.iacaa2_0.mapper.StuScoreMapper;
@@ -76,8 +77,11 @@ public class GradRequirementController{
 
     @RequestMapping("/list")
     @AuthResource(scope = "list", name = "毕业要求列表")
-    public ActionResult list(@RequestBody GradRequirementVo vo) {
-        List<GradRequirement> list = gradRequirementService.list(vo);
+    public ActionResult list(@RequestBody GradRequirement gradRequirement) {
+        QueryWrapper<GradRequirement> wrapper = new QueryWrapper<>();
+        wrapper.eq("cultivationId", gradRequirement.getCultivationId());
+        List<GradRequirement> list = gradRequirementService.list(wrapper);
+
         return ActionResult.ofSuccess(list);
     }
 
@@ -136,6 +140,18 @@ public class GradRequirementController{
         UpdateWrapper<GradRequirement> updateWrapper = new UpdateWrapper<>();
         updateWrapper.eq("id", vo.getId());
         boolean update = gradRequirementService.update(vo, updateWrapper);
+        return update ? ActionResult.ofSuccess() : ActionResult.ofFail(200, "更新失败");
+    }
+
+    @RequestMapping("/update2")
+    @AuthResource(scope = "update2", name = "更新毕业要求")
+    public ActionResult insertBatch(@RequestBody List<GradRequirement> gradRequirementList) {
+        //List<GradRequirement> gradRequirementList = vo.getGradRequirementList();
+        //gradRequirementList.forEach(i->{
+        //    gradRequirementService.saveOrUpdate(i);
+        //        }
+        //);
+        boolean update = gradRequirementService.insertBatch(gradRequirementList);
         return update ? ActionResult.ofSuccess() : ActionResult.ofFail(200, "更新失败");
     }
 

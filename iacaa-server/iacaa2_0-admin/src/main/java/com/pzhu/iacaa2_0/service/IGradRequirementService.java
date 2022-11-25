@@ -30,4 +30,7 @@ public interface IGradRequirementService extends IService<GradRequirement> {
     Boolean summaryThisYearReqGrade(Integer year);
 
     Boolean removeList(List<Long> ids);
+
+    Boolean insertBatch(List<GradRequirement> gradRequirementList);
+
 }

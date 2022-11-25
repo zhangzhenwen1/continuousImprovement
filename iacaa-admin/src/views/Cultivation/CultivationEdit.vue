@@ -66,13 +66,20 @@
         <template slot-scope="scope">
           <el-button
             type="primary"
-            icon="el-icon-edit"
-            circle
             @click="handleEditForm(scope.row)"
-          />
+            >
+            方案名称
+          </el-button>
+          <el-button
+            type="primary"
+            @click="handleEditAttributes(scope.row)"
+          >
+            毕业要求
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
+
     <el-dialog
       title="编辑培养方案详情"
       :visible.sync="dialogVisible"
@@ -131,6 +138,7 @@
         >确 定</el-button>
       </div>
     </el-dialog>
+
     <el-dialog
       title="添加培养方案"
       :visible.sync="dialogVisible1"
@@ -188,6 +196,54 @@
         >确 定</el-button>
       </div>
     </el-dialog>
+
+    <el-dialog
+      title="添加毕业要求"
+      :visible.sync="dialogVisible2"
+      :close-on-click-modal="false"
+      width="70%"
+      center
+    >
+      <div>
+        {{addAttributes.cultivationId}}
+        <el-form
+          ref="ruleForm"
+          :model="addAttributes"
+          status-icon
+          class="demo-ruleForm"
+        >
+          <el-form-item
+            label="毕业要求"
+            prop="Attributes"
+          >
+            <el-button type="primary" round style="" @click="handleAddAttributes">添加</el-button>
+            <br>
+            <span :key="index" v-for="(item,index) in addAttributes.attributes" type="text" autocomplete="off">
+
+              <el-form-item label="毕业要求指标点" prop="name" >
+                <el-input v-model="item.id" type="text" autocomplete="off" style="width: 5%;margin-top: 10px" />
+                <el-input v-model="item.name" type="text" autocomplete="off" style="width: 100%;margin-top: 10px"/>
+              </el-form-item>
+              <el-form-item label="指标点描述" prop="describe">
+              <el-input v-model="item.discrible" type="text" autocomplete="off" style="width: 91%;margin-top: 10px" />
+                </el-form-item>
+              <el-button type="danger" icon="el-icon-delete" circle @click="deleteDescribe(index)" />
+            </span>
+          </el-form-item>
+        </el-form>
+      </div>
+      <div
+        slot="footer"
+        class="dialog-footer"
+      >
+        <el-button @click="dialogVisible2 = false">取 消</el-button>
+        <el-button
+          type="primary"
+          @click="submitEditAttributes()"
+        >确 定</el-button>
+      </div>
+    </el-dialog>
+
     <el-pagination
       :current-page="currentPage"
       :page-sizes="[10, 15, 20, 50, 100]"
@@ -213,6 +269,7 @@ export default {
     return {
       dialogVisible: false,
       dialogVisible1: false,
+      dialogVisible2: false,
       visible: false,
       tableData: [],
       pageSize: 20,
@@ -231,6 +288,10 @@ export default {
         cultivationName: '',
         cultivationDescribe: ''
       },
+      addAttributes: {
+        cultivationId: '',
+        attributes: []
+      },
       ids: []
     }
   },
@@ -248,6 +309,7 @@ export default {
     getList() {
       this.dialogVisible = false
       this.dialogVisible1 = false
+      this.dialogVisible2 = false
       this.loading = true
       requestByClient(supplierConsumer, 'POST', 'cultivation/list', {
         pageNum: this.currentPage,
@@ -305,6 +367,67 @@ export default {
         }
         this.loading = false
       })
+    },
+
+    submitEditAttributes() {
+      this.dialogVisible = false
+      this.loading = true
+      this.addAttributes.attributes.forEach((item)=>{
+        item.cultivationId=this.addAttributes.cultivationId
+      })
+// eslint-disable-next-line no-console
+      console.log(this.addAttributes.attributes)
+      requestByClient(supplierConsumer, 'POST', 'gradRequirement/update2', this.addAttributes.attributes,res => {
+        if (res.data.succ) {
+          this.$message({
+            message: '修改成功',
+            type: 'success'
+          })
+          this.getList()
+        }
+        this.loading = false
+      })
+    },
+    handleEditAttributes(record) {
+      this.dialogVisible2 = true
+      this.addAttributes.cultivationId = record.id
+        requestByClient(supplierConsumer, 'POST','gradRequirement/list', {
+          cultivationId: record.id
+          }
+          , res => {
+            if (res.data.succ) {
+              this.addAttributes.attributes = res.data.data
+            }
+            this.loading = false
+          })
+    },
+    deleteDescribe(index) {
+      let attributes = this.addAttributes.attributes[index]
+      if(attributes.id){
+        this.$confirm('此操作将删除其支撑数据, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          let id = attributes.id
+          requestByClient(supplierConsumer, 'POST','gradRequirement/deleteOne', {id: id},res => {
+            if (res.data.succ) {
+              this.$message({
+                message: '删除成功',
+                type: 'success'
+              })
+            }
+          })
+          this.addAttributes.attributes.splice(index, 1)
+        }).catch(() => {
+        });
+      }else {
+        this.addAttributes.attributes.splice(index, 1)
+      }
+    },
+
+    handleAddAttributes() {
+      this.addAttributes.attributes.push({ attribute: '',reqId: this.editForm.id })
     },
     handleEditForm(record) {
       this.dialogVisible = true

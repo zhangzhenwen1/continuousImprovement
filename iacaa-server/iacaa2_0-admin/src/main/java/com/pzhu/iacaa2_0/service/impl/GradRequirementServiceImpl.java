@@ -34,6 +34,9 @@ public class GradRequirementServiceImpl extends ServiceImpl<GradRequirementMappe
     ITargetService targetService;
 
     @Autowired
+    IGradRequirementService gradRequirementService;
+
+    @Autowired
     ICourseTargetService courseTargetService;
 
     @Override
@@ -71,4 +74,11 @@ public class GradRequirementServiceImpl extends ServiceImpl<GradRequirementMappe
         int b = baseMapper.deleteBatchIds(ids);
         return b > 0;
     }
+
+    @Override
+    @Transactional
+    public Boolean insertBatch(List<GradRequirement> gradRequirementList) {
+        return baseMapper.insertBatch(gradRequirementList);
+    }
+
 }

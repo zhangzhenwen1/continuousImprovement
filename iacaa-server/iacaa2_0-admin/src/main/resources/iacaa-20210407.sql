@@ -31,6 +31,24 @@ CREATE TABLE `t_cultivation`  (
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
+-- Table structure for t_grad_requirement
+-- ----------------------------
+DROP TABLE IF EXISTS `t_grad_requirement`;
+CREATE TABLE `t_grad_requirement`  (
+  `id` int(3) NOT NULL COMMENT '唯一标识',
+  `cultivationId` int(8) NOT NULL COMMENT '培养方案编制年份',
+  `name` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '毕业要求',
+  `discrible` varchar(1000) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '描述',
+  `year` int(4) NULL DEFAULT NULL COMMENT '年份',
+  `sys_grade` double(10, 3) NULL DEFAULT 0.000 COMMENT '系统计算成绩',
+  `stu_grade` double(10, 3) NULL DEFAULT 0.000 COMMENT '学生评价成绩',
+  `created_date` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
+  `update_date` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
+  PRIMARY KEY (`id`,`cultivationId`) USING BTREE,
+  CONSTRAINT `cultivationIdKey` FOREIGN KEY (`cultivationId`) REFERENCES `t_cultivation` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE = InnoDB AUTO_INCREMENT = 35 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
 -- Table structure for t_stu_score
 -- ----------------------------
 DROP TABLE IF EXISTS `t_stu_score`;
@@ -139,21 +157,7 @@ CREATE TABLE `t_course_task`  (
   CONSTRAINT `targetKey` FOREIGN KEY (`target_id`) REFERENCES `t_target` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = InnoDB AUTO_INCREMENT = 60 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
--- ----------------------------
--- Table structure for t_grad_requirement
--- ----------------------------
-DROP TABLE IF EXISTS `t_grad_requirement`;
-CREATE TABLE `t_grad_requirement`  (
-  `id` int(3) NOT NULL AUTO_INCREMENT COMMENT '唯一标识',
-  `name` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '毕业要求',
-  `discrible` varchar(1000) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '描述',
-  `year` int(4) NULL DEFAULT NULL COMMENT '年份',
-  `sys_grade` double(10, 3) NULL DEFAULT 0.000 COMMENT '系统计算成绩',
-  `stu_grade` double(10, 3) NULL DEFAULT 0.000 COMMENT '学生评价成绩',
-  `created_date` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  `update_date` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 35 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
 
 -- ----------------------------
 -- Table structure for t_stu_evaluation
