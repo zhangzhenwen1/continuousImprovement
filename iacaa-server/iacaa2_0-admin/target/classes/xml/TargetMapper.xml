@@ -5,24 +5,20 @@
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.pzhu.iacaa2_0.entity.Target">
         <result column="id" property="id"/>
-        <result column="discribe" property="discribe"/>
-        <result column="req_id" property="reqId"/>
-        <result column="year" property="year"/>
-        <result column="sys_grade" property="sysGrade"/>
-        <result column="stu_grade" property="stuGrade"/>
-        <result column="created_date" property="createdDate"/>
-        <result column="update_date" property="updateDate"/>
+        <result column="attributeId" property="attributeId"/>
+        <result column="cultivationId" property="cultivationId"/>
+        <result column="subAttributeDescribe" property="subAttributeDescribe"/>
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, discribe, req_id, year, sys_grade, stu_grade, created_date, update_date
+        id, attributeId, cultivationId, subAttributeDescribe
     </sql>
 
-    <select id="getByReqId" parameterType="java.lang.Long" resultMap="BaseResultMap">
-        select *
+    <select id="getByReqId" parameterType="com.pzhu.iacaa2_0.entityVo.TargetVo" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"/>
         from t_target
-        where req_id = #{id}
+        where attributeId = #{attributeId} and cultivationId = #{cultivationId}
     </select>
 
     <select id="list" parameterType="com.pzhu.iacaa2_0.entityVo.TargetVo" resultMap="BaseResultMap">
@@ -32,21 +28,31 @@
         <where>
             <trim prefixOverrides="AND">
                 <if test="word != null and word !=''">
-                    AND discribe like CONCAT(CONCAT('%',#{word}),'%')
+                    AND subAttributeDescribe like CONCAT(CONCAT('%',#{word}),'%')
                 </if>
                 <if test="id != null and id !=''">
                     AND id = #{id}
                 </if>
-                <if test="reqId != null and reqId !=''">
-                    AND req_id = #{reqId}
+                <if test="attributeId != null and attributeId !=''">
+                    AND attributeId = #{attributeId}
                 </if>
-                <if test="year != null">
-                    AND year = #{year}
+                <if test="cultivationId != null">
+                    AND cultivationId = #{cultivationId}
                 </if>
             </trim>
         </where>
     </select>
 
+    <insert id="insertBatch" parameterType="com.pzhu.iacaa2_0.entity.Target">
+        INSERT INTO t_target
+        values
+        <foreach collection="list" item="item" separator=",">
+            (#{item.id}, #{item.attributeId}, #{item.cultivationId}, #{item.subAttributeDescribe})
+        </foreach>
+        ON DUPLICATE KEY UPDATE
+        subAttributeDescribe=values(subAttributeDescribe)
+    </insert>
+    <!--
     <update id="summaryByTargetId" parameterType="java.lang.Long">
         UPDATE t_target
         set sys_grade = (
@@ -77,8 +83,8 @@
                      ) ctt1)
         WHERE id in (select distinct(target_id) from t_course_task) and id = #{id}
     </update>
-
+    -->
     <delete id="removeByReqId" parameterType="java.lang.Long">
-        delete from t_target where req_id = #{id}
+        delete from t_target where attributeId = #{id}
     </delete>
 </mapper>

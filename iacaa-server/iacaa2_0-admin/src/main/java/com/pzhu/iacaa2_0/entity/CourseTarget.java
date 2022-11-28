@@ -29,19 +29,23 @@ public class CourseTarget extends BaseEntity {
      */
     @TableField("course_id")
     private Long courseId;
-
-
     /**
-     * 关联指标点
+     * 关联毕业要求
      */
-    @TableField("target_id")
-    private Long targetId;
+    @TableField("attributeId")
+    private Long attributeId;
+
+    @TableField("subAttributeId")
+    private Long subAttributeId;
+
+    @TableField("cultivationId")
+    private Integer cultivationId;
 
     /**
      * 关联比例
      */
-    @TableField("mix")
-    private Double mix;
+    @TableField("supportRatio")
+    private Double supportRatio;
 
 
 

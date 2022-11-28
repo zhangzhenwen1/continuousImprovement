@@ -7,22 +7,18 @@
         <result column="cultivationName" property="cultivationName" />
         <result column="cultivationDescribe" property="cultivationDescribe" />
         <result column="id" property="id" />
-        <result column="created_date" property="createdDate" />
-        <result column="update_date" property="updateDate" />
     </resultMap>
 
     <resultMap id="voMap"  type="com.pzhu.iacaa2_0.entityVo.CultivationVo">
         <result column="cultivationName" property="cultivationName" />
         <result column="cultivationDescribe" property="cultivationDescribe" />
         <result column="id" property="id" />
-        <result column="created_date" property="createdDate" />
-        <result column="update_date" property="updateDate" />
         <association property="targets" column="id" select="com.pzhu.iacaa2_0.mapper.TargetMapper.getByReqId"></association>
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, cultivationName, cultivationDescribe, created_date, update_date
+        id, cultivationName, cultivationDescribe
     </sql>
 
     <select id="voList" resultMap="BaseResultMap" parameterType="com.pzhu.iacaa2_0.entityVo.CultivationVo">

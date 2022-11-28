@@ -1,6 +1,7 @@
 package com.pzhu.iacaa2_0.service;
 
 import com.pzhu.iacaa2_0.common.ActionResult;
+import com.pzhu.iacaa2_0.entity.CourseTarget;
 import com.pzhu.iacaa2_0.entity.CourseTask;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.pzhu.iacaa2_0.entityVo.CourseTaskVo;
@@ -26,4 +27,5 @@ public interface ICourseTaskService extends IService<CourseTask> {
     List<CourseTaskVo> randomlist(CourseTask courseTask, int randomSize);
 
     Boolean summaryCourseTaskById(CourseTask courseTask);
+
 }

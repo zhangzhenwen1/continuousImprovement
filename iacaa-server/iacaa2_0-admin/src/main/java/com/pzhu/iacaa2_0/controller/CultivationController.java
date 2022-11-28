@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -49,7 +48,6 @@ public class CultivationController {
     @RequestMapping("/update")
     @AuthResource(scope = "update", name = "更新培养方案列表byVersion")
     public ActionResult update(@RequestBody Cultivation cultivation){
-        cultivation.setUpdateDate(LocalDateTime.now());
         UpdateWrapper<Cultivation> updateWrapper = new UpdateWrapper<>();
         updateWrapper.eq("id", cultivation.getId());
         boolean update = cultivationService.update(cultivation,updateWrapper);
@@ -58,8 +56,6 @@ public class CultivationController {
     @RequestMapping("/save")
     @AuthResource(scope = "save", name = "保存单个培养方案")
     public ActionResult save(@RequestBody Cultivation cultivation){
-        cultivation.setCreatedDate(LocalDateTime.now());
-        cultivation.setUpdateDate(LocalDateTime.now());
         boolean update = cultivationService.save(cultivation);
         return update ? ActionResult.ofSuccess() : ActionResult.ofFail(200, "保存失败");
     }

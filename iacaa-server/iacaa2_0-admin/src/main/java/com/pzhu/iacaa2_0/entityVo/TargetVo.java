@@ -8,6 +8,8 @@ import lombok.Data;
  */
 @Data
 public class TargetVo extends Target {
-    private String reqName;
+    private String attributeName;
     private String word;
+    private Long attributeId;
+    private Integer cultivationId;
 }

@@ -49,6 +49,7 @@ public class GradRequirementServiceImpl extends ServiceImpl<GradRequirementMappe
         return baseMapper.voList(vo);
     }
 
+    /*
     @Override
     @Transactional
     public Boolean summaryThisYearReqGrade(Integer year) {
@@ -64,7 +65,7 @@ public class GradRequirementServiceImpl extends ServiceImpl<GradRequirementMappe
         });
         return true;
     }
-
+    */
     @Transactional(rollbackFor = Exception.class)
     @Override
     public Boolean removeList(List<Long> ids) {

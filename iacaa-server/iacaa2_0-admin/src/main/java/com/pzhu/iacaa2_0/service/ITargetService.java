@@ -17,10 +17,11 @@ import java.util.List;
  * @since 2021-01-15
  */
 public interface ITargetService extends IService<Target> {
-    Boolean summaryThisYearTargetsGrade(Integer year);
+    //Boolean summaryThisYearTargetsGrade(Integer year);
 
     List<Target> list(TargetVo vo);
 
     Boolean removeByReqId(Long id);
 
+    Boolean insertBatch(List<Target> targetList);
 }

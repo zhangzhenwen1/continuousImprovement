@@ -4,45 +4,89 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.pzhu.iacaa2_0.entity.CourseTarget">
-        <result column="id" property="id" />
-        <result column="course_id" property="courseId" />
-        <result column="target_id" property="targetId" />
-        <result column="mix" property="mix" />
-        <result column="created_date" property="createdDate" />
-        <result column="update_date" property="updateDate" />
+        <result column="cultivationId" property="cultivationId" />
+        <result column="attributeId" property="attributeId" />
+        <result column="subAttributeId" property="subAttributeId" />
+        <result column="courseId" property="courseId" />
+        <result column="supportRatio" property="supportRatio" />
+    </resultMap>
+
+    <resultMap id="voResultMap" type="com.pzhu.iacaa2_0.entityVo.CourseTargetVo">
+        <result column="cultivationId" property="cultivationId" />
+        <result column="attributeId" property="attributeId" />
+        <result column="subAttributeId" property="subAttributeId" />
+        <result column="courseId" property="courseId" />
+        <result column="supportRatio" property="supportRatio" />
+        <association property="course" column="{id = courseId}" select="com.pzhu.iacaa2_0.mapper.CourseMapper.list" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, course_id, target_id, mix
+        cultivationId, attributeId, subAttributeId, courseId, supportRatio
     </sql>
 
-    <resultMap type="com.pzhu.iacaa2_0.entityVo.CourseTargetVo" id="voMap">
-        <association property="target" column="target_id" select="com.pzhu.iacaa2_0.mapper.TargetMapper.selectById"></association>
-        <association property="course" column="course_id" select="com.pzhu.iacaa2_0.mapper.CourseMapper.selectById"></association>
-    </resultMap>
-
-
-    <select id="volist" resultMap="voMap" parameterType="com.pzhu.iacaa2_0.entity.CourseTarget">
-        select <include refid="Base_Column_List"></include> from t_course_target
+    <select id="voList" resultMap="voResultMap" parameterType="com.pzhu.iacaa2_0.entity.CourseTarget">
+        select <include refid="Base_Column_List" /> from t_course_target
         <where>
             <trim prefixOverrides="AND">
-                <if test="id != null and id !=''">
-                    AND id = #{id}
+                <if test="cultivationId != null and cultivationId !=''">
+                    AND cultivationId = #{cultivationId}
+                </if>
+                <if test="attributeId != null and attributeId !=''">
+                    AND attributeId = #{attributeId}
+                </if>
+                <if test="subAttributeId != null and subAttributeId !=''">
+                    AND subAttributeId = #{subAttributeId}
                 </if>
                 <if test="courseId != null and courseId !=''">
-                    AND course_id = #{courseId}
-                </if>
-                <if test="targetId != null and targetId !=''">
-                    AND target_id = #{targetId}
+                    AND courseId = #{courseId}
                 </if>
             </trim>
         </where>
-        order by course_id asc
+        order by courseId asc
     </select>
 
-    <delete id="removeByTargetId" parameterType="java.lang.Long">
-        delete from t_course_target where target_id = #{id}
+    <select id="list" resultMap="BaseResultMap" parameterType="com.pzhu.iacaa2_0.entity.CourseTarget">
+        select <include refid="Base_Column_List" />
+        from t_course_target
+        <where>
+            <trim prefixOverrides="AND">
+                <if test="cultivationId != null and cultivationId !=''">
+                    AND cultivationId = #{cultivationId}
+                </if>
+                <if test="attributeId != null and attributeId !=''">
+                    AND attributeId = #{attributeId}
+                </if>
+                <if test="subAttributeId != null and subAttributeId !=''">
+                    AND subAttributeId = #{subAttributeId}
+                </if>
+                <if test="courseId != null and courseId !=''">
+                    AND courseId = #{courseId}
+                </if>
+            </trim>
+        </where>
+    </select>
+
+    <delete id="remove" parameterType="com.pzhu.iacaa2_0.entity.CourseTarget">
+        delete from t_course_target
+        where cultivationId = #{cultivationId}
+          AND attributeId = #{attributeId}
+          AND subAttributeId = #{subAttributeId}
+          AND courseId = #{courseId}
     </delete>
+
+    <delete id="removeByTargetId" parameterType="java.lang.Long">
+        delete from t_course_target where subAttributeId = #{subAttributeId}
+    </delete>
+
+    <insert id="insertBatch" parameterType="com.pzhu.iacaa2_0.entity.CourseTarget">
+        INSERT INTO t_course_target
+        values
+        <foreach collection="list" item="item" separator=",">
+            (#{item.cultivationId}, #{item.attributeId}, #{item.subAttributeId}, #{item.courseId}, #{item.supportRatio})
+        </foreach>
+        ON DUPLICATE KEY UPDATE
+        supportRatio=values(supportRatio)
+    </insert>
 
 </mapper>

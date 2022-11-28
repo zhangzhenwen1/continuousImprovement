@@ -17,9 +17,11 @@ import java.util.List;
 public interface TargetMapper extends BaseMapper<Target> {
     List<Target> getByReqId(Long id);
 
-    Integer summaryByTargetId(Long id);
+    //Integer summaryByTargetId(Long id);
 
     List<Target> list(TargetVo vo);
 
     Integer removeByReqId(Long id);
+
+    Boolean insertBatch(List<Target> targetList);
 }

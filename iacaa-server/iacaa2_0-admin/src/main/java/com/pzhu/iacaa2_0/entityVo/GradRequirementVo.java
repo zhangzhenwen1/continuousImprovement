@@ -15,4 +15,5 @@ public class GradRequirementVo extends GradRequirement {
     private String word;
     private List<Target> targets;
     private List<GradRequirement> gradRequirements;
+    private GradRequirement gradRequirement;
 }

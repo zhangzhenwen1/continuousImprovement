@@ -2,6 +2,7 @@ package com.pzhu.iacaa2_0.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.pzhu.iacaa2_0.entity.CourseTarget;
+import com.pzhu.iacaa2_0.entity.GradRequirement;
 import com.pzhu.iacaa2_0.entity.Target;
 import com.pzhu.iacaa2_0.entityVo.TargetVo;
 import com.pzhu.iacaa2_0.mapper.TargetMapper;
@@ -31,7 +32,7 @@ public class TargetServiceImpl extends ServiceImpl<TargetMapper, Target> impleme
 
     @Autowired
     ICourseTargetService courseTargetService;
-
+    /*
     @Transactional(rollbackFor = Exception.class)
     @Override
     public Boolean summaryThisYearTargetsGrade(Integer year) {
@@ -49,7 +50,7 @@ public class TargetServiceImpl extends ServiceImpl<TargetMapper, Target> impleme
 
         return true;
     }
-
+    */
     @Override
     public List<Target> list(TargetVo vo) {
         return baseMapper.list(vo);
@@ -65,6 +66,12 @@ public class TargetServiceImpl extends ServiceImpl<TargetMapper, Target> impleme
         });
 
         return b[0] && baseMapper.removeByReqId(id) >=0;
+    }
+
+    @Override
+    @Transactional
+    public Boolean insertBatch(List<Target> targetList) {
+        return baseMapper.insertBatch(targetList);
     }
 
 }

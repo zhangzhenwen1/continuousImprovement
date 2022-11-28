@@ -24,40 +24,36 @@ import lombok.EqualsAndHashCode;
 public class Target extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
-
     /**
      * 描述
      */
-    @TableField("discribe")
-    private String discribe;
+    @TableField("id")
+    private Long id;
+    /**
+     * 描述
+     */
+    @TableField("subAttributeDescribe")
+    private String subAttributeDescribe;
 
     /**
      * 关联毕业要求
      */
-    @TableField("req_id")
-    private Integer reqId;
+    @TableField("attributeId")
+    private Long attributeId;
 
-    @TableField(exist = false)
-    private GradRequirement gradRequirement;
+    //@TableField(exist = false)
+    //private GradRequirement gradRequirement;
 
     /**
      * 年份
      */
-    @TableField("year")
-    private Integer year;
+    @TableField("cultivationId")
+    private Integer cultivationId;
 
-    /**
-     * 系统计算成绩
-     */
-    @TableField("sys_grade")
-    private Double sysGrade;
+    //@TableField("created_date")
+    //private LocalDateTime created_date;
 
-    /**
-     * 学生评价成绩
-     */
-    @TableField("stu_grade")
-    private Double stuGrade;
-
-
+    //@TableField("update_date")
+    //private LocalDateTime update_date;
 
 }

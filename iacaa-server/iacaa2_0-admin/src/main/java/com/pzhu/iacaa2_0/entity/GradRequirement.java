@@ -44,8 +44,8 @@ public class GradRequirement extends BaseEntity {
     /**
      * 描述
      */
-    @TableField("discrible")
-    private String discrible;
+    @TableField("attributeDescribe")
+    private String attributeDescribe;
 
     /**
      * 年份
@@ -55,29 +55,29 @@ public class GradRequirement extends BaseEntity {
     /**
      * 年份
      */
-    @TableField("year")
-    private Integer year;
+    //@TableField("year")
+    //private Integer year;
 
     /**
      * 系统计算成绩
      */
-    @TableField("sys_grade")
-    private Double sysGrade;
+    //@TableField("sys_grade")
+    //private Double sysGrade;
 
     /**
      * 学生评价成绩
      */
-    @TableField("stu_grade")
-    private Double stuGrade;
+    //@TableField("stu_grade")
+    //private Double stuGrade;
 
-    @TableField("created_date")
-    private LocalDateTime created_date;
+    //@TableField("created_date")
+    //private LocalDateTime created_date;
 
     /**
      * 更新时间
      */
-    @TableField("update_date")
-    private LocalDateTime update_date;
+    //@TableField("update_date")
+    //private LocalDateTime update_date;
 /**
     @TableField(exist = false)
     private List<Target> targets;

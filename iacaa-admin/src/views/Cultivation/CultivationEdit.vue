@@ -74,7 +74,7 @@
             type="primary"
             @click="handleEditAttributes(scope.row)"
           >
-            毕业要求
+            编辑毕业要求
           </el-button>
         </template>
       </el-table-column>
@@ -225,7 +225,7 @@
                 <el-input v-model="item.name" type="text" autocomplete="off" style="width: 100%;margin-top: 10px"/>
               </el-form-item>
               <el-form-item label="指标点描述" prop="describe">
-              <el-input v-model="item.discrible" type="text" autocomplete="off" style="width: 91%;margin-top: 10px" />
+              <el-input v-model="item.attributeDescribe" type="text" autocomplete="off" style="width: 91%;margin-top: 10px" />
                 </el-form-item>
               <el-button type="danger" icon="el-icon-delete" circle @click="deleteDescribe(index)" />
             </span>

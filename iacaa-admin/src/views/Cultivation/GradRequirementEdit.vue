@@ -1,24 +1,43 @@
 <template>
   <span>
-    <el-form :inline="true" :model="serchForm" class="demo-form-inline" style="height: 40px;padding: 10px">
+    <el-form
+      :inline="true"
+      :model="searchForm"
+      class="demo-form-inline"
+      style="height: 40px;padding: 10px"
+    >
+      <!--搜索组件-->
       <el-form-item label="">
-        <el-input v-model="serchForm.word" placeholder="标题/描述" clearable />
+        <el-input
+          v-model="searchForm.word"
+          placeholder="标题/描述"
+          clearable
+        />
       </el-form-item>
-      <el-form-item>
-        <el-button type="primary" @click="getList()">查询</el-button>
+      <el-form-item label="">
+        <el-button
+          type="primary"
+          @click="getList()"
+        >查询/全部显示</el-button>
       </el-form-item>
-      <span style="float: right;margin-right: 30px">
+      <!--下拉组件-->
+      <span style="float: right;margin-right: 400px">
         <el-form-item>
-<!--          <el-button type="success" @click="exportTemplate">下载导入模板</el-button>-->
-        </el-form-item>
-<!--        <el-form-item>-->
-<!--          <el-button type="success" @click="">导入年度配置</el-button>-->
-<!--        </el-form-item>-->
-        <el-form-item>
-          <el-button type="warning" @click="handleAddForm()">新增</el-button>
+          选择培养方案版本
         </el-form-item>
         <el-form-item>
-          <el-button type="danger" @click="handleDelete()">删除</el-button>
+          <el-select
+            v-model="selectValue"
+            placeholder="选择培养方案版本"
+            @change="getCultivationIdList(selectValue)"
+          >
+            <el-option
+              v-for="item in options"
+              :key="item.id"
+              :label="item.cultivationName"
+              :value="item.id"
+            />
+          </el-select>
         </el-form-item>
       </span>
     </el-form>
@@ -28,93 +47,130 @@
       style="width: 98%; margin: 30px"
       height="750"
       tooltip-effect="dark"
-      @selection-change="handleSelectionChange"
     >
+      <!--表头-->
       <el-table-column
-        type="selection"
-        width="55"
-      />
-      <el-table-column
-        prop="year"
-        label="年份"
-        width="70"
+        prop="cultivationId"
+        label="培养方案版本"
+        width="150"
       />
       <el-table-column
         prop="name"
         label="毕业要求"
-        width="100"
+        width="200"
       />
       <el-table-column
         prop="discrible"
         label="描述"
-        width="400"
+        width="600"
       />
-      <el-table-column
-        prop="stuGrade"
-        label="学生自评达成度"
-        width="80"
-      />
-      <el-table-column
-        prop="sysGrade"
-        label="计算达成度"
-        width="80"
-      />
+      <!--/表头-->
       <el-table-column label="操作">
         <template slot-scope="scope">
-          <el-button type="primary" icon="el-icon-edit" circle @click="handleEditForm(scope.row)" />
+          <el-button
+            type="primary"
+            icon="el-icon-edit"
+            @click="handleEditForm(scope.row)"
+          >分指标点</el-button>
         </template>
       </el-table-column>
     </el-table>
     <el-dialog
-      title="毕业要求编辑"
+      title="毕业要求分指标点编辑"
       :visible.sync="dialogVisible"
       :close-on-click-modal="false"
-      width="50%"
+      width="90%"
       center
     >
       <div>
-        <el-form ref="ruleForm" :model="editForm" status-icon class="demo-ruleForm">
-          <el-form-item label="标题" prop="name">
-            <el-input v-model="editForm.name" type="text" autocomplete="off" />
+        {{editForm.cultivationId}}
+        <el-form
+          ref="ruleForm"
+          :model="editForm"
+          status-icon
+          class="demo-ruleForm"
+        >
+          <el-form-item
+            label="毕业要求"
+            prop="name"
+          >
+            <el-input
+              v-model="editForm.name"
+              type="text"
+              autocomplete="off"
+              readonly="true"
+            />
           </el-form-item>
-          <el-form-item label="描述" prop="pass">
-            <el-input v-model="editForm.discrible" type="text" autocomplete="off" />
+          <el-form-item
+            label="毕业要求描述"
+            prop="pass"
+          >
+            <el-input
+              v-model="editForm.attributeDescribe"
+              type="text"
+              autocomplete="off"
+              readonly="true"
+            />
           </el-form-item>
-          <el-form-item label="指标点：" prop="pass">
-            <el-button type="primary" round style="" @click="handleAddTarget">添加</el-button>
+          <el-form-item
+            label="分指标点："
+            prop="pass"
+          >
+            <el-button
+              type="primary"
+              style=""
+              @click="handleAddTarget"
+            >添加</el-button>
             <br>
-            <span :key="index" v-for="(item,index) in editForm.targets" type="text" autocomplete="off">
-              <el-input v-model="item.discribe" type="text" autocomplete="off" style="width: 91%;margin-top: 10px" />
-              <el-button type="danger" icon="el-icon-delete" circle @click="deleteDiscribe(index)" />
+            <!--分指标点编辑表格-->
+            <span
+              v-for="(item,index) in editForm.targets"
+              :key="index"
+              type="text"
+              autocomplete="off"
+            >
+              <el-form-item
+                label="分指标点编号"
+                prop="pass"
+              >
+                <el-input
+                  v-model="item.id"
+                  type="text"
+                  autocomplete="off"
+                  style="width: 91%;margin-top: 10px"
+                />
+              </el-form-item>
+              <el-form-item
+                label="分指标点描述"
+                prop="pass"
+              >
+                <el-input
+                  v-model="item.subAttributeDescribe"
+                  type="text"
+                  autocomplete="off"
+                  style="width: 91%;margin-top: 10px"
+                />
+              </el-form-item>
+              <el-button
+                type="danger"
+                icon="el-icon-delete"
+                circle
+                @click="deleteSubAttribute(index)"
+              />
             </span>
+            <!--/分指标点编辑表格-->
           </el-form-item>
         </el-form>
       </div>
-      <div slot="footer" class="dialog-footer">
+      <div
+        slot="footer"
+        class="dialog-footer"
+      >
         <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="submitEditForm('editForm')">确 定</el-button>
-      </div>
-    </el-dialog>
-    <el-dialog
-      title="添加年度毕业要求"
-      :visible.sync="dialogVisible1"
-      :close-on-click-modal="false"
-      width="30%"
-      center
-    >
-      <div>
-        <el-form ref="ruleForm" :model="addForm" status-icon class="demo-ruleForm">
-          <el-form-item label="标题" prop="name">
-            <el-input v-model="addForm.name" type="text" autocomplete="off" />
-          </el-form-item>
-          <el-form-item label="描述" prop="pass">
-            <el-input v-model="addForm.discrible" type="text" autocomplete="off" />
-          </el-form-item>
-        </el-form>
-      </div>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible1 = false">取 消</el-button>
-        <el-button type="primary" @click="submitAddForm()">确 定</el-button>
+        <el-button
+          type="primary"
+          @click="submitEditForm('editForm')"
+        >确 定</el-button>
       </div>
     </el-dialog>
     <el-pagination
@@ -132,8 +188,13 @@
 <script>
 import { requestByClient } from '@/utils/HttpUtils'
 import { supplierConsumer } from '@/utils/HttpUtils'
-import axios from 'axios'
-import {getToken} from "@/utils/auth";
+
+//下拉组件引入
+import Vue from 'vue'
+import { Select,Option } from 'element-ui'
+Vue.use(Select)
+Vue.use(Option)
+
 export default {
   name: 'GradRequirementEdit',
   data() {
@@ -145,32 +206,57 @@ export default {
       pageSize: 20,
       total: 0,
       currentPage: 1,
-      serchForm: {
+      searchForm: {
         word: '',
       },
       editForm: {
         id: '',
-        discrible: '',
+        attributeDescribe: '',
         name: '',
+        cultivationId:'',
+        attributeId:'',
         targets: []
       },
       addForm: {
-        discrible: '',
+        attributeDescribe: '',
         name: ''
       },
-      ids: []
+      selectValue: '',
+      options: [],
+      ids: [],
     }
-  },
-  mounted() {
-    this.getList()
   },
   watch: {
     '$store.state.settings.editYear': 'getList'
   },
+  mounted() {
+    this.getList();
+    this.getCultivationIdList();
+  },
   methods: {
-    handleSelectionChange(val) {
-      const result = val.map(item => item.id)
-      this.ids = result
+    getCultivationIdList(val) {
+      if (val==null){
+        requestByClient(supplierConsumer, 'POST', 'cultivation/list', {
+          pageNum: this.currentPage,
+          pageSize: this.pageSize,
+          word: this.searchForm.word,
+        },res => {
+          if (res.data.succ) {
+            this.options = res.data.data
+          }
+        })
+      }
+      else {
+        requestByClient(supplierConsumer, 'POST', 'gradRequirement/list', {
+          pageNum: this.currentPage,
+          pageSize: this.pageSize,
+          cultivationId: val,
+        },res => {
+          if (res.data.succ) {
+            this.tableData = res.data.data
+          }
+        })
+      }
     },
     onSubmit() {
     },
@@ -181,8 +267,7 @@ export default {
       requestByClient(supplierConsumer, 'POST', 'gradRequirement/list', {
         pageNum: this.currentPage,
         pageSize: this.pageSize,
-        word: this.serchForm.word,
-        year: this.$store.state.settings.editYear
+        word: this.searchForm.word,
       },res => {
         if (res.data.succ) {
           this.tableData = res.data.data
@@ -207,7 +292,9 @@ export default {
     submitEditForm() {
       this.dialogVisible = false
       this.loading = true
-      requestByClient(supplierConsumer, 'POST', 'gradRequirement/update', this.editForm,res => {
+      // eslint-disable-next-line no-console
+      console.log(this.editForm.targets)
+      requestByClient(supplierConsumer, 'POST', 'target/update2', this.editForm.targets,res => {
         if (res.data.succ) {
           this.$message({
             message: '修改成功',
@@ -218,42 +305,26 @@ export default {
         this.loading = false
       })
     },
-    submitAddForm() {
-      this.dialogVisible1 = false
-      this.loading = true
-      requestByClient(supplierConsumer, 'POST','gradRequirement/save', {
-        discrible: this.addForm.discrible,
-        name: this.addForm.name,
-        year: this.$store.state.settings.editYear
-      },res => {
-        if (res.data.succ) {
-          this.$message({
-            message: '添加成功',
-            type: 'success'
-          })
-          this.getList()
-        }
-        this.loading = false
-      })
-    },
     handleEditForm(record) {
       this.dialogVisible = true
-      this.editForm.id = record.id
-      this.editForm.discrible = record.discrible
+      this.editForm.attributeId = record.id
+      this.editForm.attributeDescribe = record.attributeDescribe
       this.editForm.name = record.name
+      this.editForm.cultivationId=record.cultivationId
       requestByClient(supplierConsumer, 'POST','target/list', {
-        reqId: record.id
+          attributeId: record.id,
+          cultivationId: record.cultivationId,
         }
-      , res => {
-        if (res.data.succ) {
-          this.editForm.targets = res.data.data
-        }
-        this.loading = false
-      })
+        , res => {
+          if (res.data.succ) {
+            this.editForm.targets = res.data.data
+          }
+          this.loading = false
+        })
     },
     handleAddForm() {
       this.dialogVisible1 = true
-      this.addForm.discrible = ''
+      this.addForm.attributeDescribe = ''
       this.addForm.name = ''
     },
     handleDelete() {
@@ -281,18 +352,21 @@ export default {
       });
     },
     handleAddTarget() {
-      this.editForm.targets.push({ discribe: '', year: localStorage.getItem('editYear'),reqId: this.editForm.id })
+      this.editForm.targets.push({ id: '', subAttributeDescribe:'', attributeId:this.editForm.attributeId, cultivationId:this.editForm.cultivationId })
     },
-    deleteDiscribe(index) {
-      let target = this.editForm.targets[index]
-      if(target.id){
+    deleteSubAttribute(index) {
+      let subAttribute = this.editForm.targets[index]
+      if(subAttribute.id){
         this.$confirm('此操作将删除其支撑数据, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          let id = target.id
-          requestByClient(supplierConsumer, 'POST','target/deleteOne', {id: id},res => {
+          requestByClient(supplierConsumer, 'POST','target/deleteOne', {
+            id: subAttribute.id,
+            attributeId: subAttribute.attributeId,
+            cultivationId: subAttribute.cultivationId,
+          },res => {
             if (res.data.succ) {
               this.$message({
                 message: '删除成功',
@@ -307,27 +381,7 @@ export default {
         this.editForm.targets.splice(index, 1)
       }
     },
-    exportTemplate() {
-      let baseURL = supplierConsumer.defaults.baseURL
-      axios.post(baseURL + '/stuScore/exportTemplate',{},{
-        responseType:  'blob',
-        headers:{
-          '_token': getToken()
-        }
-      }).then(res => {
-        const blob = new Blob([res.data], {
-          type: 'application/vnd.ms-excel'
-        })
-        const objectUrl = URL.createObjectURL(blob)
-        const a = document.createElement('a')
-        a.href = objectUrl
-        a.download = '导入模板.xlsx'
-        // a.click();
-        // 下面这个写法兼容火狐
-        a.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }))
-        window.URL.revokeObjectURL(objectUrl)
-      })
-    }
+
   }
 }
 </script>

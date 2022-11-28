@@ -7,6 +7,7 @@ import com.gapache.security.annotation.AuthResource;
 import com.gapache.security.annotation.NeedAuth;
 import com.github.pagehelper.PageInfo;
 import com.pzhu.iacaa2_0.common.ActionResult;
+import com.pzhu.iacaa2_0.entity.GradRequirement;
 import com.pzhu.iacaa2_0.entity.Target;
 import com.pzhu.iacaa2_0.entityVo.IdsVo;
 import com.pzhu.iacaa2_0.entityVo.TargetVo;
@@ -19,8 +20,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -40,7 +39,7 @@ public class TargetController {
 
     @Autowired
     ICourseTargetService courseTargetService;
-
+/*
     @RequestMapping("/pageList")
     @AuthResource(scope = "pageList", name = "指标点分页列表")
     public ActionResult list(@RequestBody TargetVo vo){
@@ -59,6 +58,7 @@ public class TargetController {
         PageInfo page = new PageInfo(list);
         return ActionResult.ofSuccess(page);
     }
+   */
 
     @RequestMapping("/list")
     @AuthResource(scope = "list", name = "指标点列表")
@@ -76,18 +76,23 @@ public class TargetController {
     @RequestMapping("/update")
     @AuthResource(scope = "update", name = "更新单个指标点")
     public ActionResult update(@RequestBody Target target){
-        target.setUpdateDate(LocalDateTime.now());
         UpdateWrapper<Target> updateWrapper = new UpdateWrapper<>();
         updateWrapper.eq("id",target.getId());
         boolean update = targetService.update(target, updateWrapper);
         return update ? ActionResult.ofSuccess() : ActionResult.ofFail(200,"更新失败");
     }
 
+    @RequestMapping("/update2")
+    @AuthResource(scope = "update2", name = "更新分指标点")
+    public ActionResult insertBatch(@RequestBody List<Target> targetsList) {
+        return targetService.insertBatch(targetsList)
+                ? ActionResult.ofSuccess()
+                : ActionResult.ofFail(200, "更新失败");
+    }
+
     @RequestMapping("/save")
     @AuthResource(scope = "save", name = "保存单个指标点")
     public ActionResult save(@RequestBody Target target){
-        target.setCreatedDate(LocalDateTime.now());
-        target.setUpdateDate(LocalDateTime.now());
         boolean update = targetService.save(target);
         return update ? ActionResult.ofSuccess() : ActionResult.ofFail(200,"添加失败");
     }
@@ -104,16 +109,21 @@ public class TargetController {
     @RequestMapping("/deleteOne")
     @AuthResource(scope = "deleteOne", name = "删除单个指标点")
     public ActionResult deleteOne(@RequestBody Target target){
-        return courseTargetService.removeByTargetId(target.getId())
-                && targetService.removeById(target.getId())
+        QueryWrapper<Target> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("id", target.getId());
+        queryWrapper.eq("attributeId", target.getAttributeId());
+        queryWrapper.eq("cultivationId", target.getCultivationId());
+        return targetService.remove(queryWrapper)
                 ? ActionResult.ofSuccess()
                 : ActionResult.ofFail("删除失败");
     }
-
+/*
     @RequestMapping("/summaryAll")
     @AuthResource(scope = "summaryAll", name = "同步指标点年度成绩数据")
     public ActionResult summaryAll(@RequestBody Target target){
         Boolean aBoolean = targetService.summaryThisYearTargetsGrade(target.getYear());
         return aBoolean ? ActionResult.ofSuccess() : ActionResult.ofFail("统计失败");
     }
+
+ */
 }
