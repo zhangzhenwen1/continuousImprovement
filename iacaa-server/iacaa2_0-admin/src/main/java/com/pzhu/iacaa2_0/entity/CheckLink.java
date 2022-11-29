@@ -28,36 +28,31 @@ public class CheckLink extends BaseEntity {
     /**
      * 对应课程
      */
-    @ExcelProperty(value = "course_id", index = 1)
-    @TableField("course_id")
+    @TableField("courseId")
     private Long courseId;
 
     /**
      * 标题
      */
-    @ExcelProperty(value = "name", index = 2)
-    @TableField("name")
-    private String name;
+    @TableField("assessmentName")
+    private String assessmentName;
 
     /**
      * 标题
      */
-    @ExcelProperty(value = "year", index = 3)
-    @TableField("year")
-    private Integer year;
+    @TableField("cultivationId")
+    private Integer cultivationId;
 
     /**
      * 目标成绩
      */
-    @ExcelProperty(value = "target_score", index = 4)
-    @TableField("target_score")
-    private Double targetScore;
+    @TableField("totalScore")
+    private Double totalScore;
 
     /**
      * 平均成绩
      */
-    @ExcelProperty(value = "average_score", index = 5)
-    @TableField("average_score")
-    private Double averageScore;
+    @TableField("scoreRatio")
+    private Double scoreRatio;
 
 }

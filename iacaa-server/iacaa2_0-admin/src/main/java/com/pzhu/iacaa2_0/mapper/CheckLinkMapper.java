@@ -1,7 +1,9 @@
 package com.pzhu.iacaa2_0.mapper;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.pzhu.iacaa2_0.entity.CheckLink;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.pzhu.iacaa2_0.entity.Target;
 import com.pzhu.iacaa2_0.entityVo.CheckLinkVo;
 
 import java.util.List;
@@ -16,7 +18,9 @@ import java.util.List;
  */
 public interface CheckLinkMapper extends BaseMapper<CheckLink> {
 
-    List<CheckLink> list(CheckLinkVo vo);
+    List<CheckLink> list(CheckLink checkLink);
+
+    Boolean insertBatch(List<CheckLink> checkLinkList);
 
     List<CheckLink> listByCourseTaskId(String id);
 
@@ -27,4 +31,5 @@ public interface CheckLinkMapper extends BaseMapper<CheckLink> {
     List<CheckLink> getByCourseId(Long id);
 
     Integer coverNullToZero();
+
 }

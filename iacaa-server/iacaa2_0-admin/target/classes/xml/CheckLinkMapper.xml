@@ -4,43 +4,47 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.pzhu.iacaa2_0.entity.CheckLink">
-        <result column="id" property="id"/>
-        <result column="course_id" property="courseId"/>
-        <result column="name" property="name"/>
-        <result column="year" property="year"/>
-        <result column="target_score" property="targetScore"/>
-        <result column="average_score" property="averageScore"/>
-        <result column="created_date" property="createdDate"/>
-        <result column="update_date" property="updateDate"/>
+        <result column="courseId" property="courseId"/>
+        <result column="assessmentName" property="assessmentName"/>
+        <result column="cultivationId" property="cultivationId"/>
+        <result column="totalScore" property="totalScore"/>
+        <result column="scoreRatio" property="scoreRatio"/>
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, course_id, name, year, target_score, average_score, created_date, update_date
+        courseId, cultivationId, assessmentName, totalScore, scoreRatio
     </sql>
 
-    <select id="list" parameterType="com.pzhu.iacaa2_0.entityVo.CheckLinkVo" resultMap="BaseResultMap">
+    <select id="list" parameterType="com.pzhu.iacaa2_0.entity.CheckLink" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"></include>
-        from t_check_link a
+        from t_check_link
         <where>
             <trim prefixOverrides="AND">
-                <if test="id != null and id !=''">
-                    AND a.id = #{id}
-                </if>
                 <if test="courseId != null and courseId !=''">
-                    AND a.course_id = #{courseId}
+                    AND courseId = #{courseId}
                 </if>
-                <if test="word != null and word !=''">
-                    AND (a.name like CONCAT(CONCAT('%',#{word}),'%'))
+                <if test="cultivationId != null and cultivationId !=''">
+                    AND cultivationId = #{cultivationId}
                 </if>
-                <if test="year != null and year !=''">
-                    AND a.year = #{year}
+                <if test="assessmentName != null and assessmentName !=''">
+                    AND assessmentName = #{assessmentName}
                 </if>
             </trim>
         </where>
-        ORDER BY a.name
     </select>
+
+    <insert id="insertBatch" parameterType="com.pzhu.iacaa2_0.entity.CheckLink">
+        INSERT INTO t_check_link
+        values
+        <foreach collection="list" item="item" separator=",">
+            (#{item.courseId}, #{item.cultivationId}, #{item.assessmentName}, #{item.totalScore}, #{item.scoreRatio})
+        </foreach>
+        ON DUPLICATE KEY UPDATE
+        totalScore=values(totalScore),
+        scoreRatio=values(scoreRatio)
+    </insert>
 
     <update id="summaryByCourseTaskId"  parameterType="java.lang.Long">
         update t_course_task SET sys_grade = (
@@ -74,5 +78,7 @@
     <update id="coverNullToZero">
         UPDATE t_check_link set average_score = 0 WHERE isNULL(average_score)
     </update>
+
+
 
 </mapper>

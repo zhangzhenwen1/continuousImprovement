@@ -75,7 +75,7 @@ public class NoModelDataListener extends AnalysisEventListener<Map<Integer, Stri
         Set<Map.Entry<Integer, String>> entries = headMap.entrySet();
         CheckLinkVo checkLink = new CheckLinkVo();
         checkLink.setCourseId(this.saveCourseId);
-        checkLink.setYear(this.year);
+        checkLink.setCultivationId(this.year);
         List<CheckLink> checkLinks = checkLinkService.list(checkLink);
 
         list.forEach(map -> {
@@ -85,7 +85,7 @@ public class NoModelDataListener extends AnalysisEventListener<Map<Integer, Stri
                 stuScore.setScore(Double.parseDouble(map.get(i)));
                 stuScore.setCheckLinkId(checkLinks.get(i-1).getId().intValue());
                 stuScore.setStuno(map.get(0));
-                stuScore.setMixScore(stuScore.getScore()/checkLinks.get(i-1).getTargetScore());
+                stuScore.setMixScore(stuScore.getScore()/checkLinks.get(i-1).getTotalScore());
                 stuScore.setCreatedDate(LocalDateTime.now());
                 stuScore.setUpdateDate(LocalDateTime.now());
                 stuScoreService.save(stuScore);

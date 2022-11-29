@@ -85,11 +85,11 @@ public class StuScoreController {
             if(stuScore.getStuno() == null){
                 return ActionResult.ofFail(String.format("学号%S不合法",stuScore.getStuno()));
             }
-            if (stuScore.getScore() > checkLink.getTargetScore()+0.00000001){
-                return ActionResult.ofFail(String.format("学生%S成绩不得大于考核环节目标成绩:%S",stuScore.getStuno(),checkLink.getTargetScore()));
+            if (stuScore.getScore() > checkLink.getTotalScore()+0.00000001){
+                return ActionResult.ofFail(String.format("学生%S成绩不得大于考核环节目标成绩:%S",stuScore.getStuno(),checkLink.getTotalScore()));
             }
 
-            stuScore.setMixScore(stuScore.getScore()/checkLink.getTargetScore());
+            stuScore.setMixScore(stuScore.getScore()/checkLink.getTotalScore());
             if(stuScore.getId() == null){
                 stuScore.setCreatedDate(LocalDateTime.now());
             }
@@ -104,7 +104,7 @@ public class StuScoreController {
     @AuthResource(scope = "exportTemplate", name = "成绩导入模板")
     public void exportTemplate(HttpServletResponse response, @RequestBody StuScoreVo stuScoreVo) throws IOException {
         CheckLinkVo vo = new CheckLinkVo();
-        vo.setYear(stuScoreVo.getYear());
+        vo.setCultivationId(stuScoreVo.getYear());
         vo.setCourseId(stuScoreVo.getCourseId());
         List<CheckLink> list1 = checkLinkService.list(vo);
         try {
@@ -124,7 +124,7 @@ public class StuScoreController {
             list1.forEach(i -> {
                 // 第 n 行 的表头
                 List<String> headTitle0 = new ArrayList<>();
-                headTitle0.add(i.getName() + "成绩");
+                headTitle0.add(i.getAssessmentName() + "成绩");
                 headList.add(headTitle0);
             });
             table.setHead(headList);

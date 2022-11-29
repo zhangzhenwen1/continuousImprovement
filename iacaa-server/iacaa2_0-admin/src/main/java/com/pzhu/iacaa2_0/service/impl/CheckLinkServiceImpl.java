@@ -1,7 +1,7 @@
 package com.pzhu.iacaa2_0.service.impl;
 
 import com.pzhu.iacaa2_0.entity.CheckLink;
-import com.pzhu.iacaa2_0.entityVo.CheckLinkVo;
+import com.pzhu.iacaa2_0.entity.Target;
 import com.pzhu.iacaa2_0.mapper.CheckLinkMapper;
 import com.pzhu.iacaa2_0.service.ICheckLinkService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -26,8 +26,14 @@ public class CheckLinkServiceImpl extends ServiceImpl<CheckLinkMapper, CheckLink
     IStuScoreService stuScoreService;
 
     @Override
-    public List<CheckLink> list(CheckLinkVo vo) {
-        return baseMapper.list(vo);
+    public List<CheckLink> list(CheckLink checkLink) {
+        return baseMapper.list(checkLink);
+    }
+
+    @Override
+    @Transactional
+    public Boolean insertBatch(List<CheckLink> checkLinkList) {
+        return baseMapper.insertBatch(checkLinkList);
     }
 
     @Transactional(rollbackFor = Exception.class)

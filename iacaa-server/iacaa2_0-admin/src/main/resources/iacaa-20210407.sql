@@ -25,9 +25,14 @@ CREATE TABLE `t_cultivation`  (
   `id` int(8) UNIQUE COMMENT '培养方案编制年份',
   `cultivationName` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '培养方案名称',
   `cultivationDescribe` varchar(300) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '培养方案描述',
-
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of t_cultivation
+-- ----------------------------
+ INSERT INTO `t_cultivation` VALUES (2011, '2011版', '201120111版');
+ INSERT INTO `t_cultivation` VALUES (2022, '2022版', '20220222版');
 
 -- ----------------------------
 -- Table structure for t_grad_requirement
@@ -41,7 +46,15 @@ CREATE TABLE `t_grad_requirement`  (
 
   PRIMARY KEY (`id`,`cultivationId`) USING BTREE,
   CONSTRAINT `cultivationIdKey_attribute` FOREIGN KEY (`cultivationId`) REFERENCES `t_cultivation` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 35 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of t_grad_requirement
+-- ----------------------------
+INSERT INTO `t_grad_requirement` VALUES (1, 2011, '工程知识', '工程知识工程知识');
+INSERT INTO `t_grad_requirement` VALUES (2, 2011, '分析问题', '202202分析问题22版');
+INSERT INTO `t_grad_requirement` VALUES (1, 2022, '工程知识', '工程知识工程知识');
+INSERT INTO `t_grad_requirement` VALUES (2, 2022, '分析问题', '202202分析问题22版');
 
 -- ----------------------------
 -- Table structure for t_target
@@ -56,7 +69,19 @@ CREATE TABLE `t_target`  (
   PRIMARY KEY (`id`,`attributeId`,`cultivationId`) USING BTREE,
   CONSTRAINT `attributeIdKey_subAttribute` FOREIGN KEY (`attributeId`) REFERENCES `t_grad_requirement` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `cultivationIdKey_subAttribute` FOREIGN KEY (`cultivationId`) REFERENCES `t_cultivation` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 232 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of t_target
+-- ----------------------------
+INSERT INTO `t_target` VALUES (1, 1, 2011, '分解1工程知识');
+INSERT INTO `t_target` VALUES (2, 1, 2011, '分解2工程知识');
+INSERT INTO `t_target` VALUES (1, 2, 2011, '分解1分析问题');
+INSERT INTO `t_target` VALUES (2, 2, 2011, '分解2分析问题');
+INSERT INTO `t_target` VALUES (1, 1, 2022, '分解1工程知识');
+INSERT INTO `t_target` VALUES (2, 1, 2022, '分解2工程知识');
+INSERT INTO `t_target` VALUES (1, 2, 2022, '分解1分析问题');
+INSERT INTO `t_target` VALUES (2, 2, 2022, '分解2分析问题');
 
 -- ----------------------------
 -- Table structure for t_course_target
@@ -74,7 +99,52 @@ CREATE TABLE `t_course_target`  (
   CONSTRAINT `attributeIdKey@courseObjective` FOREIGN KEY (`attributeId`) REFERENCES `t_grad_requirement` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `subAttributeIdKey@courseObjective` FOREIGN KEY (`subAttributeId`) REFERENCES `t_target` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `courseIdKey@courseObjective` FOREIGN KEY (`courseId`) REFERENCES `t_course` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 269 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+INSERT INTO `t_course_target` VALUES (2011, 1, 1, 1, 1);
+INSERT INTO `t_course_target` VALUES (2011, 1, 2, 2, 1);
+INSERT INTO `t_course_target` VALUES (2011, 2, 1, 2, 1);
+INSERT INTO `t_course_target` VALUES (2011, 2, 2, 1, 1);
+INSERT INTO `t_course_target` VALUES (2022, 1, 1, 2, 1);
+INSERT INTO `t_course_target` VALUES (2022, 1, 2, 1, 1);
+INSERT INTO `t_course_target` VALUES (2022, 2, 1, 2, 1);
+INSERT INTO `t_course_target` VALUES (2022, 2, 2, 1, 1);
+
+-- ----------------------------
+-- Table structure for t_check_link
+-- ----------------------------
+DROP TABLE IF EXISTS `t_check_link`;
+CREATE TABLE `t_check_link`  (
+  `courseId` int(5) NOT NULL COMMENT '关联课程',
+  `cultivationId` int(8) NOT NULL COMMENT '培养方案编制年份',
+  `assessmentName` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '考核环节名称',
+  `totalScore` double NOT NULL COMMENT '总分',
+  `scoreRatio` double NOT NULL COMMENT '成绩占比',
+  PRIMARY KEY (`courseId`,`cultivationId`,`assessmentName`) USING BTREE,
+  CONSTRAINT `courseId@assessment` FOREIGN KEY (`courseId`) REFERENCES `t_course` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `cultivationIdKey@assessment` FOREIGN KEY (`cultivationId`) REFERENCES `t_cultivation` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for t_course
+-- ----------------------------
+DROP TABLE IF EXISTS `t_course`;
+CREATE TABLE `t_course`  (
+  `id` int(5) NOT NULL AUTO_INCREMENT COMMENT '唯一标识',
+  `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '内容',
+  `image` varchar(300) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '图片地址',
+  `edit_user_id` int(5) NULL DEFAULT NULL COMMENT '管理账户',
+  `edit_status` int(1) NULL DEFAULT NULL COMMENT '课程编辑状态',
+  `created_date` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
+  `update_date` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of t_course
+-- ----------------------------
+INSERT INTO `t_course` VALUES (1, '数据结构', NULL, NULL, NULL, '2021-03-23 15:23:00', '2021-03-23 15:23:00');
+INSERT INTO `t_course` VALUES (2, '计算机组成原理', NULL, NULL, NULL, '2021-03-23 15:23:00', '2021-03-23 15:23:00');
 
 -- ----------------------------
 -- Table structure for t_stu_score
@@ -105,49 +175,6 @@ CREATE TABLE `t_course_task_check_link`  (
   `update_date` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 62 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Table structure for t_check_link
--- ----------------------------
-DROP TABLE IF EXISTS `t_check_link`;
-CREATE TABLE `t_check_link`  (
-  `id` int(8) NOT NULL AUTO_INCREMENT COMMENT '唯一标识',
-  `course_id` int(5) NULL DEFAULT NULL COMMENT '关联课程',
-  `task_id` int(7) NULL DEFAULT NULL COMMENT '对应课程目标',
-  `name` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '标题',
-  `year` int(4) NULL DEFAULT NULL COMMENT '年份',
-  `target_score` double NULL DEFAULT NULL COMMENT '目标成绩',
-  `average_score` double NULL DEFAULT NULL COMMENT '平均成绩',
-  `mix` double NULL DEFAULT NULL COMMENT '占比',
-  `created_date` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  `update_date` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
-  PRIMARY KEY (`id`) USING BTREE,
-  INDEX `c_task`(`task_id`) USING BTREE,
-  CONSTRAINT `c_task` FOREIGN KEY (`task_id`) REFERENCES `t_course_task` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 62 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Table structure for t_course
--- ----------------------------
-DROP TABLE IF EXISTS `t_course`;
-CREATE TABLE `t_course`  (
-  `id` int(5) NOT NULL AUTO_INCREMENT COMMENT '唯一标识',
-  `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '内容',
-  `image` varchar(120) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '图片地址',
-  `edit_user_id` int(5) NULL DEFAULT NULL COMMENT '管理账户',
-  `edit_status` int(1) NULL DEFAULT NULL COMMENT '课程编辑状态',
-  `created_date` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  `update_date` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
-  PRIMARY KEY (`id`) USING BTREE,
-  INDEX `course_id`(`id`) USING BTREE,
-  INDEX `teacherUser`(`edit_user_id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of t_course
--- ----------------------------
-INSERT INTO `t_course` VALUES (1, '数据结构', NULL, NULL, NULL, '2021-03-23 15:23:00', '2021-03-23 15:23:00');
-INSERT INTO `t_course` VALUES (2, '计算机组成原理', NULL, NULL, NULL, '2021-03-23 15:23:00', '2021-03-23 15:23:00');
 
 -- ----------------------------
 -- Table structure for t_course_task

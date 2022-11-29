@@ -26,6 +26,11 @@
         width="200"
       />
       <el-table-column
+        prop="cultivationId"
+        label="培养方案版本"
+        width="200"
+      />
+      <el-table-column
         prop="image"
         label="课程描述"
         width="200"
