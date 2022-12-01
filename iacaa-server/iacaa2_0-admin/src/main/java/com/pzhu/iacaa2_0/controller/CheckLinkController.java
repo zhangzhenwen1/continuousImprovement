@@ -7,8 +7,7 @@ import com.gapache.security.annotation.NeedAuth;
 import com.github.pagehelper.PageInfo;
 import com.pzhu.iacaa2_0.common.ActionResult;
 import com.pzhu.iacaa2_0.entity.CheckLink;
-import com.pzhu.iacaa2_0.entity.CourseTask;
-import com.pzhu.iacaa2_0.entity.Target;
+import com.pzhu.iacaa2_0.entity.CourseObjective;
 import com.pzhu.iacaa2_0.entityVo.CheckLinkVo;
 import com.pzhu.iacaa2_0.service.ICheckLinkService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -44,8 +42,8 @@ public class CheckLinkController {
 
     @RequestMapping("/listBySourseTask")
     @AuthResource(scope = "listBySourseTask", name = "单个课程目标的考核环节列表")
-    public ActionResult listBySourseTask(@RequestBody CourseTask courseTask) throws Exception{
-        List<CheckLink> list = checkLinkService.listBySourseTask(courseTask.getId());
+    public ActionResult listBySourseTask(@RequestBody CourseObjective courseObjective) throws Exception{
+        List<CheckLink> list = checkLinkService.listBySourseTask(courseObjective.getId());
         return ActionResult.ofSuccess(list);
     }
 

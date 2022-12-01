@@ -5,7 +5,7 @@
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.pzhu.iacaa2_0.entity.StuEvaluation">
         <result column="id" property="id" />
-        <result column="course_task" property="courseTask" />
+        <result column="course_task" property="courseObjective" />
         <result column="ip" property="ip" />
         <result column="stu_no" property="stuNo" />
         <result column="score" property="score" />

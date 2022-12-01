@@ -5,6 +5,7 @@
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.pzhu.iacaa2_0.entity.Target">
         <result column="id" property="id"/>
+        <result column="idx_target" property="idx_target"/>
         <result column="attributeId" property="attributeId"/>
         <result column="cultivationId" property="cultivationId"/>
         <result column="subAttributeDescribe" property="subAttributeDescribe"/>
@@ -12,26 +13,20 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, attributeId, cultivationId, subAttributeDescribe
+        id, idx_target, attributeId, cultivationId, subAttributeDescribe
     </sql>
 
-    <select id="getByReqId" parameterType="com.pzhu.iacaa2_0.entityVo.TargetVo" resultMap="BaseResultMap">
-        select <include refid="Base_Column_List"/>
-        from t_target
-        where attributeId = #{attributeId} and cultivationId = #{cultivationId}
-    </select>
-
-    <select id="list" parameterType="com.pzhu.iacaa2_0.entityVo.TargetVo" resultMap="BaseResultMap">
+    <select id="list" parameterType="com.pzhu.iacaa2_0.entity.Target" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from t_target
         <where>
             <trim prefixOverrides="AND">
-                <if test="word != null and word !=''">
-                    AND subAttributeDescribe like CONCAT(CONCAT('%',#{word}),'%')
-                </if>
                 <if test="id != null and id !=''">
                     AND id = #{id}
+                </if>
+                <if test="idx_target != null and idx_target !=''">
+                    AND idx_target = #{idx_target}
                 </if>
                 <if test="attributeId != null and attributeId !=''">
                     AND attributeId = #{attributeId}
@@ -52,6 +47,13 @@
         ON DUPLICATE KEY UPDATE
         subAttributeDescribe=values(subAttributeDescribe)
     </insert>
+
+    <select id="getByReqId" parameterType="com.pzhu.iacaa2_0.entityVo.TargetVo" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"/>
+        from t_target
+        where attributeId = #{attributeId} and cultivationId = #{cultivationId}
+    </select>
+
     <!--
     <update id="summaryByTargetId" parameterType="java.lang.Long">
         UPDATE t_target

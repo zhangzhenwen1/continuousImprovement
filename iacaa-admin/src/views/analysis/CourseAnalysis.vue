@@ -89,7 +89,7 @@ export default {
         target: 'document.body',
         body: true
       })
-      requestByClient(supplierConsumer, 'POST', 'courseTask/summaryCourseTask', {
+      requestByClient(supplierConsumer, 'POST', 'courseObjective/summaryCourseTask', {
         year: this.$store.state.settings.editYear
       }, res => {
         if (res.data.succ) {
@@ -108,7 +108,7 @@ export default {
     },
     getList() {
       this.dialogVisible = false
-      requestByClient(supplierConsumer, 'POST', 'courseTask/voList', {
+      requestByClient(supplierConsumer, 'POST', 'courseObjective/voList', {
         year: this.$store.state.settings.editYear,
         courseId: this.serchForm.courseId,
         targetId: this.serchForm.targetId,
@@ -237,7 +237,7 @@ export default {
       });
     },
     selectOneCourseTask(id) {
-      requestByClient(supplierConsumer, 'POST', 'courseTask/getOne', {
+      requestByClient(supplierConsumer, 'POST', 'courseObjective/getOne', {
         id: id
       }, res => {
         this.viewingCourseTask = res.data.data

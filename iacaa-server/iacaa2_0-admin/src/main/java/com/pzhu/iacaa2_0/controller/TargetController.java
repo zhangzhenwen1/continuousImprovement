@@ -5,17 +5,12 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.gapache.security.annotation.AuthResource;
 import com.gapache.security.annotation.NeedAuth;
-import com.github.pagehelper.PageInfo;
 import com.pzhu.iacaa2_0.common.ActionResult;
-import com.pzhu.iacaa2_0.entity.GradRequirement;
 import com.pzhu.iacaa2_0.entity.Target;
 import com.pzhu.iacaa2_0.entityVo.IdsVo;
-import com.pzhu.iacaa2_0.entityVo.TargetVo;
 import com.pzhu.iacaa2_0.service.ICourseTargetService;
-import com.pzhu.iacaa2_0.service.ICourseTaskService;
 import com.pzhu.iacaa2_0.service.ITargetService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -62,8 +57,8 @@ public class TargetController {
 
     @RequestMapping("/list")
     @AuthResource(scope = "list", name = "指标点列表")
-    public ActionResult pageList(@RequestBody TargetVo vo){
-        List<Target> list = targetService.list(vo);
+    public ActionResult list(@RequestBody Target target){
+        List<Target> list = targetService.list(target);
         return ActionResult.ofSuccess(list);
     }
 

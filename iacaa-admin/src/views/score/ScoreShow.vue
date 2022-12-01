@@ -31,7 +31,7 @@
         label="简介"
         width="400">
       </el-table-column>
-      <el-table-column prop="courseTasks" type="expand" label="考核环节" width="1000">
+      <el-table-column prop="courseObjectives" type="expand" label="考核环节" width="1000">
         <template slot-scope="courseScope">
           <el-table :data="courseScope.row.checkLinks" stripe>
             <el-table-column
@@ -54,7 +54,7 @@
               label="最终更新时间"
               width="200"
             />
-            <el-table-column label="操作" prop="courseTasks">
+            <el-table-column label="操作" prop="courseObjectives">
               <template slot-scope="checkLinkScope">
                 <el-button :disabled="courseScope.row.editStatus === 0" v-if="checkLinkScope.row.year === new Date().getFullYear()"
                            type="primary" @click="handleCheckLinkEditForm(courseScope.row, checkLinkScope.row)" >查看成绩</el-button>

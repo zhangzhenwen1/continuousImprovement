@@ -50,7 +50,7 @@ export default {
         title: '',
         score: '',
         courseTargets: [],
-        courseTasks: []
+        courseObjectives: []
       },
       reqs:[],
       lastFiveYears: [],
@@ -221,11 +221,11 @@ export default {
             }, res => {
               if (res.data.succ) {
                 this.targetChartForm.courseTargets = res.data.data
-                requestByClient(supplierConsumer, 'POST', 'courseTask/voList', {
+                requestByClient(supplierConsumer, 'POST', 'courseObjective/voList', {
                   targetId: value,
                 }, res => {
                   if (res.data.succ) {
-                    this.targetChartForm.courseTasks = res.data.data
+                    this.targetChartForm.courseObjectives = res.data.data
                     this.dialogVisible = true
                   }
                 })
@@ -246,7 +246,7 @@ export default {
       let chartDom = document.getElementById('targetBar');
       const myChart = echarts.init(chartDom)
       let option
-      let courseTasks = this.targetChartForm.courseTasks
+      let courseObjectives = this.targetChartForm.courseObjectives
       let colors = [
         '#199237',
         '#196292',
@@ -256,15 +256,15 @@ export default {
         '#1c977a',
         '#9a5a2b',
       ]
-      let tasksName = courseTasks.map(i => {
+      let tasksName = courseObjectives.map(i => {
         return i.course.name + ':' + i.describes
       })
 
-      let tasksScores = courseTasks.map(i => {
+      let tasksScores = courseObjectives.map(i => {
         return (i.sysGrade * 100).toFixed(2)
       })
 
-      let stuScores = courseTasks.map(i => {
+      let stuScores = courseObjectives.map(i => {
         return (i.stuGrade * 100).toFixed(2)
       })
 
@@ -348,19 +348,19 @@ export default {
           name: courseTarget.course.name
         })
       }
-      let courseTasks = this.targetChartForm.courseTasks
-      let tasksDta = new Array(courseTasks.length)
-      for (let courseTask of courseTasks) {
-        dtataNames.push(courseTask.describes)
+      let courseObjectives = this.targetChartForm.courseObjectives
+      let tasksDta = new Array(courseObjectives.length)
+      for (let courseObjective of courseObjectives) {
+        dtataNames.push(courseObjective.describes)
         let courseTaskMix = 0
         for (let courseTarget of courseTargets) {
-          if (courseTask.course.id === courseTarget.course.id) {
-            courseTaskMix = courseTask.mix * courseTarget.mix
+          if (courseObjective.course.id === courseTarget.course.id) {
+            courseTaskMix = courseObjective.mix * courseTarget.mix
           }
         }
         tasksDta.push({
           value: courseTaskMix.toFixed(2),
-          name: courseTask.describes
+          name: courseObjective.describes
         })
       }
       option = {

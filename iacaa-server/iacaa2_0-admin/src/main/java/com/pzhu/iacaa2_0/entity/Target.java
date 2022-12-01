@@ -29,6 +29,9 @@ public class Target extends BaseEntity {
      */
     @TableField("id")
     private Long id;
+
+    @TableField("idx_target")
+    private Long idx_target;
     /**
      * 描述
      */

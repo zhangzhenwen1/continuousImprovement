@@ -81,7 +81,7 @@ export default {
         {
           stuEvaluations: this.questionnaireForm.courseTaskEvaluations.map(i => {
             return {
-              courseTask: i.courseTaskVo.id,
+              courseObjective: i.courseTaskVo.id,
               stuNo: this.questionnaireForm.stuNo,
               score: i.score
             }

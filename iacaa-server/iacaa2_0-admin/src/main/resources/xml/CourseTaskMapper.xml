@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.pzhu.iacaa2_0.mapper.CourseTaskMapper">
+<mapper namespace="com.pzhu.iacaa2_0.mapper.CourseObjectiveMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.pzhu.iacaa2_0.entity.CourseTask">
+    <resultMap id="BaseResultMap" type="com.pzhu.iacaa2_0.entity.CourseObjective">
         <result column="id" property="id"/>
         <result column="describes" property="describes"/>
         <result column="course_id" property="courseId"/>
@@ -16,7 +16,7 @@
         <result column="update_date" property="updateDate"/>
     </resultMap>
 
-    <resultMap id="voMap" type="com.pzhu.iacaa2_0.entityVo.CourseTaskVo">
+    <resultMap id="voMap" type="com.pzhu.iacaa2_0.entityVo.CourseObjectiveVo">
         <result column="id" property="id"/>
         <result column="describes" property="describes"/>
         <result column="course_id" property="courseId"/>
@@ -56,17 +56,17 @@
         from t_course_task
         <where>
             <trim prefixOverrides="AND">
-                <if test="courseTask.courseId != null and courseTask.courseId !=''">
-                    AND course_id = #{courseTask.courseId}
+                <if test="courseObjective.courseId != null and courseObjective.courseId !=''">
+                    AND course_id = #{courseObjective.courseId}
                 </if>
-                <if test="courseTask.targetId != null and courseTask.targetId !=''">
-                    AND target_id = #{courseTask.targetId}
+                <if test="courseObjective.targetId != null and courseObjective.targetId !=''">
+                    AND target_id = #{courseObjective.targetId}
                 </if>
-                <if test="courseTask.year != null and courseTask.year !=''">
-                    AND year = #{courseTask.year}
+                <if test="courseObjective.year != null and courseObjective.year !=''">
+                    AND year = #{courseObjective.year}
                 </if>
-                <if test="courseTask.stuGrade != null">
-                    AND stu_grade = #{courseTask.stuGrade}
+                <if test="courseObjective.stuGrade != null">
+                    AND stu_grade = #{courseObjective.stuGrade}
                 </if>
             </trim>
         </where>
@@ -81,7 +81,7 @@
 
 
 
-    <select id="voList" parameterType="com.pzhu.iacaa2_0.entityVo.CourseTaskVo" resultMap="voMap">
+    <select id="voList" parameterType="com.pzhu.iacaa2_0.entityVo.CourseObjectiveVo" resultMap="voMap">
         select
         <include refid="Base_Column_List"/>
         from t_course_task
@@ -107,7 +107,7 @@
         order by year desc,course_id asc
     </select>
 
-    <select id="list" parameterType="com.pzhu.iacaa2_0.entity.CourseTask" resultMap="BaseResultMap">
+    <select id="list" parameterType="com.pzhu.iacaa2_0.entity.CourseObjective" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from t_course_task

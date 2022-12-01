@@ -97,7 +97,7 @@
             <el-input v-model="ckeckLinkEditForm.courseName" disabled type="text" autocomplete="off"/>
           </el-form-item>
           <el-form-item label="课程目标" prop="pass">
-            <el-input v-model="ckeckLinkEditForm.courseTask.describes" disabled type="text" autocomplete="off"/>
+            <el-input v-model="ckeckLinkEditForm.courseObjective.describes" disabled type="text" autocomplete="off"/>
           </el-form-item>
           <el-form-item label="考核环节：" prop="pass">
             <el-button type="primary" round style="" @click="handleAddCheckLink">添加</el-button>
@@ -171,7 +171,7 @@ export default {
       },
       ckeckLinkEditForm: {
         courseName: '',
-        courseTask: {},
+        courseObjective: {},
         ableCheckLinks: [],
         courseTaskCheckLinks: []
       },
@@ -188,7 +188,7 @@ export default {
   methods: {
     courseTaskList(courseCope){
       this.editingCourse = courseCope
-      requestByClient(supplierConsumer, 'POST', 'courseTask/list', {
+      requestByClient(supplierConsumer, 'POST', 'courseObjective/list', {
         courseId: courseCope.id,
         year: this.$store.state.settings.editYear
       }, res => {
@@ -214,8 +214,8 @@ export default {
         }
       })
     },
-    handleCheckLinkEditForm(course, courseTask) {
-      this.ckeckLinkEditForm.courseTask = courseTask
+    handleCheckLinkEditForm(course, courseObjective) {
+      this.ckeckLinkEditForm.courseObjective = courseObjective
       this.ckeckLinkEditForm.courseName = course.name
       requestByClient(supplierConsumer, 'POST', 'checkLink/list', {
         courseId: course.id,
@@ -226,7 +226,7 @@ export default {
         }
       })
       requestByClient(supplierConsumer, 'POST', 'courseTaskCheckLink/voList', {
-        courseTaskId: courseTask.id
+        courseTaskId: courseObjective.id
       }, res => {
         if (res.data.succ) {
           this.ckeckLinkEditForm.courseTaskCheckLinks = res.data.data
@@ -265,7 +265,7 @@ export default {
       this.ckeckLinkEditForm.courseTaskCheckLinks.push({
         checkLinkId: '',
         mix: '',
-        courseTaskId: this.ckeckLinkEditForm.courseTask.id
+        courseTaskId: this.ckeckLinkEditForm.courseObjective.id
       })
     },
     submitCheckLinksForm() {

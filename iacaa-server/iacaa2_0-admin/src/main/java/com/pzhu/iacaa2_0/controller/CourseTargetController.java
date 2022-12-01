@@ -1,15 +1,13 @@
 package com.pzhu.iacaa2_0.controller;
 
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.gapache.security.annotation.AuthResource;
 import com.gapache.security.annotation.NeedAuth;
 import com.pzhu.iacaa2_0.common.ActionResult;
 import com.pzhu.iacaa2_0.entity.CourseTarget;
-import com.pzhu.iacaa2_0.entity.CourseTask;
 import com.pzhu.iacaa2_0.entityVo.CourseTargetVo;
 import com.pzhu.iacaa2_0.service.ICourseTargetService;
-import com.pzhu.iacaa2_0.service.ICourseTaskService;
+import com.pzhu.iacaa2_0.service.ICourseObjectiveService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -36,7 +34,7 @@ public class CourseTargetController {
     ICourseTargetService courseTargetService;
 
     @Autowired
-    ICourseTaskService courseTaskService;
+    ICourseObjectiveService courseTaskService;
 
     @RequestMapping("/list")
     @AuthResource(scope = "list", name = "课程-指标点列表")

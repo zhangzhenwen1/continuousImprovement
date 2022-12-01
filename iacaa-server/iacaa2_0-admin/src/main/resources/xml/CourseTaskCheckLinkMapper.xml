@@ -19,7 +19,7 @@
         <result column="check_link_id" property="checkLinkId" />
         <result column="created_date" property="createdDate" />
         <result column="update_date" property="updateDate" />
-        <association property="courseTask" column="course_task_id" select="com.pzhu.iacaa2_0.mapper.CourseTaskMapper.selectById"></association>
+        <association property="courseObjective" column="course_task_id" select="com.pzhu.iacaa2_0.mapper.CourseObjectiveMapper.selectById"></association>
         <association property="checkLink" column="check_link_id" select="com.pzhu.iacaa2_0.mapper.CheckLinkMapper.selectById"></association>
     </resultMap>
 

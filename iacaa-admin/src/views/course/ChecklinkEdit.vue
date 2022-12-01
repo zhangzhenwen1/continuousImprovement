@@ -7,7 +7,7 @@
       height="750"
       tooltip-effect="dark">
       <el-table-column
-        prop="courseId"
+        prop="id"
         label="课程编号"
         width="60">
       </el-table-column>
@@ -18,7 +18,20 @@
       </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
-          <el-button type="primary" :disabled="scope.row.editStatus === 0" @click="handleEditForm(scope.row)">编辑课程考核环节</el-button>
+          <el-button
+            type="primary"
+            :disabled="scope.row.editStatus === 0"
+            @click="handleEditForm(scope.row)"
+          >
+            编辑课程考核环节
+          </el-button>
+          <el-button
+            type="primary"
+            :disabled="scope.row.editStatus === 0"
+            @click="handleEditObjective(scope.row)"
+          >
+            编辑课程目标
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -30,9 +43,9 @@
       width="90%"
       center>
       <div>
-        <el-form :model="editingForm" status-icon ref="ruleForm" class="demo-ruleForm">
+        <el-form :model="editForm" status-icon ref="ruleForm" class="demo-ruleForm">
           <el-form-item label="课程名称" prop="pass">
-            <div style="font-size: 18px;color: #1a1a1a">{{ editingForm.courseName }}</div>
+            <div style="font-size: 18px;color: #1a1a1a">{{ editForm.courseName }}</div>
           </el-form-item>
           <!--下拉组件-->
           <el-form-item label="选择培养方案版本" prop="pass">
@@ -79,7 +92,7 @@
                 label="总评占比">
               </el-table-column>
             </el-table>
-            <span v-for="(item,index) in editingForm.assessmentInfo" type="text" autocomplete="off">
+            <span v-for="(item,index) in editForm.assessmentInfo" type="text" autocomplete="off">
               <el-select v-model="item.assessmentName" placeholder="课程目标" clearable filterable style="width: 40%;margin-top: 10px">
                 <el-option label="期末考试" value="期末考试" />
                 <el-option label="期中考试" value="期中考试" />
@@ -97,6 +110,158 @@
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">取 消</el-button>
         <el-button type="primary" @click="submitCheckLinks">确 定</el-button>
+      </div>
+    </el-dialog>
+
+    <el-dialog
+      title="课程目标编辑"
+      :close-on-click-modal="false"
+      :visible.sync="dialogVisible_objective"
+      width="90%"
+      center
+    >
+      <div>
+        <el-form
+          ref="ruleForm"
+          :model="editObjective"
+          status-icon
+          class="demo-ruleForm"
+        >
+          <!--课程名称-->
+          <el-form-item
+            label="课程名称"
+            prop="pass"
+          >
+            <div style="font-size: 18px;color: #1a1a1a">
+              {{ editObjective.courseName }}
+            </div>
+          </el-form-item>
+          <!--下拉组件-->
+          <el-form-item label="选择培养方案版本" prop="pass">
+            <!--选项数据来源：
+                  options: [{
+                    value: '选项1',
+                    label: '黄金糕'
+                  },{...}
+                  默认值所在数组：
+                  v-model="selectValue"
+              -->
+            <el-select
+              v-model="selectValue"
+              placeholder="选择培养方案版本"
+              @change="getCultivationIdList(selectValue)"
+            >
+              <el-option
+                v-for="item in options"
+                :key="item.id"
+                :label="item.cultivationName"
+                :value="item.id"
+              />
+            </el-select>
+          </el-form-item>
+          <el-form-item
+            label="课程目标："
+            prop="pass"
+          >
+            <el-button
+              type="primary"
+              round
+              style=""
+              @click="handleAddObjective"
+            >
+              添加
+            </el-button>
+            <br>
+            <el-table
+              ref="multipleTable"
+              style="width: 100%"
+              height="50"
+              tooltip-effect="dark"
+            >
+              <el-table-column
+                prop=""
+                label="课程目标编号"
+                width="50"
+              />
+              <el-table-column
+                prop=""
+                label="课程目标描述"
+                width="300"
+              />
+              <el-table-column
+                prop=""
+                label="支撑二级指标点"
+                width="300"
+              />
+              <el-table-column
+                prop=""
+                label="权重系数"
+                width="80"
+              />
+            </el-table>
+            <span
+              v-for="(item,index) in editObjective.objectiveInfo"
+              type="text"
+              autocomplete="off"
+            >
+              <el-input
+                v-model="item.objectiveId"
+                type="text"
+                autocomplete="off"
+                style="width: 5%;margin-right: 5px; margin-top: 10px"
+              />
+              <el-input
+                v-model="item.objectiveDescribe"
+                type="text"
+                autocomplete="off"
+                style="width: 20%;margin-right: 10px"
+              />
+              <el-select
+                v-model="item.target.idx_target"
+                placeholder="支撑二级指标点"
+                @change="getSubAttributeList(item.target.idx_target)"
+                clearable
+                style="width: 27%;margin-right: 10px"
+              >
+                <el-option
+                  v-for="item1 in subAttributeList"
+                  :key="item1.idx_target"
+                  :label="`${item1.attributeId}.${item1.id} ${item1.subAttributeDescribe}`"
+                  :value="item1.idx_target"
+                />
+              </el-select>
+              <el-input-number
+                v-model="item.objectiveSupportRatio"
+                :min="0.1"
+                :max="1"
+                step="0.1"
+                label="权重系数"
+                style="width: 10%;margin-right: 10px"
+              />
+              <el-button
+                type="danger"
+                icon="el-icon-delete"
+                circle
+                @click="handleDeleteObjective(index)"
+              />
+              <br />
+            </span>
+          </el-form-item>
+        </el-form>
+      </div>
+      <div
+        slot="footer"
+        class="dialog-footer"
+      >
+        <el-button @click="dialogVisible_objective = false">
+          取 消
+        </el-button>
+        <el-button
+          type="primary"
+          @click="submitEditObjective"
+        >
+          确 定
+        </el-button>
       </div>
     </el-dialog>
 
@@ -122,8 +287,8 @@ export default {
   },
   data() {
     return {
-      year: localStorage.getItem('editYear'),
       dialogVisible: false,
+      dialogVisible_objective: false,
       visible: false,
       tableData: [],
       pageSize: 20,
@@ -133,22 +298,33 @@ export default {
       searchForm: {
         word: ''
       },
-      editingForm: {
+      editForm: {
         courseName: '',
         courseId:'',
         assessmentInfo:[],
       },
+      editObjective:{
+        courseName: '',
+        courseId:'',
+        cultivationId:'',
+        objectiveInfo:[{
+          objectiveSupportRatio:1,
+          target:{},
+        }],
+      },
       selectValue:'',
+      type:'',
       options: [],
+      subAttributeList:[],
     }
   },
   watch: {
-    '$store.state.settings.editYear': 'getList'
+
   },
   methods: {
     //获取下拉菜单数据
     getCultivationIdList(val) {
-      if (val==null){
+      if (this.selectValue==0){
         requestByClient(supplierConsumer, 'POST', 'cultivation/list', {
           pageNum: this.currentPage,
           pageSize: this.pageSize,
@@ -159,48 +335,206 @@ export default {
         })
       }
       else {
-        this.editingForm.cultivationId=val
-        // eslint-disable-next-line no-console
-        console.log(this.editingForm.courseId)
-        requestByClient(supplierConsumer, 'POST', 'checkLink/list', {
-          pageNum: this.currentPage,
-          pageSize: this.pageSize,
-          cultivationId: val,
-          courseId: this.editingForm.courseId,
-        },res => {
-          if (res.data.succ) {
-            this.editingForm.assessmentInfo = res.data.data
-          }
-        })
-        // eslint-disable-next-line no-console
-        console.log(this.editingForm)
+        if(this.type=='editForm'){
+          this.editForm.cultivationId=val
+          this.getSubAttributeList()
+          requestByClient(supplierConsumer, 'POST', 'checkLink/list', {
+            pageNum: this.currentPage,
+            pageSize: this.pageSize,
+            cultivationId: val,
+            courseId: this.editForm.courseId,
+          },res => {
+            if (res.data.succ) {
+              this.editForm.assessmentInfo = res.data.data
+            }
+          })
+        }
+        else if(this.type=='editObjective'){
+          this.editObjective.cultivationId=val
+          this.getSubAttributeList()
+          requestByClient(supplierConsumer, 'POST', 'courseObjective/voList', {
+            pageNum: this.currentPage,
+            pageSize: this.pageSize,
+            cultivationId: val,
+            courseId: this.editObjective.courseId,
+          },res => {
+            if (res.data.succ) {
+              this.editObjective.objectiveInfo = res.data.data
+              this.editObjective.objectiveInfo.forEach(p=> {
+                p.idx_target = p.target.idx_target
+                this.subAttributeList.forEach(i => {
+                  if (p.idx_target == i.idx_target) {
+                    p.attributeId = i.attributeId
+                    p.subAttributeId = i.id
+                  }
+                })
+              })
+              // eslint-disable-next-line no-console
+              console.log('this.editObjective')
+              // eslint-disable-next-line no-console
+              console.log(this.editObjective)
+              // eslint-disable-next-line no-console
+              console.log(this.subAttributeList)
+            }
+          })
+
+        }
       }
     },
-    handleEditForm(row) {
+    getSubAttributeList(val) {
+      if (this.subAttributeList.length==0){
+        requestByClient(supplierConsumer, 'POST', 'target/list', {
+          pageNum: this.currentPage,
+          pageSize: this.pageSize,
+        },res => {
+          if (res.data.succ) {
+            this.subAttributeList = res.data.data
+            // eslint-disable-next-line no-console
+            console.log(this.subAttributeList)
+          }
+        })
+      }
+      else{
+        // eslint-disable-next-line no-console
+        console.log('option passin')
+        // eslint-disable-next-line no-console
+        console.log(val)
+        this.editObjective.objectiveInfo.forEach(p=>{
+            p.idx_target=p.target.idx_target
+            this.subAttributeList.forEach(i=>{
+              if (p.idx_target==i.idx_target){
+                p.attributeId=i.attributeId
+                p.subAttributeId =i.id
+              }
+            })
+        })
+
+      }
+    },
+
+    handleEditObjective(row) {
+      this.type='editObjective'
       this.getCultivationIdList()
-      this.editingForm.courseName=row.name
-      this.editingForm.courseId=row.id
+      this.editObjective.courseName=row.name
+      this.editObjective.courseId=row.id
+      this.dialogVisible_objective = true
+    },
+    handleAddObjective() {
+      this.editObjective.objectiveInfo.push({
+        cultivationId: this.editObjective.cultivationId,
+        courseId: this.editObjective.courseId,
+        objectiveSupportRatio: 1.00,
+        target:{},
+      }),
+        // eslint-disable-next-line no-console
+        console.log('handleAddObjective')
       // eslint-disable-next-line no-console
-      console.log(this.editingForm)
+      console.log(this.editObjective)
+    },
+    submitEditObjective(){
+      requestByClient(supplierConsumer, 'POST', 'courseObjective/saveOrUpdate', this.editObjective.objectiveInfo, res => {
+        if (res.data.succ) {
+          this.$message({
+            message: '修改成功',
+            type: 'success'
+          });
+          this.dialogVisible_objective = false
+        }
+      })
+    },
+    handleDeleteObjective(index) {
+      let objectiveInfo = this.editObjective.objectiveInfo[index]
+      if (objectiveInfo.attributeId) {
+        this.$confirm('此操作将删除其支撑数据, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          requestByClient(supplierConsumer, 'POST', 'courseObjective/delete', {
+            courseId: objectiveInfo.courseId,
+            cultivationId:objectiveInfo.cultivationId,
+            objectiveId: objectiveInfo.objectiveId,
+          }, res => {
+            if (res.data.succ) {
+              this.$message({
+                  message: '已删除',
+                  type: 'success'
+                },
+                this.dialogVisible_objective = false
+              );
+            } else {
+              this.$message.error(res.data.msg);
+            }
+            this.loading = false
+          })
+          this.editObjective.objectiveInfo.splice(index, 1)
+        }).catch(() => {
+        });
+      } else {
+        this.editObjective.objectiveInfo.splice(index, 1)
+      }
+    },
+
+
+    getList() {
+      this.dialogVisible = false
+      this.loading = true
+      requestByClient(supplierConsumer, 'POST', 'course/authList', {
+        pageNum: this.currentPage,
+        pageSize: this.pageSize,
+        word: this.searchForm.word
+      }, res => {
+        if (res.data.succ) {
+          this.tableData = res.data.data.list
+          this.total = res.data.data.total
+          this.pageSize = res.data.data.pageSize
+          this.currentPage = res.data.data.pageNum
+        }
+        this.loading = false
+      })
+    },
+    handleSizeChange(val) {
+      this.pageSize = val
+      this.currentPage = 1
+      this.getList()
+    },
+    handleCurrentChange(val) {
+      this.currentPage = val
+      this.getList()
+    },
+    handleAddChecklink() {
+      this.editForm.assessmentInfo.push({
+        cultivationId: this.editForm.cultivationId,
+        courseId: this.editForm.courseId,
+        assessmentName:'',
+        totalScore:'',
+        scoreRatio:'',
+      })
+    },
+    handleEditForm(row) {
+      this.type='editForm'
+      this.getCultivationIdList()
+      this.editForm.courseName=row.name
+      this.editForm.courseId=row.id
+      // eslint-disable-next-line no-console
+      console.log(this.editForm)
       this.dialogVisible = true
       /*
       requestByClient(supplierConsumer, 'POST', 'checkLink/list', {
-        courseId: this.editingForm.coursdId,
+        courseId: this.editForm.coursdId,
         cultivationId: row.cultivationId
       }, res => {
         if (res.data.succ) {
-          this.editingForm.assessmentInfo = res.data.data
+          this.editForm.assessmentInfo = res.data.data
           this.dialogVisible = true
           // eslint-disable-next-line no-console
-          console.log(this.editingForm)
+          console.log(this.editForm)
         }
         this.loading = false
       })*/
     },
     submitCheckLinks(){
-      // eslint-disable-next-line no-console
-      console.log(this.editingForm.assessmentInfo)
-      requestByClient(supplierConsumer, 'POST', 'checkLink/saveOrUpdate', this.editingForm.assessmentInfo, res => {
+      requestByClient(supplierConsumer, 'POST', 'checkLink/saveOrUpdate', this.editForm.assessmentInfo, res => {
         if (res.data.succ) {
           this.$message({
             message: '修改成功',
@@ -210,18 +544,8 @@ export default {
         }
       })
     },
-    handleAddChecklink() {
-      this.editingForm.assessmentInfo.push({
-        cultivationId: this.editingForm.cultivationId,
-        courseId: this.editingForm.courseId,
-        assessmentName:'',
-        totalScore:'',
-        scoreRatio:'',
-        })
-
-    },
     handleDeleteChecklink(index) {
-      let assessmentInfo = this.editingForm.assessmentInfo[index]
+      let assessmentInfo = this.editForm.assessmentInfo[index]
       // eslint-disable-next-line no-console
       console.log(assessmentInfo)
       if (assessmentInfo.cultivationId) {
@@ -237,51 +561,22 @@ export default {
           }, res => {
             if (res.data.succ) {
               this.$message({
-                message: '已删除',
-                type: 'success'
-              },
-              this.dialogVisible = false
-            );
+                  message: '已删除',
+                  type: 'success'
+                },
+                this.dialogVisible = false
+              );
             } else {
               this.$message.error(res.data.msg);
             }
             this.loading = false
           })
-          this.editingForm.assessmentInfo.splice(index, 1)
+          this.editForm.assessmentInfo.splice(index, 1)
         }).catch(() => {
         });
       } else {
-        this.editingForm.assessmentInfo.splice(index, 1)
+        this.editForm.assessmentInfo.splice(index, 1)
       }
-    },
-
-    getList() {
-      this.dialogVisible = false
-      this.loading = true
-      requestByClient(supplierConsumer, 'POST', 'course/authList', {
-        pageNum: this.currentPage,
-        pageSize: this.pageSize,
-        word: this.searchForm.word
-      }, res => {
-        if (res.data.succ) {
-          this.tableData = res.data.data.list
-          this.total = res.data.data.total
-          this.pageSize = res.data.data.pageSize
-          this.currentPage = res.data.data.pageNum
-          // eslint-disable-next-line no-console
-          console.log(this.tableData)
-        }
-        this.loading = false
-      })
-    },
-    handleSizeChange(val) {
-      this.pageSize = val
-      this.currentPage = 1
-      this.getList()
-    },
-    handleCurrentChange(val) {
-      this.currentPage = val
-      this.getList()
     },
   }
 }

@@ -322,7 +322,7 @@ export default {
         target: 'document.body',
         body: true
       })
-      requestByClient(supplierConsumer, 'POST', 'courseTask/summaryCourseTaskByCourseId', {
+      requestByClient(supplierConsumer, 'POST', 'courseObjective/summaryCourseTaskByCourseId', {
         year: this.$store.state.settings.editYear,
         courseId: course.id
       }, res => {
@@ -331,7 +331,7 @@ export default {
           loadingInstance.close()
         })
       })
-      requestByClient(supplierConsumer, 'POST', 'courseTask/voList', {
+      requestByClient(supplierConsumer, 'POST', 'courseObjective/voList', {
         courseId: course.id,
         year: this.$store.state.settings.editYear
       }, res => {
@@ -692,7 +692,7 @@ export default {
       });
     },
     selectOneCourseTask(id) {
-      requestByClient(supplierConsumer, 'POST', 'courseTask/getOne', {
+      requestByClient(supplierConsumer, 'POST', 'courseObjective/getOne', {
         id: id
       }, res => {
         this.viewingCourseTask = res.data.data
@@ -853,7 +853,7 @@ export default {
         name: '',
         mix: '',
         targetScore: '',
-        taskId: this.ckeckLinkEditForm.courseTask.id
+        taskId: this.ckeckLinkEditForm.courseObjective.id
       })
     },
     importFile(params) {

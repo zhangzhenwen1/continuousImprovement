@@ -36,7 +36,7 @@ public class MenuController {
     }
 
     @RequestMapping("CourseTask")
-    @AuthResource(scope = "CourseTask", name = "课程目标管理")
+    @AuthResource(scope = "CourseObjective", name = "课程目标管理")
     public void CourseTask(){
 
     }

@@ -12,5 +12,5 @@ import lombok.Data;
  */
 @Data
 public class StuEvaluationVo extends StuEvaluation {
-    CourseTaskVo courseTaskVo;
+    CourseObjectiveVo courseTaskVo;
 }

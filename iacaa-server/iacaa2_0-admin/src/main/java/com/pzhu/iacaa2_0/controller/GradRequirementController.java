@@ -1,38 +1,24 @@
 package com.pzhu.iacaa2_0.controller;
 
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.gapache.security.annotation.AuthResource;
 import com.gapache.security.annotation.NeedAuth;
 import com.pzhu.iacaa2_0.common.ActionResult;
 import com.pzhu.iacaa2_0.entity.*;
-import com.pzhu.iacaa2_0.entityVo.CheckLinkVo;
 import com.pzhu.iacaa2_0.entityVo.GradRequirementVo;
-import com.pzhu.iacaa2_0.entityVo.CultivationAttributesVo;
 import com.pzhu.iacaa2_0.entityVo.IdsVo;
-import com.pzhu.iacaa2_0.entityVo.TargetVo;
-import com.pzhu.iacaa2_0.mapper.StuScoreMapper;
 import com.pzhu.iacaa2_0.service.*;
 import com.pzhu.iacaa2_0.utils.FileUtils;
-import org.apache.poi.ss.formula.functions.T;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
-import java.net.URLEncoder;
-import java.text.NumberFormat;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
-import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -59,7 +45,7 @@ public class GradRequirementController{
     ICourseTargetService courseTargetService;
 
     @Autowired
-    ICourseTaskService courseTaskService;
+    ICourseObjectiveService courseTaskService;
 
     @Autowired
     ICheckLinkService checkLinkService;

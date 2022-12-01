@@ -51,7 +51,7 @@
 2022-11-14 10:12:13.267  INFO 4300 --- [main] .s.c.AuthResourceServerAutoConfiguration : find auth resource:@com.gapache.security.annotation.AuthResource(checkEnabled=true, scope=delete, name=删除CourseTaskCheckLink)
 2022-11-14 10:12:13.268  INFO 4300 --- [main] .s.c.AuthResourceServerAutoConfiguration : find auth resource:@com.gapache.security.annotation.AuthResource(checkEnabled=true, scope=saveOrUpdate, name=保存或更新CourseTaskCheckLink列表)
 2022-11-14 10:12:13.268  INFO 4300 --- [main] .s.c.AuthResourceServerAutoConfiguration : find auth resource:@com.gapache.security.annotation.AuthResource(checkEnabled=true, scope=voList, name=CourseTaskCheckLinkVo列表)
-2022-11-14 10:12:13.268  INFO 4300 --- [main] .s.c.AuthResourceServerAutoConfiguration : find need auth component:CourseTask, courseTaskController, com.pzhu.iacaa2_0.controller.CourseTaskController@79627d27
+2022-11-14 10:12:13.268  INFO 4300 --- [main] .s.c.AuthResourceServerAutoConfiguration : find need auth component:CourseTask, courseTaskController, com.pzhu.iacaa2_0.controller.CourseObjectiveController@79627d27
 2022-11-14 10:12:13.268  INFO 4300 --- [main] .s.c.AuthResourceServerAutoConfiguration : find auth resource:@com.gapache.security.annotation.AuthResource(checkEnabled=true, scope=delete, name=删除单个课程目标)
 2022-11-14 10:12:13.268  INFO 4300 --- [main] .s.c.AuthResourceServerAutoConfiguration : find auth resource:@com.gapache.security.annotation.AuthResource(checkEnabled=true, scope=list, name=课程目标列表)
 2022-11-14 10:12:13.268  INFO 4300 --- [main] .s.c.AuthResourceServerAutoConfiguration : find auth resource:@com.gapache.security.annotation.AuthResource(checkEnabled=true, scope=summaryCourseTask, name=同步课程目标成绩数据)

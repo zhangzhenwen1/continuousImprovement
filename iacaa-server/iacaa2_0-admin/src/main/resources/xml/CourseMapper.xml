@@ -21,8 +21,8 @@
         <result column="edit_status" property="editStatus" />
         <result column="created_date" property="createdDate" />
         <result column="update_date" property="updateDate" />
-        <association property="courseTasks" column="id"
-                     select="com.pzhu.iacaa2_0.mapper.CourseTaskMapper.getByCourseId"/>
+        <association property="courseObjectives" column="id"
+                     select="com.pzhu.iacaa2_0.mapper.CourseObjectiveMapper.getByCourseId"/>
         <association property="checkLinks" column="id"
                      select="com.pzhu.iacaa2_0.mapper.CheckLinkMapper.getByCourseId"/>
     </resultMap>

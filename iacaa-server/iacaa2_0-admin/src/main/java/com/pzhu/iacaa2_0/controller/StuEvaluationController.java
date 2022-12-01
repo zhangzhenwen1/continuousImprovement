@@ -1,13 +1,11 @@
 package com.pzhu.iacaa2_0.controller;
 
 
-import com.gapache.security.annotation.AuthResource;
 import com.pzhu.iacaa2_0.common.ActionResult;
-import com.pzhu.iacaa2_0.entity.Course;
-import com.pzhu.iacaa2_0.entity.CourseTask;
+import com.pzhu.iacaa2_0.entity.CourseObjective;
 import com.pzhu.iacaa2_0.entity.StuEvaluation;
 import com.pzhu.iacaa2_0.entityVo.*;
-import com.pzhu.iacaa2_0.service.ICourseTaskService;
+import com.pzhu.iacaa2_0.service.ICourseObjectiveService;
 import com.pzhu.iacaa2_0.service.IStuEvaluationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -32,17 +30,17 @@ import java.util.List;
 @RequestMapping("/stuEvaluation")
 public class StuEvaluationController {
     @Autowired
-    ICourseTaskService courseTaskService;
+    ICourseObjectiveService courseTaskService;
 
     @Autowired
     IStuEvaluationService stuEvaluationService;
 
     @RequestMapping("getQuestions")
     public ActionResult getQuestions (@RequestBody CourseVo courseVo){
-        CourseTask courseTask = new CourseTask();
-//        courseTask.setYear(LocalDateTime.now().getYear());
+        CourseObjective courseObjective = new CourseObjective();
+//        courseObjective.setYear(LocalDateTime.now().getYear());
         int randomSize = 8;
-        List<CourseTaskVo> courseTasks = courseTaskService.randomlist(courseTask,randomSize);
+        List<CourseObjectiveVo> courseTasks = courseTaskService.randomlist(courseObjective,randomSize);
         List<StuEvaluationVo> stuEvaluationVos = new ArrayList<>();
         courseTasks.forEach(i -> {
             StuEvaluationVo vo = new StuEvaluationVo();
@@ -69,8 +67,8 @@ public class StuEvaluationController {
     }
 
     @RequestMapping("statisticsByCourseTaskId")
-    public ActionResult statisticsByCourseTaskId (@RequestBody CourseTask courseTask){
-        List<StuEvaluationStatisticsVo> stuEvaluationStatisticsVos = stuEvaluationService.statisticsByCourseTaskId(courseTask.getId());
+    public ActionResult statisticsByCourseTaskId (@RequestBody CourseObjective courseObjective){
+        List<StuEvaluationStatisticsVo> stuEvaluationStatisticsVos = stuEvaluationService.statisticsByCourseTaskId(courseObjective.getId());
         return ActionResult.ofSuccess(stuEvaluationStatisticsVos);
     }
 
