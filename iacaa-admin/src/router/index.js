@@ -143,23 +143,11 @@ export const asyncRoutes = [
     meta: { title: '课程及课程目标管理', icon: 'edit', affix: true, roles: ['adminExclusive', 'Iacaa20Server:Menue:CourseObjective']},
     children: [
       {
-        path: 'ChecklinkEdit',
-        component: () => import('@/views/course/ChecklinkEdit'),
-        name: 'ChecklinkEdit',
+        path: 'Assessment',
+        component: () => import('@/views/course/Assessment'),
+        name: 'Assessment',
         meta: { title: '编辑考核环节', icon: 'edit', affix: true }
       },
-      {
-        path: 'CourseObjective',
-        component: () => import('@/views/course/CourseObjective'),
-        name: 'CourseObjective',
-        meta: { title: '编辑课程目标', icon: 'edit', affix: true }
-      },
-      {
-        path: 'CheckLinks',
-        component: () => import('@/views/course/CheckLinks'),
-        name: 'CheckLinks',
-        meta: { title: '考核环节关联目标', icon: 'edit', affix: true }
-      }
     ]
   },
   {

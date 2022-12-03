@@ -34,43 +34,40 @@ public class CourseTaskCheckLinkController {
     @Autowired
     ICourseTaskCheckLinkService courseTaskCheckLinkService;
 
-    @RequestMapping("voList")
-    @AuthResource(scope = "voList", name = "CourseTaskCheckLinkVo列表")
-    public ActionResult voList(@RequestBody CourseTaskCheckLinkVo vo){
-        List<CourseTaskCheckLinkVo> list = courseTaskCheckLinkService.voList(vo);
+    @RequestMapping("list")
+    @AuthResource(scope = "list", name = "CourseTaskCheckLink")
+    public ActionResult voList(@RequestBody CourseTaskCheckLink courseTaskCheckLink){
+        List<CourseTaskCheckLink> list = courseTaskCheckLinkService.list(courseTaskCheckLink);
         return ActionResult.ofSuccess(list);
     }
 
     @RequestMapping("delete")
     @AuthResource(scope = "delete", name = "删除CourseTaskCheckLink")
-    public ActionResult delete(@RequestBody CourseTaskCheckLink checkLink){
-        return courseTaskCheckLinkService.removeById(checkLink.getId())
-                ? ActionResult.ofSuccess() : ActionResult.ofFail("删除失败");
+    public ActionResult delete(@RequestBody CourseTaskCheckLink courseTaskCheckLink){
+        return courseTaskCheckLinkService.remove(courseTaskCheckLink)
+                ? ActionResult.ofSuccess()
+                : ActionResult.ofFail("删除失败");
     }
 
     @RequestMapping("saveOrUpdate")
     @AuthResource(scope = "saveOrUpdate", name = "保存或更新CourseTaskCheckLink列表")
-    public ActionResult saveOrUpdate(@RequestBody List<CourseTaskCheckLink> list){
+    public ActionResult insertBatch(@RequestBody List<CourseTaskCheckLink> list){
         AtomicReference<Boolean> iflegal = new AtomicReference<>(true);
         AtomicReference<Double> totalMix = new AtomicReference<>(0d);
-        Map<Integer,Double> checkMap = new HashMap<>(list.size());
+        Map<Long,Double> checkMap = new HashMap<>(list.size());
         list.forEach(i -> {
-            if(checkMap.get(i.getCheckLinkId())==null){
-                checkMap.put(i.getCheckLinkId(),i.getMix());
+            if(checkMap.get(i.getId())==null){
+                checkMap.put(i.getObjectiveId(),i.getRatio());
             }else {
                  iflegal.set(false);
             }
-            if(i.getMix() < 0.09999999999d){
+            if(i.getRatio() < 0.09999999999d){
                 iflegal.set(false);
             }
-            if (i.getCheckLinkId() == null){
+            if (i.getCourseId() == null){
                 iflegal.set(false);
             }
-            totalMix.set(totalMix.get() + i.getMix());
-            if (i.getId() == null){
-                i.setCreatedDate(LocalDateTime.now());
-            }
-            i.setUpdateDate(LocalDateTime.now());
+            totalMix.set(totalMix.get() + i.getRatio());
         });
         if(!iflegal.get()){
             return ActionResult.ofFail("考核环节不可重复且不为空，权重至少为0.1");
@@ -78,7 +75,7 @@ public class CourseTaskCheckLinkController {
         if(totalMix.get() < 0.99999999d || totalMix.get() > 1.000000001d){
             return ActionResult.ofFail("权重总和必须为1");
         }
-        boolean b = courseTaskCheckLinkService.saveOrUpdateBatch(list);
+        boolean b = courseTaskCheckLinkService.insertBatch(list);
         return b ? ActionResult.ofSuccess(list) : ActionResult.ofFail("更新失败");
     }
 }

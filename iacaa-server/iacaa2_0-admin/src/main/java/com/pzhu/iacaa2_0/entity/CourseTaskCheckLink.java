@@ -27,32 +27,28 @@ public class CourseTaskCheckLink extends BaseEntity {
     /**
      * 课程目标
      */
-    @TableField("course_task_id")
-    private Integer courseTaskId;
+    @TableField("objectiveId")
+    private Long objectiveId;
 
     /**
      * 考核环节
      */
-    @TableField("check_link_id")
-    private Integer checkLinkId;
+    @TableField("courseId")
+    private Long courseId;
+
+    @TableField("cultivationId")
+    private Integer cultivationId;
+
+    /**
+     * 考核环节
+     */
+    @TableField("assessmentName")
+    private String assessmentName;
 
     /**
      * 支撑权重
      */
-    @TableField("mix")
-    private Double mix;
-
-    /**
-     * 创建时间
-     */
-    @TableField("created_date")
-    private LocalDateTime createdDate;
-
-    /**
-     * 更新时间
-     */
-    @TableField("update_date")
-    private LocalDateTime updateDate;
-
+    @TableField("ratio")
+    private Double ratio;
 
 }

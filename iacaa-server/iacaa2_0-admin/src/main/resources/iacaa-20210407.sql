@@ -121,6 +121,7 @@ CREATE TABLE `t_check_link`  (
   `totalScore` double NOT NULL COMMENT '总分',
   `scoreRatio` double NOT NULL COMMENT '成绩占比',
   PRIMARY KEY (`courseId`,`cultivationId`,`assessmentName`) USING BTREE,
+  INDEX `assessmentName`(`assessmentName`) USING BTREE,
   CONSTRAINT `courseId@assessment` FOREIGN KEY (`courseId`) REFERENCES `t_course` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `cultivationIdKey@assessment` FOREIGN KEY (`cultivationId`) REFERENCES `t_cultivation` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
@@ -144,6 +145,23 @@ CREATE TABLE `t_courseObjective`  (
   CONSTRAINT `attributeIdKey@courseObjective` FOREIGN KEY (`attributeId`) REFERENCES `t_grad_requirement` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `subAttributeIdKey@courseObjective` FOREIGN KEY (`subAttributeId`) REFERENCES `t_target` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for t_course_task_check_link
+-- ----------------------------
+DROP TABLE IF EXISTS `t_course_task_check_link`;
+CREATE TABLE `t_course_task_check_link`  (
+  `objectiveId` int(7) NOT NULL COMMENT '唯一标识',
+  `courseId` int(5) NOT NULL COMMENT '关联课程',
+  `cultivationId` int(8) NOT NULL COMMENT '培养方案编制年份',
+  `assessmentName` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '考核环节名称',
+  `ratio` double NOT NULL COMMENT '占比',
+  PRIMARY KEY (`courseId`,`objectiveId`, `cultivationId`, `assessmentName`) USING BTREE,
+  CONSTRAINT `courseId@assessObjective` FOREIGN KEY (`courseId`) REFERENCES `t_course` (`id`),
+  CONSTRAINT `cultivationIdKey@assessObjective` FOREIGN KEY (`cultivationId`) REFERENCES `t_cultivation` (`id`),
+  CONSTRAINT `objectiveIdKey@assessObjective` FOREIGN KEY (`objectiveId`) REFERENCES `t_courseObjective` (`objectiveId`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `assessmentNameKey@assessObjective` FOREIGN KEY (`assessmentName`) REFERENCES `t_check_link` (`assessmentName`)
+) ENGINE = InnoDB AUTO_INCREMENT = 62 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for t_course
@@ -181,20 +199,7 @@ CREATE TABLE `t_stu_score`  (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 62 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
--- ----------------------------
--- Table structure for t_course_task_check_link
--- ----------------------------
-DROP TABLE IF EXISTS `t_course_task_check_link`;
-CREATE TABLE `t_course_task_check_link`  (
-  `id` int(8) NOT NULL AUTO_INCREMENT COMMENT '唯一标识',
-  `course_task_id` int(5) NULL DEFAULT NULL COMMENT 'course_task表id',
-  `check_link_id` int(7) NULL DEFAULT NULL COMMENT 'check_link表id',
-  `year` int(4) NULL DEFAULT NULL COMMENT '年份',
-  `mix` double NULL DEFAULT NULL COMMENT '占比',
-  `created_date` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  `update_date` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 62 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
 
 
 

@@ -4,45 +4,74 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.pzhu.iacaa2_0.entity.CourseTaskCheckLink">
-        <result column="id" property="id" />
-        <result column="course_task_id" property="courseTaskId" />
-        <result column="check_link_id" property="checkLinkId" />
-        <result column="mix" property="mix" />
-        <result column="created_date" property="createdDate" />
-        <result column="update_date" property="updateDate" />
+        <result column="objectiveId" property="objectiveId" />
+        <result column="courseId" property="courseId" />
+        <result column="cultivationId" property="cultivationId" />
+        <result column="assessmentName" property="assessmentName" />
+        <result column="ratio" property="ratio" />
     </resultMap>
 
     <resultMap id="voMap" type="com.pzhu.iacaa2_0.entityVo.CourseTaskCheckLinkVo">
-        <result column="id" property="id" />
-        <result column="mix" property="mix" />
-        <result column="course_task_id" property="courseTaskId" />
-        <result column="check_link_id" property="checkLinkId" />
-        <result column="created_date" property="createdDate" />
-        <result column="update_date" property="updateDate" />
+        <result column="objectiveId" property="objectiveId" />
+        <result column="courseId" property="courseId" />
+        <result column="cultivationId" property="cultivationId" />
+        <result column="assessmentName" property="assessmentName" />
+        <result column="ratio" property="ratio" />
         <association property="courseTask" column="course_task_id" select="com.pzhu.iacaa2_0.mapper.CourseTaskMapper.selectById"></association>
         <association property="checkLink" column="check_link_id" select="com.pzhu.iacaa2_0.mapper.CheckLinkMapper.selectById"></association>
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, course_task_id, check_link_id, mix, created_date, update_date
+        objectiveId, courseId, cultivationId, assessmentName, ratio
     </sql>
 
-    <select id="voList" resultMap="voMap" parameterType="com.pzhu.iacaa2_0.entityVo.CourseTaskCheckLinkVo">
+    <select id="list" resultMap="BaseResultMap" parameterType="com.pzhu.iacaa2_0.entity.CourseTaskCheckLink">
         select <include refid="Base_Column_List"></include> from t_course_task_check_link
         <where>
             <trim prefixOverrides="AND">
-                <if test="id != null and id !=''">
-                    AND id = #{id}
+                <if test="objectiveId != null and objectiveId !=''">
+                    AND objectiveId = #{objectiveId}
                 </if>
-                <if test="courseTaskId != null and courseTaskId !=''">
-                    AND course_task_id = #{courseTaskId}
+                <if test="courseId != null and courseId !=''">
+                    AND courseId = #{courseId}
                 </if>
-                <if test="checkLinkId != null and checkLinkId !=''">
-                    AND check_link_id = #{checkLinkId}
+                <if test="cultivationId != null and cultivationId !=''">
+                    AND cultivationId = #{cultivationId}
                 </if>
             </trim>
         </where>
     </select>
+
+    <insert id="insertBatch" parameterType="com.pzhu.iacaa2_0.entity.CourseTaskCheckLink">
+        INSERT INTO t_course_task_check_link
+        values
+        <foreach collection="list" item="item" separator=",">
+            (#{item.objectiveId}, #{item.courseId}, #{item.cultivationId}, #{item.assessmentName}, #{item.ratio})
+        </foreach>
+        AS alias ON DUPLICATE KEY UPDATE
+        assessmentName=alias.assessmentName,
+        ratio=alias.ratio
+    </insert>
+
+    <delete id="remove" parameterType="com.pzhu.iacaa2_0.entity.CourseTaskCheckLink">
+        delete from t_course_task_check_link
+        <where>
+            <trim prefixOverrides="AND">
+                <if test="objectiveId != null and objectiveId !=''">
+                    AND objectiveId = #{objectiveId}
+                </if>
+                <if test="courseId != null and courseId !=''">
+                    AND courseId = #{courseId}
+                </if>
+                <if test="cultivationId != null and cultivationId !=''">
+                    AND cultivationId = #{cultivationId}
+                </if>
+                <if test="assessmentName != null and assessmentName !=''">
+                    AND assessmentName = #{assessmentName}
+                </if>
+            </trim>
+        </where>
+    </delete>
 
 </mapper>

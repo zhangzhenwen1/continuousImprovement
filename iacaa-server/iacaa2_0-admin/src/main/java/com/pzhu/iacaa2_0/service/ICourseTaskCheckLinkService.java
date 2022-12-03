@@ -16,5 +16,9 @@ import java.util.List;
  */
 public interface ICourseTaskCheckLinkService extends IService<CourseTaskCheckLink> {
 
-    List<CourseTaskCheckLinkVo> voList(CourseTaskCheckLinkVo vo);
+    List<CourseTaskCheckLink> list(CourseTaskCheckLink courseTaskCheckLink);
+
+    Boolean insertBatch(List<CourseTaskCheckLink> courseTaskCheckLinkList);
+
+    Boolean remove(CourseTaskCheckLink courseTaskCheckLink);
 }
