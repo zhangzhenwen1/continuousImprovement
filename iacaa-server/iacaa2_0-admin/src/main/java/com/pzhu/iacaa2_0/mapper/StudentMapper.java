@@ -1,6 +1,7 @@
 package com.pzhu.iacaa2_0.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.pzhu.iacaa2_0.entity.StuObjEval;
 import com.pzhu.iacaa2_0.entity.StuScore;
 import com.pzhu.iacaa2_0.entity.Student;
 
@@ -21,4 +22,6 @@ public interface StudentMapper extends BaseMapper<Student> {
     Boolean deleteOne(Student student);
 
     Boolean updateInfo(Student student);
+
+    Boolean insertBatch(List<StuObjEval> stuObjEvalList);
 }

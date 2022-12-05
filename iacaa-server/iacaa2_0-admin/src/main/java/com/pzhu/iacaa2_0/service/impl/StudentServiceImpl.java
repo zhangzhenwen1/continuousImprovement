@@ -1,18 +1,11 @@
 package com.pzhu.iacaa2_0.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.pzhu.iacaa2_0.entity.CheckLink;
-import com.pzhu.iacaa2_0.entity.StuScore;
+import com.pzhu.iacaa2_0.entity.StuObjEval;
 import com.pzhu.iacaa2_0.entity.Student;
-import com.pzhu.iacaa2_0.entityVo.CheckLinkVo;
-import com.pzhu.iacaa2_0.mapper.StuScoreMapper;
 import com.pzhu.iacaa2_0.mapper.StudentMapper;
-import com.pzhu.iacaa2_0.service.ICheckLinkService;
-import com.pzhu.iacaa2_0.service.IStuScoreService;
 import com.pzhu.iacaa2_0.service.IStudentService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -40,6 +33,11 @@ public class StudentServiceImpl extends ServiceImpl<StudentMapper, Student> impl
     @Override
     public Boolean updateInfo(Student student) {
         return baseMapper.updateInfo(student);
+    }
+
+    @Override
+    public Boolean insertBatch(List<StuObjEval> stuObjEvalList) {
+        return baseMapper.insertBatch(stuObjEvalList);
     }
 
 }

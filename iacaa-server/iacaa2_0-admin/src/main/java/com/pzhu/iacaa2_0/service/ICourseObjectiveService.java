@@ -31,4 +31,5 @@ public interface ICourseObjectiveService extends IService<CourseObjective> {
     Boolean summaryCourseTaskById(CourseObjective courseObjective);
 
 
+    List<CourseObjective> CourseTargetvoList(CourseObjective courseObjective);
 }

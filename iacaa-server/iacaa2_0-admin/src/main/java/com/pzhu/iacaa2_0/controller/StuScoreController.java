@@ -12,6 +12,7 @@ import com.pzhu.iacaa2_0.common.ActionResult;
 import com.pzhu.iacaa2_0.easyexcel.NoModelDataListener;
 import com.pzhu.iacaa2_0.entity.CheckLink;
 import com.pzhu.iacaa2_0.entity.Course;
+import com.pzhu.iacaa2_0.entity.CourseTaskCheckLink;
 import com.pzhu.iacaa2_0.entity.StuScore;
 import com.pzhu.iacaa2_0.entityVo.CheckLinkVo;
 import com.pzhu.iacaa2_0.entityVo.FileUploadVo;
@@ -32,6 +33,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * <p>

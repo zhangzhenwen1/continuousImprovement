@@ -243,6 +243,7 @@ CREATE TABLE `t_objectiveEvaluate`  (
   `semesterId` int(8) NOT NULL COMMENT '学期',
   `objectiveId` int(5) NOT NULL COMMENT '',
   `evaluate` double NULL DEFAULT NULL COMMENT '占比',
+  `subAttributeEvaluate` double NULL DEFAULT NULL COMMENT '占比',
   PRIMARY KEY (`studentId`, `courseId`, `objectiveId`,`semesterId`) USING BTREE,
   CONSTRAINT `studentId@t_objectiveEvaluate` FOREIGN KEY (`studentId`) REFERENCES `t_studentInfo` (`studentId`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
@@ -255,16 +256,18 @@ CREATE TABLE `t_subAttributeEvaluate`  (
   `studentId` int(8) NOT NULL COMMENT '学号',
   `courseId` int(5) NOT NULL COMMENT '关联课程',
   `semesterId` int(8) NOT NULL COMMENT '学期',
+  `objectiveId` int(5) NOT NULL COMMENT '',
+  `attributeId` int(5) NOT NULL COMMENT '关联次级指标点',
   `subAttributeId` int(5) NOT NULL COMMENT '关联次级指标点',
   `evaluate` double NULL DEFAULT NULL COMMENT '占比',
-  PRIMARY KEY (`studentId`, `courseId`, `subAttributeId`) USING BTREE
+  PRIMARY KEY (`studentId`, `courseId`, `objectiveId`,`semesterId`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for t_attributeEvaluate
 -- ----------------------------
-DROP TABLE IF EXISTS `t_subAttributeEvaluate`;
-CREATE TABLE `t_subAttributeEvaluate`  (
+DROP TABLE IF EXISTS `t_attributeEvaluate`;
+CREATE TABLE `t_attributeEvaluate`  (
   `studentId` int(8) NOT NULL COMMENT '学号',
   `courseId` int(5) NOT NULL COMMENT '关联课程',
   `attributeId` int(5) NOT NULL COMMENT '关联次级指标点',

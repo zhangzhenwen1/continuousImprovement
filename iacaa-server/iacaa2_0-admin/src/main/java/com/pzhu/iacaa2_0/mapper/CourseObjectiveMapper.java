@@ -33,4 +33,5 @@ public interface CourseObjectiveMapper extends BaseMapper<CourseObjective> {
     void coverNullToZero();
 
 
+    List<CourseObjective> CourseTargetvoList(CourseObjective courseObjective);
 }

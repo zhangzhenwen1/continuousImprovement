@@ -65,6 +65,15 @@
         where studentId = #{studentId}
     </update>
 
-
+    <insert id="insertBatch"  parameterType="com.pzhu.iacaa2_0.entity.StuObjEval">
+        INSERT INTO t_objectiveEvaluate
+        values
+        <foreach collection="list" item="item" separator=",">
+            (#{item.studentId}, #{item.courseId}, #{item.semesterId}, #{item.objectiveId}, #{item.evaluate}, #{item.subAttributeEvaluate})
+        </foreach>
+        ON DUPLICATE KEY UPDATE
+        evaluate=values(evaluate),
+        subAttributeEvaluate=values(subAttributeEvaluate)
+    </insert>
 
 </mapper>

@@ -52,6 +52,13 @@ public class CourseObjectiveController {
         return ActionResult.ofSuccess(courseObjectives);
     }
 
+    @RequestMapping("/CourseTargetvoList")
+    @AuthResource(scope = "CourseTargetvoList", name = "课程目标列表")
+    public ActionResult CourseTargetvoList(@RequestBody CourseObjective courseObjective){
+        List<CourseObjective> courseObjectives = courseObjectiveService.CourseTargetvoList(courseObjective);
+        return ActionResult.ofSuccess(courseObjectives);
+    }
+
     @RequestMapping("/getOne")
     @AuthResource(scope = "getOne", name = "获取单个课程目标")
     public ActionResult getOne(@RequestBody CourseObjective courseObjective){

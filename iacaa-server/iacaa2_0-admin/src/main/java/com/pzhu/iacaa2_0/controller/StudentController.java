@@ -11,6 +11,7 @@ import com.gapache.security.annotation.NeedAuth;
 import com.pzhu.iacaa2_0.common.ActionResult;
 import com.pzhu.iacaa2_0.easyexcel.NoModelDataListener;
 import com.pzhu.iacaa2_0.entity.CheckLink;
+import com.pzhu.iacaa2_0.entity.StuObjEval;
 import com.pzhu.iacaa2_0.entity.StuScore;
 import com.pzhu.iacaa2_0.entity.Student;
 import com.pzhu.iacaa2_0.entityVo.CheckLinkVo;
@@ -67,6 +68,13 @@ public class StudentController {
     @AuthResource(scope = "updateInfo", name = "修改学生信息")
     public ActionResult updateInfo(@RequestBody Student student) {
         Boolean b = studentService.updateInfo(student);
+        return ActionResult.ofSuccess(b);
+    }
+
+    @RequestMapping("updateObjectiveEvaluate")
+    @AuthResource(scope = "updateObjectiveEvaluate", name = "updateObjectiveEvaluate")
+    public ActionResult insertBatch(@RequestBody List<StuObjEval> stuObjEvalList) {
+        Boolean b = studentService.insertBatch(stuObjEvalList);
         return ActionResult.ofSuccess(b);
     }
 

@@ -37,6 +37,11 @@ public class CourseObjectiveServiceImpl extends ServiceImpl<CourseObjectiveMappe
     }
 
     @Override
+    public List<CourseObjective> CourseTargetvoList(CourseObjective courseObjective) {
+        return baseMapper.CourseTargetvoList(courseObjective);
+    }
+
+    @Override
     public Boolean insertBatch(List<CourseObjective> courseObjectiveList) {
         return baseMapper.insertBatch(courseObjectiveList);
     }

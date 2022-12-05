@@ -24,6 +24,15 @@
         <association property="target" column="{id=subAttributeId,cultivationId=cultivationId,attributeId=attributeId}" select="com.pzhu.iacaa2_0.mapper.TargetMapper.list"/>
     </resultMap>
 
+    <resultMap id="courseTargetVoMap" type="com.pzhu.iacaa2_0.entityVo.CourseObjectiveVoCourseTarget">
+        <result column="objectiveId" property="objectiveId"/>
+        <result column="courseId" property="courseId"/>
+        <result column="cultivationId" property="cultivationId"/>
+        <result column="attributeId" property="attributeId"/>
+        <result column="subAttributeId" property="subAttributeId"/>
+        <association property="courseTarget" column="{attributeId=attributeId,cultivationId=cultivationId,courseId=courseId,subAttributeId=subAttributeId}" select="com.pzhu.iacaa2_0.mapper.CourseTargetMapper.list"/>
+    </resultMap>
+
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
         objectiveId, objectiveDescribe, courseId, cultivationId, attributeId, subAttributeId, objectiveSupportRatio
@@ -61,6 +70,37 @@
     </select>
 
     <select id="voList" parameterType="com.pzhu.iacaa2_0.entity.CourseObjective" resultMap="voMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_courseObjective
+        <where>
+            <trim prefixOverrides="AND">
+                <if test="objectiveId != null and objectiveId !=''">
+                    AND objectiveId = #{objectiveId}
+                </if>
+                <if test="objectiveDescribe != null and objectiveDescribe !=''">
+                    AND objectiveDescribe = #{objectiveDescribe}
+                </if>
+                <if test="courseId != null and courseId !=''">
+                    AND courseId = #{courseId}
+                </if>
+                <if test="cultivationId != null and cultivationId !=''">
+                    AND cultivationId = #{cultivationId}
+                </if>
+                <if test="attributeId != null and attributeId !=''">
+                    AND attributeId = #{attributeId}
+                </if>
+                <if test="subAttributeId != null and subAttributeId !=''">
+                    AND subAttributeId = #{subAttributeId}
+                </if>
+                <if test="objectiveSupportRatio != null and objectiveSupportRatio !=''">
+                    AND objectiveSupportRatio = #{objectiveSupportRatio}
+                </if>
+            </trim>
+        </where>
+    </select>
+
+    <select id="CourseTargetvoList" parameterType="com.pzhu.iacaa2_0.entity.CourseObjective" resultMap="courseTargetVoMap">
         select
         <include refid="Base_Column_List"/>
         from t_courseObjective

@@ -183,10 +183,13 @@
       <div>
         {{viewingCourse.name}}  {{ semesterDescribe }}
       </div>
-      <template>
-        <el-button icon="el-icon-download" type="primary" @click="exportTemplate(viewingCourse)">成绩导入模板</el-button>
-        <el-button icon="el-icon-upload2" size="small" type="primary" @click="importFilePrefix(viewingCourse)">Excel导入成绩</el-button>
-      </template>
+      <el-form >
+        <el-form-item>
+          <el-button icon="el-icon-download" type="primary" @click="exportTemplate(viewingCourse)">成绩导入模板</el-button>
+          <el-button icon="el-icon-upload2" size="small" type="primary" @click="importFilePrefix(viewingCourse)">Excel导入成绩</el-button>
+          <el-button icon="" type="warning" @click="calculate(viewingCourse)">计算达成度</el-button>
+        </el-form-item>
+      </el-form>
       <el-table
         ref="multipleTable"
         :data="studentScore"
@@ -296,7 +299,9 @@ export default {
         cultivationId:'',
       }],
       courseScore:[],
+      objectiveCalculateParameter:[],
       studentScore:[{}],
+      subAttributeEvaluate:[{}],
     }
   },
   watch: {
@@ -374,6 +379,7 @@ export default {
                 score.push({
                   assessmentName: i.assessmentName,
                   score: '',
+                  totalScore: i.totalScore,
                 })
               })
               // eslint-disable-next-line no-console
@@ -400,6 +406,7 @@ export default {
                           studentName: p.studentId,
                           courseId: p.courseId,
                           score:[],
+                          objectiveEvaluate:[],
                         })
                       })
                       this.studentScore = temp
@@ -456,6 +463,116 @@ export default {
         })
       }
     },
+
+    calculate(course){
+      let evaluate=[] //储存课程目标达成度
+      let supportSubRatio=[]//储存课程目标的支撑二级指标系数
+      let courseSupportRatio=[]//储存课程的支撑二级指标系数
+
+      requestByClient(supplierConsumer, 'POST', 'courseObjective/CourseTargetvoList', {
+        courseId: course.id,
+        cultivationId: this.semesterCultivationId,
+      }, res => {
+        //将权重分配进一个数组
+        if (res.data.succ) {
+          res.data.data.forEach(i=>{
+            let n=(i.objectiveId-1)
+            //supportAttributeRatio存权重，数组坐标含义‘指标点-1’
+            courseSupportRatio[n]=i.courseTarget.supportRatio
+          })
+          // eslint-disable-next-line no-console
+          console.log('储存课程支撑二级指标系数')
+          // eslint-disable-next-line no-console
+          console.log(courseSupportRatio)
+        }
+      })
+
+      //获取课程目标支撑二级指标的权重
+      requestByClient(supplierConsumer, 'POST', 'courseObjective/list', {
+        courseId: course.id,
+        cultivationId: this.semesterCultivationId,
+      }, res => {
+        //将权重分配进一个数组
+        if (res.data.succ) {
+          res.data.data.forEach(i=>{
+            let n=(i.objectiveId-1)
+            evaluate[n]=0.00
+            //evaluateSubAttribute暂存权重，数组坐标含义‘指标点-1’
+            supportSubRatio[n]=i.objectiveSupportRatio
+          })
+          // eslint-disable-next-line no-console
+          console.log('supportSubRatio')
+          // eslint-disable-next-line no-console
+          console.log(supportSubRatio)
+          //获取考核环节对课程目标的支撑权重
+          requestByClient(supplierConsumer, 'POST', 'courseTaskCheckLink/list', {
+            courseId: course.id,
+            cultivationId: this.semesterCultivationId,
+          }, res => {
+            if (res.data.succ) {
+              // eslint-disable-next-line no-console
+              console.log('获取考核环节对课程目标的支撑权重')
+              // eslint-disable-next-line no-console
+              console.log(res.data.data)
+              this.studentScore.forEach(p=> {
+                p.score.forEach(q=>{
+                  res.data.data.forEach(i=>{
+                    if (i.assessmentName === q.assessmentName) {
+                      let totalScore=100
+                      let num=i.objectiveId-1
+                      evaluate[num]=evaluate[num]+i.ratio*q.score/totalScore
+                    }
+                  })
+                })
+                for (let n = 0; n < evaluate.length; n++) {
+                  p.objectiveEvaluate.push({
+                    objectiveId: n+1,
+                    eval: evaluate[n],
+                    evaluateSubAttribute: evaluate[n]*supportSubRatio[n]*courseSupportRatio[n]
+                  })
+                  evaluate[n]=0.00
+                }
+              })
+              let data=[]
+              this.studentScore.forEach(i=>{
+                i.objectiveEvaluate.forEach(j=>{
+                  data.push({
+                    studentId: i.studentId,
+                    courseId: course.id,
+                    semesterId: this.selectSemester,
+                    objectiveId: j.objectiveId,
+                    evaluate: j.eval,
+                    subAttributeEvaluate: j.evaluateSubAttribute
+                  })
+                })
+              })
+              // eslint-disable-next-line no-console
+              console.log('data')
+              // eslint-disable-next-line no-console
+              console.log(data)
+              requestByClient(supplierConsumer, 'POST', 'student/updateObjectiveEvaluate', data, res => {
+                if (res.data.succ) {
+                  this.$message({
+                    message: '更新成功',
+                    type: '200'
+                  })
+                }
+                else {
+                  this.$message({
+                    message: '更新出错',
+                    type: 'error'
+                  })
+                }
+              })
+            }
+          })
+        }
+      })
+
+
+    },
+
+
     getStuScore(stuNo) {
 
     },
