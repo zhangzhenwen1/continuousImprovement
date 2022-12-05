@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pzhu.iacaa2_0.mapper.StudentMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.pzhu.iacaa2_0.entity.Student">
+        <result column="studentId" property="studentId" />
+        <result column="studentName" property="studentName" />
+        <result column="cultivationId" property="cultivationId" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        studentId, studentName, cultivationId
+    </sql>
+
+    <select id="listInfo" resultMap="BaseResultMap" parameterType="com.pzhu.iacaa2_0.entity.Student">
+        select
+        <include refid="Base_Column_List"></include>
+        from t_studentInfo
+        <where>
+            <trim prefixOverrides="AND">
+                <if test="studentId != null and studentId !=''">
+                    AND studentId = #{studentId}
+                </if>
+                <if test="studentName != null and studentName !=''">
+                    AND studentName = #{studentName}
+                </if>
+                <if test="cultivationId != null and cultivationId !=''">
+                    AND cultivationId = #{cultivationId}
+                </if>
+            </trim>
+        </where>
+    </select>
+
+    <delete id="deleteOne" parameterType="com.pzhu.iacaa2_0.entity.Student">
+        delete
+        from t_studentInfo
+        <where>
+            <trim prefixOverrides="AND">
+                <if test="studentId != null and studentId !=''">
+                    AND studentId = #{studentId}
+                </if>
+                <if test="studentName != null and studentName !=''">
+                    AND studentName = #{studentName}
+                </if>
+                <if test="cultivationId != null and cultivationId !=''">
+                    AND cultivationId = #{cultivationId}
+                </if>
+            </trim>
+        </where>
+    </delete>
+
+    <update id="updateInfo"  parameterType="com.pzhu.iacaa2_0.entity.Student">
+        UPDATE t_studentInfo
+            SET
+        <trim prefixOverrides=",">
+            <if test="studentName != null and studentName !=''">
+                , studentName = #{studentName}
+            </if>
+            <if test="cultivationId != null and cultivationId !=''">
+                , cultivationId = #{cultivationId}
+            </if>
+        </trim>
+        where studentId = #{studentId}
+    </update>
+
+
+
+</mapper>

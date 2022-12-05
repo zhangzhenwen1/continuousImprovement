@@ -2,6 +2,7 @@ package com.pzhu.iacaa2_0.service;
 
 import com.pzhu.iacaa2_0.entity.Course;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.pzhu.iacaa2_0.entity.Semester;
 import com.pzhu.iacaa2_0.entityVo.CourseVo;
 
 import java.util.List;
@@ -27,5 +28,7 @@ public interface ICourseService extends IService<Course> {
     List<CourseVo> voList(CourseVo vo);
 
     List<Course> list(CourseVo vo);
+
+    List<Semester> listSemester(Semester semester);
 
 }

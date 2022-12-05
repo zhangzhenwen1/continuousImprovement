@@ -12,6 +12,6 @@ import lombok.Data;
  */
 @Data
 public class StuScoreVo extends StuScore {
-    private Integer year;
+    private Integer cultivationId;
     private Long courseId;
 }

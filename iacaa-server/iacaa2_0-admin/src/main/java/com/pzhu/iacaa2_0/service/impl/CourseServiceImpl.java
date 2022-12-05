@@ -1,6 +1,7 @@
 package com.pzhu.iacaa2_0.service.impl;
 
 import com.pzhu.iacaa2_0.entity.Course;
+import com.pzhu.iacaa2_0.entity.Semester;
 import com.pzhu.iacaa2_0.entityVo.CourseVo;
 import com.pzhu.iacaa2_0.mapper.CourseMapper;
 import com.pzhu.iacaa2_0.service.ICourseService;
@@ -26,5 +27,10 @@ public class CourseServiceImpl extends ServiceImpl<CourseMapper, Course> impleme
     @Override
     public List<Course> list(CourseVo vo) {
         return baseMapper.list(vo);
+    }
+
+    @Override
+    public List<Semester> listSemester(Semester semester) {
+        return baseMapper.listSemester(semester);
     }
 }

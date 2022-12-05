@@ -4,31 +4,35 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.pzhu.iacaa2_0.entity.StuScore">
-        <result column="id" property="id" />
-        <result column="check_link_id" property="checkLinkId" />
-        <result column="stuno" property="stuno" />
+        <result column="studentId" property="studentId" />
+        <result column="courseId" property="courseId" />
+        <result column="semesterId" property="semesterId" />
+        <result column="assessmentName" property="assessmentName" />
         <result column="score" property="score" />
-        <result column="created_date" property="createdDate" />
-        <result column="update_date" property="updateDate" />
-        <result column="mix_score" property="mixScore" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, check_link_id, stuno, score, created_date, update_date, mix_score
+        studentId, courseId, semesterId, assessmentName, score
     </sql>
 
     <select id="list" resultMap="BaseResultMap" parameterType="com.pzhu.iacaa2_0.entity.StuScore">
         select
         <include refid="Base_Column_List"></include>
-        from t_stu_score
+        from t_stuScore
         <where>
             <trim prefixOverrides="AND">
-                <if test="checkLinkId != null and checkLinkId !=''">
-                    AND check_link_id = #{checkLinkId}
+                <if test="studentId != null and studentId !=''">
+                    AND studentId = #{studentId}
                 </if>
-                <if test="stuno != null and stuno !=''">
-                    AND stuno = #{stuno}
+                <if test="courseId != null and courseId !=''">
+                    AND courseId = #{courseId}
+                </if>
+                <if test="semesterId != null and semesterId !=''">
+                    AND semesterId = #{semesterId}
+                </if>
+                <if test="assessmentName != null and assessmentName !=''">
+                    AND assessmentName = #{assessmentName}
                 </if>
             </trim>
         </where>

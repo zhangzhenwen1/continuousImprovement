@@ -71,25 +71,25 @@ public class StuScoreController {
         if(stuScoreList.isEmpty()){
             return ActionResult.ofFail("不能为空数据");
         }
-        CheckLink checkLink = checkLinkService.getById(stuScoreList.get(0).getCheckLinkId());
+        CheckLink checkLink = checkLinkService.getById(stuScoreList.get(0).getAssessmentName());
         Map<String,String> check = new HashMap<>();
         for (StuScore stuScore : stuScoreList) {
-            if(check.get(stuScore.getStuno()) == null){
-                check.put(stuScore.getStuno(),"exsist");
+            if(check.get(stuScore.getStudentId()) == null){
+                check.put(stuScore.getAssessmentName(),"exsist");
             }else {
-                return ActionResult.ofFail(String.format("已存在学生%S此考核环节分数",stuScore.getStuno()));
+                return ActionResult.ofFail(String.format("已存在学生%S此考核环节分数",stuScore.getStudentId()));
             }
             if(stuScore.getScore() == null || stuScore.getScore() < 0){
-                return ActionResult.ofFail(String.format("学生%S成绩不合法数",stuScore.getStuno()));
+                return ActionResult.ofFail(String.format("学生%S成绩不合法数",stuScore.getStudentId()));
             }
-            if(stuScore.getStuno() == null){
-                return ActionResult.ofFail(String.format("学号%S不合法",stuScore.getStuno()));
+            if(stuScore.getStudentId() == null){
+                return ActionResult.ofFail(String.format("学号%S不合法",stuScore.getStudentId()));
             }
             if (stuScore.getScore() > checkLink.getTotalScore()+0.00000001){
-                return ActionResult.ofFail(String.format("学生%S成绩不得大于考核环节目标成绩:%S",stuScore.getStuno(),checkLink.getTotalScore()));
+                return ActionResult.ofFail(String.format("学生%S成绩不得大于考核环节目标成绩:%S",stuScore.getStudentId(),checkLink.getTotalScore()));
             }
 
-            stuScore.setMixScore(stuScore.getScore()/checkLink.getTotalScore());
+            stuScore.setScore(stuScore.getScore()/checkLink.getTotalScore());
             if(stuScore.getId() == null){
                 stuScore.setCreatedDate(LocalDateTime.now());
             }
@@ -103,10 +103,10 @@ public class StuScoreController {
     @RequestMapping("/exportTemplate")
     @AuthResource(scope = "exportTemplate", name = "成绩导入模板")
     public void exportTemplate(HttpServletResponse response, @RequestBody StuScoreVo stuScoreVo) throws IOException {
-        CheckLinkVo vo = new CheckLinkVo();
-        vo.setCultivationId(stuScoreVo.getYear());
-        vo.setCourseId(stuScoreVo.getCourseId());
-        List<CheckLink> list1 = checkLinkService.list(vo);
+        CheckLink query = new CheckLink();
+        query.setCultivationId(stuScoreVo.getCultivationId());
+        query.setCourseId(stuScoreVo.getCourseId());
+        List<CheckLink> exportList = checkLinkService.list(query);
         try {
             // 所有行的集合
             List<List<Object>> list = new ArrayList<>();
@@ -121,7 +121,7 @@ public class StuScoreController {
             List<String> headTitle = new ArrayList<>();
             headTitle.add("学生学号");
             headList.add(headTitle);
-            list1.forEach(i -> {
+            exportList.forEach(i -> {
                 // 第 n 行 的表头
                 List<String> headTitle0 = new ArrayList<>();
                 headTitle0.add(i.getAssessmentName() + "成绩");

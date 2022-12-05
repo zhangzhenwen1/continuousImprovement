@@ -1,17 +1,17 @@
 package com.pzhu.iacaa2_0.entityVo;
 
-import com.pzhu.iacaa2_0.entity.CheckLink;
+import com.pzhu.iacaa2_0.entity.StuScore;
 import lombok.Data;
 
 /**
  * @author ZhaoZezhong
  * @version V1.0
- * @Title: CheckLinkVo
+ * @Title: StuScoreVo
  * @Description: Company:成都平凡谷科技有限责任公司
- * @date 2021/3/2210:40
+ * @date 2021/4/2610:46
  */
 @Data
-public class CheckLinkVo extends CheckLink {
-    private Long semesterId;
+public class StudentVo extends StuScore {
+    private Integer year;
     private Long courseId;
 }

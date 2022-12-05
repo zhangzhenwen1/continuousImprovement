@@ -7,6 +7,7 @@ import com.gapache.security.holder.AccessCardHolder;
 import com.github.pagehelper.PageInfo;
 import com.pzhu.iacaa2_0.common.ActionResult;
 import com.pzhu.iacaa2_0.entity.Course;
+import com.pzhu.iacaa2_0.entity.Semester;
 import com.pzhu.iacaa2_0.entityVo.CourseVo;
 import com.pzhu.iacaa2_0.entityVo.IdsVo;
 import com.pzhu.iacaa2_0.service.ICourseService;
@@ -39,6 +40,13 @@ public class CourseController{
     @AuthResource(scope = "list", name = "课程列表")
     public ActionResult list(@RequestBody Course course) throws Exception{
         List<Course> list = courseService.list();
+        return ActionResult.ofSuccess(list);
+    }
+
+    @RequestMapping("/listSemester")
+    @AuthResource(scope = "listSemester", name = "学期列表")
+    public ActionResult listSemester(@RequestBody Semester semester) throws Exception{
+        List<Semester> list = courseService.listSemester(semester);
         return ActionResult.ofSuccess(list);
     }
 

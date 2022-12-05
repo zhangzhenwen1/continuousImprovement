@@ -13,6 +13,13 @@
         <result column="update_date" property="updateDate" />
     </resultMap>
 
+    <!-- 通用查询映射结果 -->
+    <resultMap id="SemesterMap" type="com.pzhu.iacaa2_0.entity.Semester">
+        <result column="semesterId" property="semesterId" />
+        <result column="semesterDescribe" property="semesterDescribe" />
+        <result column="cultivationId" property="cultivationId" />
+    </resultMap>
+
     <resultMap id="voMap" type="com.pzhu.iacaa2_0.entityVo.CourseVo">
         <result column="id" property="id" />
         <result column="name" property="name" />
@@ -27,11 +34,12 @@
                      select="com.pzhu.iacaa2_0.mapper.CheckLinkMapper.getByCourseId"/>
     </resultMap>
 
-
-
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
         id, name, image, edit_user_id, edit_status, created_date, update_date
+    </sql>
+    <sql id="Semester_List">
+        semesterId, semesterDescribe, cultivationId
     </sql>
 
     <select id="voList" resultMap="voMap" parameterType="com.pzhu.iacaa2_0.entityVo.CourseVo">
@@ -69,18 +77,22 @@
         ORDER by id
     </select>
 
-    <select id="fuzzyQuery" parameterType="com.pzhu.iacaa2_0.entity.Course" resultMap="BaseResultMap">
-        select
-        <include refid="Base_Column_List"/>
-        from t_course a
+    <select id="listSemester" resultMap="SemesterMap" parameterType="com.pzhu.iacaa2_0.entity.Semester">
+        select <include refid="Semester_List"></include>
+        from t_semesterInfo
         <where>
             <trim prefixOverrides="AND">
-                <if test="word != null and word !=''">
-                    AND a.name like CONCAT(CONCAT('%',#{word}),'%')
+                <if test="semesterId != null and semesterId !=''">
+                    AND semesterId = #{semesterId}
+                </if>
+                <if test="semesterDescribe != null and semesterDescribe !=''">
+                    AND semesterDescribe = #{semesterDescribe}
+                </if>
+                <if test="cultivationId != null and cultivationId !=''">
+                    AND cultivationId = #{cultivationId}
                 </if>
             </trim>
         </where>
-        ORDER BY a.name
     </select>
 
 </mapper>

@@ -11,7 +11,7 @@ import lombok.EqualsAndHashCode;
 
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author ZhaoZezhong
@@ -19,28 +19,23 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-@TableName("t_stu_score")
+@TableName("t_stuScore")
 public class StuScore extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
 
-    @TableField("check_link_id")
-    private Integer checkLinkId;
+    @TableField("studentId")
+    private Long studentId;
 
-    @TableField("stuno")
-    private String stuno;
+    @TableField("courseId")
+    private Long courseId;
+
+    @TableField("semesterId")
+    private Long semesterId;
+
+    @TableField("assessmentName")
+    private String assessmentName;
 
     @TableField("score")
     private Double score;
-
-    @TableField("created_date")
-    private LocalDateTime createdDate;
-
-    @TableField("update_date")
-    private LocalDateTime updateDate;
-
-    @TableField("mix_score")
-    private Double mixScore;
-
-
 }

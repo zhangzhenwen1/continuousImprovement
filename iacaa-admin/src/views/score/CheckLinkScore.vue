@@ -1,25 +1,31 @@
 <template>
   <div style="padding: 25px">
-    <el-form :inline="true" :model="serchForm" class="demo-form-inline" style="height: 50px">
+    <el-form :inline="true" :model="searchForm" class="demo-form-inline" style="height: 50px">
       <el-form-item label="">
-        <el-input v-model="serchForm.word" placeholder="课程名称" clearable/>
+        <el-input v-model="searchForm.word" placeholder="课程名称" clearable/>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="getCourseList">查询</el-button>
       </el-form-item>
+        <el-form-item>
+          选择学期
+        </el-form-item>
+        <el-form-item>
+          <el-select
+            v-model="selectSemester"
+            placeholder="选择学期"
+            @change="getSemesterList()"
+          >
+            <el-option
+              v-for="item in semesterList"
+              :key="item.semesterId"
+              :label="item.semesterDescribe"
+              :value="item.semesterId"
+            />
+          </el-select>
+        </el-form-item>
     </el-form>
-    <el-dialog
-      :visible.sync="dialogVisible2"
-      :close-on-click-modal="false"
-      :title="'课程成绩'"
-      width="65%"
-      z-index="3"
-      @open="open2"
-      center>
-      <div class="historyLabel">
-        <div id="historyData" class="historyCanvas"/>
-      </div>
-    </el-dialog>
+
     <el-table
       ref="multipleTable"
       :data="courses"
@@ -38,19 +44,14 @@
         width="200">
       </el-table-column>
       <el-table-column
-        prop="image"
-        label="简介"
-        width="400">
-      </el-table-column>
-      <el-table-column
         prop=""
         label="操作"
         width="">
         <template slot-scope="courseScope">
           <el-button type="primary" @click="showScore(courseScope.row)">年度课程成绩分析</el-button>
-          <el-button type="primary" @click="editScore(courseScope.row)">年度成绩管理</el-button>
+          <el-button type="primary" @click="editScore(courseScope.row)">成绩管理</el-button>
           <span style="margin-left: 1%;display: inline-block">
-            <el-button icon="el-icon-download" type="primary" @click="exportTemplate(courseScope.row)">成绩导入模板</el-button>
+
             <el-upload
               class="upload-demo"
               action=""
@@ -63,7 +64,7 @@
               :file-list="fileList"
               :http-request="importFile"
               style="display: inline-block;margin-left: 10px">
-              <el-button icon="el-icon-upload2" size="small" type="primary" @click="importFilePrefix(courseScope.row)">Excel导入成绩</el-button>
+
             </el-upload>
           </span>
           <!--          <el-button icon="el-icon-download" type="primary" @click="exportTemplate(courseScope.row.id, 2021)">下载导入模板</el-button>-->
@@ -116,12 +117,6 @@
                         style="width: 25%;margin-top: 2px"></el-input>
               <el-input type="text" autocomplete="off" v-model="item.score"
                         style="width: 15%;margin-top: 2px"></el-input>
-              <el-input type="text" autocomplete="off" v-if="item.createdDate" v-model="item.mixScore" disabled
-                        style="width: 15%;margin-top: 2px"></el-input>
-              <el-input type="text" autocomplete="off" v-if="item.createdDate" v-model="item.createdDate" disabled
-                        style="width: 20%;margin-top: 2px"></el-input>
-              <el-input type="text" autocomplete="off" v-if="item.createdDate" v-model="item.updateDate" disabled
-                        style="width: 20%;margin-top: 2px"></el-input>
               <el-button type="danger" icon="el-icon-delete" circle @click="handleDeleteChecklink(index)"></el-button>
             </div>
             <div>
@@ -134,6 +129,19 @@
       <div slot="footer" class="dialog-footer" style="margin-left: 80%">
         <el-button @click="dialogVisible = false">取 消</el-button>
         <el-button type="primary" @click="submitScores">确 定</el-button>
+      </div>
+    </el-dialog>
+
+    <el-dialog
+      :visible.sync="dialogVisible2"
+      :close-on-click-modal="false"
+      :title="'课程成绩'"
+      width="65%"
+      z-index="3"
+      @open="open2"
+      center>
+      <div class="historyLabel">
+        <div id="historyData" class="historyCanvas"/>
       </div>
     </el-dialog>
 
@@ -166,40 +174,49 @@
     </el-dialog>
 
     <el-dialog
-      :visible.sync="dialogVisible4"
+      :visible.sync="dialogVisible_editScore"
       :close-on-click-modal="false"
       :title="'课程成绩'"
-      width="65%"
+      width="90%"
       z-index="3"
       center>
-
+      <div>
+        {{viewingCourse.name}}  {{ semesterDescribe }}
+      </div>
+      <template>
+        <el-button icon="el-icon-download" type="primary" @click="exportTemplate(viewingCourse)">成绩导入模板</el-button>
+        <el-button icon="el-icon-upload2" size="small" type="primary" @click="importFilePrefix(viewingCourse)">Excel导入成绩</el-button>
+      </template>
       <el-table
         ref="multipleTable"
-        :data="checkLinksList"
+        :data="studentScore"
         style="width: 100%"
         tooltip-effect="dark"
       >
         <el-table-column
-          type="index"
-          label="序号"
+          prop="studentId"
+          label="学号"
           width="100">
         </el-table-column>
         <el-table-column
-          prop="name"
-          label="名称"
+          prop="studentName"
+          label="姓名"
           width="200">
         </el-table-column>
+        <!-- 动态生成列 -->
         <el-table-column
-          prop="averageScore"
-          label="平均成绩"
-          width="300">
+          v-for="(item,index) in studentScore[0].score"
+          :key="index"
+          width="150"
+          align="center"
+        >
+          <template slot="header">
+            <div>{{ item.assessmentName }}成绩</div>
+          </template>
+          <template v-slot="scope"> {{scope.row.score[index].score}}</template>
         </el-table-column>
-        <el-table-column
-          prop="targetScore"
-          label="目标成绩"
-          width="300">
-        </el-table-column>
-        <el-table-column
+        <!-- 动态生成列结束 -->
+        <!--el-table-column
           prop=""
           label="操作"
           width="">
@@ -209,7 +226,7 @@
             <el-button type="warning" @click="handleCheckLinkEditForm(checkLinkScope.row)">编辑成绩
             </el-button>
           </template>
-        </el-table-column>
+        </el-table-column -->
       </el-table>
     </el-dialog>
 
@@ -242,7 +259,7 @@ export default {
       dialogVisible1: false,
       dialogVisible2: false,
       dialogVisible3: false,
-      dialogVisible4: false,
+      dialogVisible_editScore: false,
       pageSize: 20,
       total: 0,
       currentPage: 1,
@@ -255,19 +272,31 @@ export default {
       tableData: [],
       courses: [],
       checkLinksList: [],
-      serchForm: {
+      searchForm: {
         word: '',
         year: ''
       },
       ckeckLinkEditForm: {
-        course: {},
+        course: {
+          semesterId:'',
+        },
         checkLink: {},
         stuScores: []
       },
       stuScoreSerchForm: {
         stuNo: ''
       },
-      fileList: []
+      fileList: [],
+      selectSemester:'',
+      semesterCultivationId:'',
+      semesterDescribe:'',
+      semesterList:[{
+        semesterId:'',
+        semesterDescribe:'',
+        cultivationId:'',
+      }],
+      courseScore:[],
+      studentScore:[{}],
     }
   },
   watch: {
@@ -277,6 +306,36 @@ export default {
     this.getCourseList()
   },
   methods: {
+    getSemesterList() {
+      if (this.selectSemester===''){
+        requestByClient(supplierConsumer, 'POST', 'course/listSemester', {
+          pageNum: this.currentPage,
+          pageSize: this.pageSize,
+        },res => {
+          if (res.data.succ) {
+            this.semesterList = res.data.data
+          }
+        })
+      }
+      else {
+        this.semesterList.forEach(i=>{
+          if (i.semesterId===this.selectSemester){
+            this.semesterCultivationId=i.cultivationId
+            this.semesterDescribe=i.semesterDescribe
+          }
+        })
+        requestByClient(supplierConsumer, 'POST', 'course/list', {
+          pageNum: this.currentPage,
+          pageSize: this.pageSize,
+          semesterId: this.selectSemester,
+        },res => {
+          if (res.data.succ) {
+            this.tableData = res.data.data
+          }
+        })
+      }
+    },
+
     importFilePrefix(course){
       this.viewingCourse = course
     },
@@ -292,24 +351,110 @@ export default {
     beforeRemove(file, fileList) {
       return this.$confirm(`确定移除 ${ file.name }？`);
     },
+
     editScore(course) {
-      this.viewingCourse = course
-      requestByClient(supplierConsumer, 'POST', 'checkLink/list', {
-        courseId: course.id,
-        year: this.$store.state.settings.editYear
-      }, res => {
-        if (res.data.succ) {
-          this.checkLinksList = res.data.data
-          if (this.checkLinksList.length > 0) {
-            this.dialogVisible4 = true
-          } else {
-            this.$message({
-              message: '该课课程' + this.$store.state.settings.editYear + '未录入考核环节',
-              type: 'warning'
-            });
+      if (this.semesterCultivationId === '') {
+        this.$message({
+          message: '请选择学期',
+          type: 'error'
+        })
+      } else {
+        this.viewingCourse = course
+        let score=[]
+        //判断是否定义考核环节
+        requestByClient(supplierConsumer, 'POST', 'checkLink/list', {
+          courseId: course.id,
+          cultivationId: this.semesterCultivationId,
+        }, res => {
+          if (res.data.succ) {
+            this.checkLinksList = res.data.data
+            //若已定义考核环节，将考核环节信息查询后储存在score中
+            if (this.checkLinksList.length > 0) {
+              res.data.data.forEach(i=>{
+                score.push({
+                  assessmentName: i.assessmentName,
+                  score: '',
+                })
+              })
+              // eslint-disable-next-line no-console
+              console.log('0. score')
+              // eslint-disable-next-line no-console
+              console.log(score)
+              //以下顺序执行
+              new Promise((resolve)=> {
+                //初始化学生成绩列表JSON
+                requestByClient(supplierConsumer, 'POST', 'stuScore/list', {
+                  //按score[0].assessmentName的考核环节查询学生信息
+                  assessmentName: score[0].assessmentName,
+                  courseId: this.viewingCourse.id,
+                  cultivationId: this.semesterCultivationId,
+                  semesterId: this.selectSemester,
+                }, res => {
+                  if (res.data.succ) {
+                    if (typeof (this.studentScore.studentId) === 'undefined') {
+                      let temp = []
+                      res.data.data.forEach(p => {
+                        //JSON列表中根据查询结果插入学生信息，但插入成绩为空
+                        temp.push({
+                          studentId: p.studentId,
+                          studentName: p.studentId,
+                          courseId: p.courseId,
+                          score:[],
+                        })
+                      })
+                      this.studentScore = temp
+                      // eslint-disable-next-line no-console
+                      console.log('1.1 this.studentScore')
+                      // eslint-disable-next-line no-console
+                      console.log(this.studentScore)
+                      resolve()
+                    }
+                  }
+                })
+              }).then(()=> {
+                // eslint-disable-next-line no-console
+                console.log('1.2 this.studentScore')
+                //再次查询并获取全部成绩，根据score中存储的考核环节轮询
+                score.forEach(i => {
+                    requestByClient(supplierConsumer, 'POST', 'stuScore/list', {
+                      assessmentName: i.assessmentName,
+                      courseId: this.viewingCourse.id,
+                      cultivationId: this.semesterCultivationId,
+                      semesterId: this.selectSemester,
+                    }, res => {
+                      if (res.data.succ) {
+                        res.data.data.forEach(p => {
+                          this.studentScore.forEach(q => {
+                            if (p.studentId === q.studentId) {
+                                q.score.push({
+                                  assessmentName: i.assessmentName,
+                                  score: p.score,
+                                })
+                            }
+                          })
+                        })
+                      }
+                    })
+                })
+                // eslint-disable-next-line no-console
+                console.log(this.studentScore)
+              }).then(()=>{
+                //3. 前端显示
+                // eslint-disable-next-line no-console
+                console.log('3 this.studentScore')
+                // eslint-disable-next-line no-console
+                console.log(this.studentScore)
+                this.dialogVisible_editScore=true
+              })
+            } else {
+              this.$message({
+                message: '该课课程在培养方案' + this.semesterCultivationId + '中未录入考核环节',
+                type: 'warning'
+              });
+            }
           }
-        }
-      })
+        })
+      }
     },
     getStuScore(stuNo) {
 
@@ -700,28 +845,36 @@ export default {
       })
     },
     exportTemplate(course) {
-      let baseURL = supplierConsumer.defaults.baseURL
-      axios.post(baseURL + '/stuScore/exportTemplate', {
-        year: this.$store.state.settings.editYear,
-        courseId: course.id
-      }, {
-        responseType: 'blob',
-        headers: {
-          '_token': getToken()
-        }
-      }).then(res => {
-        const blob = new Blob([res.data], {
-          type: 'application/vnd.ms-excel'
+      if (this.semesterCultivationId===''){
+        this.$message({
+          message: '请选择学期',
+          type: 'error'
         })
-        const objectUrl = URL.createObjectURL(blob)
-        const a = document.createElement('a')
-        a.href = objectUrl
-        a.download = course.name + this.$store.state.settings.editYear + '年成绩导入模板.xlsx'
-        // a.click();
-        // 下面这个写法兼容火狐
-        a.dispatchEvent(new MouseEvent('click', {bubbles: true, cancelable: true, view: window}))
-        window.URL.revokeObjectURL(objectUrl)
-      })
+      }
+      else{
+        let baseURL = supplierConsumer.defaults.baseURL
+        axios.post(baseURL + '/stuScore/exportTemplate', {
+          cultivationId: this.semesterCultivationId,
+          courseId: course.id
+        }, {
+          responseType: 'blob',
+          headers: {
+            '_token': getToken()
+          }
+        }).then(res => {
+          const blob = new Blob([res.data], {
+            type: 'application/vnd.ms-excel'
+          })
+          const objectUrl = URL.createObjectURL(blob)
+          const a = document.createElement('a')
+          a.href = objectUrl
+          a.download = course.name + this.$store.state.settings.editYear + '年成绩导入模板.xlsx'
+          // a.click();
+          // 下面这个写法兼容火狐
+          a.dispatchEvent(new MouseEvent('click', {bubbles: true, cancelable: true, view: window}))
+          window.URL.revokeObjectURL(objectUrl)
+        })
+      }
     },
     submitScores() {
       requestByClient(supplierConsumer, 'POST', 'stuScore/saveOrUpdate', this.ckeckLinkEditForm.stuScores, res => {
@@ -769,7 +922,7 @@ export default {
       requestByClient(supplierConsumer, 'POST', 'voList/voList', {
         pageNum: this.currentPage,
         pageSize: this.pageSize,
-        word: this.serchForm.word
+        word: this.searchForm.word
       }, res => {
         if (res.data.succ) {
           this.courses = res.data.data.list
@@ -793,18 +946,19 @@ export default {
       this.dialogVisible1 = false
       this.dialogVisible2 = false
       this.dialogVisible3 = false
-      this.dialogVisible4 = false
-      requestByClient(supplierConsumer, 'POST', 'course/voList', {
+      this.dialogVisible_editScore = false
+      requestByClient(supplierConsumer, 'POST', 'course/list', {
         pageNum: this.currentPage,
         pageSize: this.pageSize,
-        word: this.serchForm.word
+        word: this.searchForm.word
       }, res => {
         if (res.data.succ) {
-          this.courses = res.data.data.list
+          this.courses = res.data.data
           this.total = res.data.data.total
           this.pageSize = res.data.data.pageSize
           this.currentPage = res.data.data.pageNum
         }
+        this.getSemesterList()
       })
     },
     handleCheckLinkEditForm(checkLink) {

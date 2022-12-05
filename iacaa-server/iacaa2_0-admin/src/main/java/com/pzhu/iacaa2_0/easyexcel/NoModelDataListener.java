@@ -83,9 +83,9 @@ public class NoModelDataListener extends AnalysisEventListener<Map<Integer, Stri
             for (int i = 1; i < size; i++) {
                 StuScore stuScore = new StuScore();
                 stuScore.setScore(Double.parseDouble(map.get(i)));
-                stuScore.setCheckLinkId(checkLinks.get(i-1).getId().intValue());
-                stuScore.setStuno(map.get(0));
-                stuScore.setMixScore(stuScore.getScore()/checkLinks.get(i-1).getTotalScore());
+                //stuScore.setAssessmentName(checkLinks.get(i-1).getId().intValue());
+                stuScore.setAssessmentName(map.get(0));
+                stuScore.setScore(stuScore.getScore()/checkLinks.get(i-1).getTotalScore());
                 stuScore.setCreatedDate(LocalDateTime.now());
                 stuScore.setUpdateDate(LocalDateTime.now());
                 stuScoreService.save(stuScore);

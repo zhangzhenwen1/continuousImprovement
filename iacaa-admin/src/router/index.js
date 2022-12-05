@@ -157,6 +157,12 @@ export const asyncRoutes = [
     meta: { title: '成绩管理', icon: 'list', affix: true, roles: ['adminExclusive', 'Iacaa20Server:Menue:Score']},
     children: [
       {
+        path: 'StudentInfo',
+        component: () => import('@/views/score/StudentInfo'),
+        name: 'StudentInfo',
+        meta: { title: '学生信息管理', icon: 'list', affix: true }
+      },
+      {
         path: 'CheckLinkScore',
         component: () => import('@/views/score/CheckLinkScore'),
         name: 'CheckLinkScore',
