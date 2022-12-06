@@ -161,10 +161,10 @@
     </el-dialog>
 
     <el-dialog
-      :title="'考核环节:' + viewingCheckLink.name"
+      :title="'《'+viewingCourse.name+'》 “'+semesterDescribe+'” 课程目标达成情况报告'"
       :visible.sync="dialogVisible3"
       :close-on-click-modal="false"
-      width="75%"
+      width="90%"
       @open="open3"
       center
     >
@@ -188,6 +188,7 @@
           <el-button icon="el-icon-download" type="primary" @click="exportTemplate(viewingCourse)">成绩导入模板</el-button>
           <el-button icon="el-icon-upload2" size="small" type="primary" @click="importFilePrefix(viewingCourse)">Excel导入成绩</el-button>
           <el-button icon="" type="warning" @click="calculate(viewingCourse)">计算达成度</el-button>
+          <el-button icon="" type="primary" @click="editReport(viewingCourse)">撰写达成评价报告</el-button>
         </el-form-item>
       </el-form>
       <el-table
@@ -309,6 +310,7 @@ export default {
   },
   mounted() {
     this.getCourseList()
+    this.setCheckLinkScoreBar()
   },
   methods: {
     getSemesterList() {
@@ -572,6 +574,11 @@ export default {
 
     },
 
+    editReport(Course){
+      this.dialogVisible3=true
+
+    },
+
 
     getStuScore(stuNo) {
 
@@ -646,54 +653,57 @@ export default {
       })
     },
     setCheckLinkScoreBar() {
-      var chartDom = document.getElementById('elinkScatterPlot');
-      var myChart = echarts.init(chartDom);
-      var option;
-      let stuScores = this.viewingStuScore
+      let chartDom = document.getElementById('elinkScatterPlot');
+      let myChart = echarts.init(chartDom);
+      let option;
+      let name=[]
       let data = []
-      for (let i = 0; i < stuScores.length; i++) {
-        let step = []
-        step.push(i)
-        step.push(stuScores[i].score)
-        data.push(step)
+      for (let n=0; n< this.studentScore[0].objectiveEvaluate.length; n++) {
+        data[n]=[]
+        name[n]=this.studentScore[0].objectiveEvaluate[n].objectiveId
+        for (let i = 0; i < this.studentScore.length; i++) {
+          let step = [this.studentScore[i].studentId]
+          step.push(this.studentScore[i].objectiveEvaluate[n].eval)
+          data[n].push(step)
+        }
       }
+      // eslint-disable-next-line no-console
+      console.log('echarts data')
+      // eslint-disable-next-line no-console
+      console.log(data)
       option = {
-        grid: {
-          top: 40,
-          left: 50,
-          right: 40,
-          bottom: 50
-        },
-        tooltip: {
-          trigger: 'axis',
-          axisPointer: {
-            type: 'cross',
-            crossStyle: {
-              color: '#999'
-            }
+        color: ['red', 'green'],
+        title: { x: 33, text: '《'+this.viewingCourse.name+'》课程目标达成度分布', subtext: this.semesterDescribe },
+        tooltip: {},
+        xAxis: {
+          type: 'category',
+          scale: true,
+          axisLabel:{
+            rotate: 45
           }
         },
-        toolbox: {
-          show: true,
-          feature: {
-            saveAsImage: {show: true}
-          }
+        yAxis: {},
+        series:[],
+        legend: {
+          orient:'vertical',
+          top: 'center',
+          right: -5
         },
-        xAxis: {},
-        yAxis: {
-          max: this.viewingCheckLink.targetScore
-        },
-        series: [{
-          symbolSize: 15,
-          data: data,
-          type: 'scatter',
-          markLine: {
-            data: [
-              {type: 'average', name: '平均值'}
-            ]
-          }
-        }]
       };
+      data.forEach((item,index)=>{
+        option.series.push({
+          name:'课程目标'+name[index],
+            symbolSize: 10,
+            data: item,
+            type: 'scatter',
+            markLine: {
+              data: [
+                {type: 'average', name: '平均值'}
+              ]
+            },
+          markPoint: { data: [{ type: 'max', name: '最大值' }, { type: 'min', name: '最小值' }],}
+        })
+      })
       option && myChart.setOption(option);
     },
     setStuTaskScoreBar() {
@@ -1209,12 +1219,12 @@ export default {
 }
 
 .elinkScatterBar {
-  width: 90%;
+  width: 100%;
   height: 400px;
 }
 
 .elinkScatterPlot {
-  width: 1350px;
-  height: 400px;
+  width: 100%;
+  height: 100%;
 }
 </style>
