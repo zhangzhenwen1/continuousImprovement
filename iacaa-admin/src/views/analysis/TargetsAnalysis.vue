@@ -246,7 +246,7 @@ export default {
               symbol: 'circle',
               symbolSize: 5,  //设置单个数据标记的大小
               itemStyle: { normal: { borderColor: 'rgba(51,0,255,1)', borderWidth: 3, } },
-              lineStyle: { normal: { color: 'blue', width: 1, opacity: 0.9 } },
+              lineStyle: { normal: { color: 'black', width: 1, opacity: 0.9 } },
               //areaStyle:{normal:{color:'blue'}}  //设置单项区域填充样式
             }
           ]

@@ -7,11 +7,12 @@
         <result column="studentId" property="studentId" />
         <result column="studentName" property="studentName" />
         <result column="cultivationId" property="cultivationId" />
+        <result column="grade" property="grade" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        studentId, studentName, cultivationId
+        studentId, studentName, cultivationId, grade
     </sql>
 
     <select id="listInfo" resultMap="BaseResultMap" parameterType="com.pzhu.iacaa2_0.entity.Student">
@@ -29,6 +30,9 @@
                 <if test="cultivationId != null and cultivationId !=''">
                     AND cultivationId = #{cultivationId}
                 </if>
+                <if test="grade != null and grade !=''">
+                AND grade = #{grade}
+            </if>
             </trim>
         </where>
     </select>

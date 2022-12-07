@@ -1,6 +1,8 @@
 package com.pzhu.iacaa2_0.entityVo;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.pzhu.iacaa2_0.entity.StuScore;
+import com.pzhu.iacaa2_0.entity.Student;
 import lombok.Data;
 
 /**
@@ -14,4 +16,6 @@ import lombok.Data;
 public class StuScoreVo extends StuScore {
     private Integer cultivationId;
     private Long courseId;
+    private String studentName;
+    private String grade;
 }

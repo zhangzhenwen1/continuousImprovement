@@ -411,7 +411,7 @@ export default {
                         //JSON列表中根据查询结果插入学生信息，但插入成绩为空
                         temp.push({
                           studentId: p.studentId,
-                          studentName: p.studentId,
+                          studentName: p.studentName,
                           courseId: p.courseId,
                           score:[],
                           objectiveEvaluate:[],
@@ -421,7 +421,7 @@ export default {
                       // eslint-disable-next-line no-console
                       console.log('1.1 this.studentScore')
                       // eslint-disable-next-line no-console
-                      console.log(this.studentScore)
+                      console.log(res.data.data)
                       resolve()
                     }
                   }

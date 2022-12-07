@@ -3,6 +3,7 @@ package com.pzhu.iacaa2_0.service.impl;
 import com.pzhu.iacaa2_0.entity.CheckLink;
 import com.pzhu.iacaa2_0.entity.StuScore;
 import com.pzhu.iacaa2_0.entityVo.CheckLinkVo;
+import com.pzhu.iacaa2_0.entityVo.StuScoreVo;
 import com.pzhu.iacaa2_0.mapper.StuScoreMapper;
 import com.pzhu.iacaa2_0.service.ICheckLinkService;
 import com.pzhu.iacaa2_0.service.IStuScoreService;
@@ -47,5 +48,10 @@ public class StuScoreServiceImpl extends ServiceImpl<StuScoreMapper, StuScore> i
     @Override
     public Boolean summaryCheckLinkScoreById(Long id) {
         return baseMapper.summaryCheckLinkScoreById(id);
+    }
+
+    @Override
+    public List<StuScoreVo> listVo(StuScore stuScore) {
+        return baseMapper.listVo(stuScore);
     }
 }

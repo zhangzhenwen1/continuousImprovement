@@ -3,12 +3,24 @@
 <mapper namespace="com.pzhu.iacaa2_0.mapper.StuScoreMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.pzhu.iacaa2_0.entity.StuScore">
+    <resultMap id="BaseResultMap" type="com.pzhu.iacaa2_0.entityVo.StuScoreVo">
         <result column="studentId" property="studentId" />
         <result column="courseId" property="courseId" />
         <result column="semesterId" property="semesterId" />
         <result column="assessmentName" property="assessmentName" />
         <result column="score" property="score" />
+        <result column="studentName" property="studentName" />
+        <result column="grade" property="grade" />
+    </resultMap>
+
+    <resultMap id="voMap" type="com.pzhu.iacaa2_0.entityVo.StuScoreVo">
+        <result column="studentId" property="studentId" />
+        <result column="courseId" property="courseId" />
+        <result column="semesterId" property="semesterId" />
+        <result column="assessmentName" property="assessmentName" />
+        <result column="score" property="score" />
+        <association property="studentInfo" column="{studentId=studentId}"
+                     select="com.pzhu.iacaa2_0.mapper.studentMapper.listInfoVo"/>
     </resultMap>
 
     <!-- 通用查询结果列 -->
@@ -18,8 +30,9 @@
 
     <select id="list" resultMap="BaseResultMap" parameterType="com.pzhu.iacaa2_0.entity.StuScore">
         select
-        <include refid="Base_Column_List"></include>
+        *
         from t_stuScore
+        INNER JOIN t_studentInfo ON t_stuScore.studentId = t_studentInfo.studentId
         <where>
             <trim prefixOverrides="AND">
                 <if test="studentId != null and studentId !=''">
@@ -38,24 +51,5 @@
         </where>
     </select>
 
-    <update id="summaryByCheckLinkId"  parameterType="java.lang.Long">
-        UPDATE t_check_link a
-        set a.average_score = (
-            SELECT AVG(score)
-            from t_stu_score
-            WHERE check_link_id = #{id}
-            GROUP BY check_link_id)
-        WHERE id = #{id}
-    </update>
-
-    <update id="summaryCheckLinkScoreById" parameterType="java.lang.Long">
-        UPDATE t_check_link a
-        set a.average_score = (
-            SELECT AVG(score)
-            from t_stu_score
-            WHERE check_link_id = #{id}
-            GROUP BY check_link_id)
-        WHERE id = #{id}
-    </update>
 
 </mapper>

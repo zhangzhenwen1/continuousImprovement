@@ -60,6 +60,13 @@ public class StuScoreController {
         return ActionResult.ofSuccess(stuScoreList);
     }
 
+    @RequestMapping("listVo")
+    @AuthResource(scope = "listVo", name = "学生成绩列表包含姓名")
+    public ActionResult listVo(@RequestBody StuScore stuScore){
+        List<StuScoreVo> stuScoreList = stuScoreService.listVo(stuScore);
+        return ActionResult.ofSuccess(stuScoreList);
+    }
+
     @RequestMapping("delete")
     @AuthResource(scope = "delete", name = "删除学生成绩")
     public ActionResult delete(@RequestBody StuScore stuScore){
