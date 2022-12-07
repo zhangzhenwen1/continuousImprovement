@@ -19,6 +19,10 @@ import java.util.List;
  */
 @Service
 public class StudentServiceImpl extends ServiceImpl<StudentMapper, Student> implements IStudentService {
+    @Override
+    public List<Student> listGrade() {
+        return baseMapper.listGrade();
+    }
 
     @Override
     public List<Student> listInfo(Student student) {

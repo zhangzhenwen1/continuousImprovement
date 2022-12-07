@@ -33,6 +33,13 @@
         </where>
     </select>
 
+    <select id="listGrade" resultMap="BaseResultMap" parameterType="com.pzhu.iacaa2_0.entity.Student">
+        select
+        cultivationId, grade
+        from t_studentInfo
+        GROUP BY cultivationId
+    </select>
+
     <delete id="deleteOne" parameterType="com.pzhu.iacaa2_0.entity.Student">
         delete
         from t_studentInfo
@@ -69,7 +76,8 @@
         INSERT INTO t_objectiveEvaluate
         values
         <foreach collection="list" item="item" separator=",">
-            (#{item.studentId}, #{item.courseId}, #{item.semesterId}, #{item.objectiveId}, #{item.evaluate}, #{item.subAttributeEvaluate})
+            (#{item.studentId}, #{item.courseId}, #{item.objectiveId},#{item.attributeId},  #{item.subAttributeId},
+             #{item.semesterId}, #{item.cultivationId},#{item.evaluate}, #{item.subAttributeEvaluate})
         </foreach>
         ON DUPLICATE KEY UPDATE
         evaluate=values(evaluate),

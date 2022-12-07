@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.gapache.security.annotation.AuthResource;
 import com.gapache.security.annotation.NeedAuth;
 import com.pzhu.iacaa2_0.common.ActionResult;
+import com.pzhu.iacaa2_0.entity.StuObjEval;
 import com.pzhu.iacaa2_0.entity.Target;
 import com.pzhu.iacaa2_0.entityVo.IdsVo;
 import com.pzhu.iacaa2_0.service.ICourseTargetService;
@@ -59,6 +60,20 @@ public class TargetController {
     @AuthResource(scope = "list", name = "指标点列表")
     public ActionResult list(@RequestBody Target target){
         List<Target> list = targetService.list(target);
+        return ActionResult.ofSuccess(list);
+    }
+
+    @RequestMapping("/listAttribute")
+    @AuthResource(scope = "listAttribute", name = "指标点列表")
+    public ActionResult listAttribute(@RequestBody Target target){
+        List<Target> list = targetService.listAttribute(target);
+        return ActionResult.ofSuccess(list);
+    }
+
+    @RequestMapping("/listEvaluate")
+    @AuthResource(scope = "listEvaluate", name = "指标点列表")
+    public ActionResult listEvaluate(@RequestBody StuObjEval stuObjEval){
+        List<StuObjEval> list = targetService.listEvaluate(stuObjEval);
         return ActionResult.ofSuccess(list);
     }
 

@@ -29,6 +29,9 @@ public class Student extends BaseEntity {
     @TableField("studentName")
     private String studentName;
 
+    @TableField("grade")
+    private String grade;
+
     @TableField("cultivationId")
     private Integer cultivationId;
 }

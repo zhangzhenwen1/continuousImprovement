@@ -1,5 +1,6 @@
 package com.pzhu.iacaa2_0.service.impl;
 
+import com.pzhu.iacaa2_0.entity.StuObjEval;
 import com.pzhu.iacaa2_0.entity.Target;
 import com.pzhu.iacaa2_0.mapper.TargetMapper;
 import com.pzhu.iacaa2_0.service.ICourseObjectiveService;
@@ -31,6 +32,16 @@ public class TargetServiceImpl extends ServiceImpl<TargetMapper, Target> impleme
     @Override
     public List<Target> list(Target target) {
         return baseMapper.list(target);
+    }
+
+    @Override
+    public List<Target> listAttribute(Target target) {
+        return baseMapper.listAttribute(target);
+    }
+
+    @Override
+    public List<StuObjEval> listEvaluate(StuObjEval stuObjEval) {
+        return baseMapper.listEvaluate(stuObjEval);
     }
 
     @Transactional

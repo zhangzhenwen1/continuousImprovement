@@ -112,7 +112,7 @@ export const asyncRoutes = [
         path: 'TargetsAnalysis',
         component: () => import('@/views/analysis/TargetsAnalysis'),
         name: 'TargetsAnalysis',
-        meta: { title: '指标点分析', icon: 'chart', affix: true }
+        meta: { title: '指标点达成分析', icon: 'chart', affix: true }
       },
       {
         path: 'CourseAnalysis',
@@ -154,7 +154,7 @@ export const asyncRoutes = [
     path: '/Score',
     component: Layout,
     redirect: '/Score',
-    meta: { title: '成绩管理', icon: 'list', affix: true, roles: ['adminExclusive', 'Iacaa20Server:Menue:Score']},
+    meta: { title: '课程管理', icon: 'list', affix: true, roles: ['adminExclusive', 'Iacaa20Server:Menue:Score']},
     children: [
       {
         path: 'StudentInfo',
@@ -166,7 +166,7 @@ export const asyncRoutes = [
         path: 'CheckLinkScore',
         component: () => import('@/views/score/CheckLinkScore'),
         name: 'CheckLinkScore',
-        meta: { title: '成绩管理', icon: 'list', affix: true }
+        meta: { title: '课程成绩与目标达成管理', icon: 'list', affix: true }
       }
     ]
   },

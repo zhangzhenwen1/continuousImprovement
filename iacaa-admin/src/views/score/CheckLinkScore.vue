@@ -275,6 +275,7 @@ export default {
       viewingStuScore: [],
       tableData: [],
       courses: [],
+      courseObjectiveInfo:null,
       checkLinksList: [],
       searchForm: {
         word: '',
@@ -366,6 +367,7 @@ export default {
           type: 'error'
         })
       } else {
+        this.dialogVisible_editScore=true
         this.viewingCourse = course
         let score=[]
         //判断是否定义考核环节
@@ -375,6 +377,10 @@ export default {
         }, res => {
           if (res.data.succ) {
             this.checkLinksList = res.data.data
+            // eslint-disable-next-line no-console
+            console.log('0. checkLink/list res')
+            // eslint-disable-next-line no-console
+            console.log(this.checkLinksList)
             //若已定义考核环节，将考核环节信息查询后储存在score中
             if (this.checkLinksList.length > 0) {
               res.data.data.forEach(i=>{
@@ -453,7 +459,6 @@ export default {
                 console.log('3 this.studentScore')
                 // eslint-disable-next-line no-console
                 console.log(this.studentScore)
-                this.dialogVisible_editScore=true
               })
             } else {
               this.$message({
@@ -470,107 +475,153 @@ export default {
       let evaluate=[] //储存课程目标达成度
       let supportSubRatio=[]//储存课程目标的支撑二级指标系数
       let courseSupportRatio=[]//储存课程的支撑二级指标系数
+      let data=[]
+      let courseTaskCheckLinkList=null
+      let courseObjectiveList=null
 
-      requestByClient(supplierConsumer, 'POST', 'courseObjective/CourseTargetvoList', {
-        courseId: course.id,
-        cultivationId: this.semesterCultivationId,
-      }, res => {
-        //将权重分配进一个数组
-        if (res.data.succ) {
-          res.data.data.forEach(i=>{
-            let n=(i.objectiveId-1)
-            //supportAttributeRatio存权重，数组坐标含义‘指标点-1’
-            courseSupportRatio[n]=i.courseTarget.supportRatio
-          })
-          // eslint-disable-next-line no-console
-          console.log('储存课程支撑二级指标系数')
-          // eslint-disable-next-line no-console
-          console.log(courseSupportRatio)
-        }
-      })
+      new Promise(resolve => {
+        //1 获取课程对二级指标点的支撑权重
+        requestByClient(supplierConsumer, 'POST', 'courseObjective/CourseTargetvoList', {
+          courseId: course.id,
+          cultivationId: this.semesterCultivationId,
+        }, res => {
+          //将权重分配进一个数组
+          if (res.data.succ) {
+            this.courseObjectiveInfo=res.data.data
 
-      //获取课程目标支撑二级指标的权重
-      requestByClient(supplierConsumer, 'POST', 'courseObjective/list', {
-        courseId: course.id,
-        cultivationId: this.semesterCultivationId,
-      }, res => {
-        //将权重分配进一个数组
-        if (res.data.succ) {
-          res.data.data.forEach(i=>{
-            let n=(i.objectiveId-1)
-            evaluate[n]=0.00
-            //evaluateSubAttribute暂存权重，数组坐标含义‘指标点-1’
-            supportSubRatio[n]=i.objectiveSupportRatio
-          })
-          // eslint-disable-next-line no-console
-          console.log('supportSubRatio')
-          // eslint-disable-next-line no-console
-          console.log(supportSubRatio)
-          //获取考核环节对课程目标的支撑权重
-          requestByClient(supplierConsumer, 'POST', 'courseTaskCheckLink/list', {
-            courseId: course.id,
-            cultivationId: this.semesterCultivationId,
-          }, res => {
-            if (res.data.succ) {
-              // eslint-disable-next-line no-console
-              console.log('获取考核环节对课程目标的支撑权重')
-              // eslint-disable-next-line no-console
-              console.log(res.data.data)
-              this.studentScore.forEach(p=> {
-                p.score.forEach(q=>{
-                  res.data.data.forEach(i=>{
-                    if (i.assessmentName === q.assessmentName) {
-                      let totalScore=100
-                      let num=i.objectiveId-1
-                      evaluate[num]=evaluate[num]+i.ratio*q.score/totalScore
+            //2 获取考核环节对课程目标的支撑权重
+            requestByClient(supplierConsumer, 'POST', 'courseTaskCheckLink/list', {
+              courseId: course.id,
+              cultivationId: this.semesterCultivationId,
+            }, res => {
+              if (res.data.succ) {
+                courseTaskCheckLinkList = res.data.data
+
+                //3 获取课程目标支撑二级指标的权重
+                requestByClient(supplierConsumer, 'POST', 'courseObjective/list', {
+                  courseId: course.id,
+                  cultivationId: this.semesterCultivationId,
+                }, res => {
+                  //将权重分配进一个数组
+                  if (res.data.succ) {
+                    courseObjectiveList = res.data.data
+
+                    // eslint-disable-next-line no-console
+                    console.log('0.1 获取课程对二级指标点的支撑权重')
+                    // eslint-disable-next-line no-console
+                    console.log(this.courseObjectiveInfo)
+                    // eslint-disable-next-line no-console
+                    console.log('0.2 获取考核环节对课程目标的支撑权重')
+                    // eslint-disable-next-line no-console
+                    console.log(courseTaskCheckLinkList)
+                      // eslint-disable-next-line no-console
+                      console.log('0.3 获取课程目标支撑二级指标的权重')
+                      // eslint-disable-next-line no-console
+                      console.log(courseObjectiveList)
+                    resolve()
                     }
                   })
-                })
-                for (let n = 0; n < evaluate.length; n++) {
-                  p.objectiveEvaluate.push({
-                    objectiveId: n+1,
-                    eval: evaluate[n],
-                    evaluateSubAttribute: evaluate[n]*supportSubRatio[n]*courseSupportRatio[n]
-                  })
-                  evaluate[n]=0.00
                 }
               })
-              let data=[]
-              this.studentScore.forEach(i=>{
-                i.objectiveEvaluate.forEach(j=>{
-                  data.push({
-                    studentId: i.studentId,
-                    courseId: course.id,
-                    semesterId: this.selectSemester,
-                    objectiveId: j.objectiveId,
-                    evaluate: j.eval,
-                    subAttributeEvaluate: j.evaluateSubAttribute
-                  })
-                })
-              })
-              // eslint-disable-next-line no-console
-              console.log('data')
-              // eslint-disable-next-line no-console
-              console.log(data)
-              requestByClient(supplierConsumer, 'POST', 'student/updateObjectiveEvaluate', data, res => {
-                if (res.data.succ) {
-                  this.$message({
-                    message: '更新成功',
-                    type: '200'
-                  })
-                }
-                else {
-                  this.$message({
-                    message: '更新出错',
-                    type: 'error'
-                  })
-                }
-              })
-            }
-          })
-        }
-      })
+          }
+        })
+      }).then(()=>{
+        // eslint-disable-next-line no-console
+        console.log('1.0 THEN ')
+        //转储存课程支撑二级指标系数
+        this.courseObjectiveInfo.forEach(i=>{
+          let n=i.objectiveId-1
+          //supportAttributeRatio存权重，数组坐标含义‘指标点-1’
+          courseSupportRatio[n]=i.courseTarget.supportRatio
+        })
+        // eslint-disable-next-line no-console
+        console.log('1.1 转储存课程支撑二级指标系数')
+        // eslint-disable-next-line no-console
+        console.log(courseSupportRatio)
 
+        //转存课程目标支撑二级指标的权重
+        courseObjectiveList.forEach(i=>{
+          let n=(i.objectiveId-1)
+          evaluate[n]=0.00
+          //evaluateSubAttribute存权重，数组坐标含义‘指标点-1’
+          supportSubRatio[n]=i.objectiveSupportRatio
+        })
+        // eslint-disable-next-line no-console
+        console.log('1.2 转存课程目标支撑二级指标的权重')
+        // eslint-disable-next-line no-console
+        console.log(supportSubRatio)
+      }).then(()=>{
+        // eslint-disable-next-line no-console
+        console.log('2.0 THEN ')
+        this.studentScore.forEach(p=> {
+          p.score.forEach(q=>{
+            courseTaskCheckLinkList.forEach(i=>{
+              if (i.assessmentName === q.assessmentName) {
+                let totalScore=100
+                let num=i.objectiveId-1
+                evaluate[num]=evaluate[num]+i.ratio*q.score/totalScore
+              }
+            })
+          })
+          for (let n = 0; n < evaluate.length; n++) {
+            p.objectiveEvaluate.push({
+              objectiveId: n+1,
+              eval: evaluate[n],
+              evaluateSubAttribute: evaluate[n]*supportSubRatio[n]*courseSupportRatio[n]
+            })
+            evaluate[n]=0.00
+          }
+        })
+      }).then(()=>{
+
+        this.studentScore.forEach(i=>{
+          i.objectiveEvaluate.forEach(j=>{
+            let attributeId
+            let subAttributeId
+            this.courseObjectiveInfo.forEach(k=>{
+              if (k.courseId===course.id) {
+                if (k.objectiveId===j.objectiveId) {
+                  attributeId=k.attributeId
+                  subAttributeId=k.subAttributeId
+                }
+              }
+            })
+            data.push({
+              studentId: i.studentId,
+              courseId: course.id,
+              objectiveId: j.objectiveId,
+              attributeId: attributeId,
+              subAttributeId: subAttributeId,
+              semesterId: this.selectSemester,
+              cultivationId: this.semesterCultivationId,
+              evaluate: j.eval,
+              subAttributeEvaluate: j.evaluateSubAttribute
+            })
+          })
+        })
+
+        // eslint-disable-next-line no-console
+        console.log('data')
+        // eslint-disable-next-line no-console
+        console.log(data)
+
+      }).then(()=>{
+
+        requestByClient(supplierConsumer, 'POST', 'student/updateObjectiveEvaluate', data, res => {
+          if (res.data.succ) {
+            this.$message({
+              message: '更新成功',
+              type: '200'
+            })
+          }
+          else {
+            this.$message({
+              message: '更新出错',
+              type: 'error'
+            })
+          }
+        })
+      })
 
     },
 

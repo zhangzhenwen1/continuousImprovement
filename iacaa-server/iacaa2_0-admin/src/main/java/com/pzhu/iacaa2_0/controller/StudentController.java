@@ -57,6 +57,13 @@ public class StudentController {
         return ActionResult.ofSuccess(studentList);
     }
 
+    @RequestMapping("listGrade")
+    @AuthResource(scope = "listGrade", name = "年级列表")
+    public ActionResult listGrade() {
+        List<Student> studentList = studentService.listGrade();
+        return ActionResult.ofSuccess(studentList);
+    }
+
     @RequestMapping("deleteOne")
     @AuthResource(scope = "deleteOne", name = "删除学生信息")
     public ActionResult delete(@RequestBody Student student) {

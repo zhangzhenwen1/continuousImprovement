@@ -16,6 +16,8 @@ import java.util.List;
  */
 public interface IStudentService extends IService<Student> {
 
+    List<Student> listGrade();
+
     List<Student> listInfo(Student student);
 
     Boolean deleteOne(Student student);

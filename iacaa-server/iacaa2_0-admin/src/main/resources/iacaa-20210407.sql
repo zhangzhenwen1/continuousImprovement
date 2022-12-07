@@ -191,6 +191,7 @@ DROP TABLE IF EXISTS `t_studentInfo`;
 CREATE TABLE `t_studentInfo`  (
   `studentId` int(8) NOT NULL UNIQUE COMMENT '学号',
   `studentName` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '姓名',
+  `grade` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '年级',
   `cultivationId` int(8) NOT NULL COMMENT '培养方案编制年份',
   PRIMARY KEY (`studentId`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
@@ -198,8 +199,8 @@ CREATE TABLE `t_studentInfo`  (
 -- ----------------------------
 -- Records of t_studentInfo
 -- ----------------------------
-INSERT INTO `t_studentInfo` VALUES (111111, '张三', 2011);
-INSERT INTO `t_studentInfo` VALUES (111112, '李四', 2011);
+INSERT INTO `t_studentInfo` VALUES (111111, '张三', '2011级',2011);
+INSERT INTO `t_studentInfo` VALUES (111112, '李四', '2011级',2011);
 
 -- ----------------------------
 -- Table structure for t_semesterInfo
@@ -240,8 +241,11 @@ DROP TABLE IF EXISTS `t_objectiveEvaluate`;
 CREATE TABLE `t_objectiveEvaluate`  (
   `studentId` int(8) NOT NULL COMMENT '学号',
   `courseId` int(5) NOT NULL COMMENT '关联课程',
-  `semesterId` int(8) NOT NULL COMMENT '学期',
   `objectiveId` int(5) NOT NULL COMMENT '',
+  `attributeId`int(5) NOT NULL COMMENT'关联次级指标点',
+  `subAttributeId`int(5) NOT NULL COMMENT'关联次级指标点',
+  `semesterId` int(8) NOT NULL COMMENT '学期',
+  `cultivationId` int(8) NOT NULL COMMENT '培养方案编制年份',
   `evaluate` double NULL DEFAULT NULL COMMENT '占比',
   `subAttributeEvaluate` double NULL DEFAULT NULL COMMENT '占比',
   PRIMARY KEY (`studentId`, `courseId`, `objectiveId`,`semesterId`) USING BTREE,

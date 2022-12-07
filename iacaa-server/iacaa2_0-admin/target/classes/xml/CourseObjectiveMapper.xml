@@ -21,7 +21,7 @@
         <result column="attributeId" property="attributeId"/>
         <result column="subAttributeId" property="subAttributeId"/>
         <result column="objectiveSupportRatio" property="objectiveSupportRatio"/>
-        <association property="target" column="{id=subAttributeId,cultivationId=cultivationId,attributeId=attributeId}" select="com.pzhu.iacaa2_0.mapper.TargetMapper.list"/>
+        <association property="target" column="{id=subAttributeId,cultivationId=cultivationId,attributeId=attributeId}" select="com.pzhu.iacaa2_0.mapper.TargetMapper.list" autoMapping="true"/>
     </resultMap>
 
     <resultMap id="courseTargetVoMap" type="com.pzhu.iacaa2_0.entityVo.CourseObjectiveVoCourseTarget">

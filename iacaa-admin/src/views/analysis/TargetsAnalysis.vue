@@ -1,31 +1,32 @@
 <template>
   <div>
+    <el-form :inline="true" :model="selectGrade" class="demo-form-inline" style="height: 100px;padding-top: 20px">
+      <el-form-item>
+        选择统计年级
+      </el-form-item>
+      <el-form-item>
+        <el-select
+          v-model="selectGrade"
+          placeholder="选择年级"
+          @change="getGrade($event)"
+        >
+          <el-option
+            v-for="item in gradeList"
+            :key="item.grade"
+            :label="item.grade"
+            :value="{cultivationId: item.cultivationId, grade:item.grade }"
+          />
+        </el-select>
+      </el-form-item>
+    </el-form>
     <div class="historyLabel">
-      <el-select v-model="serchForm.reqId" placeholder="关联毕业要求" clearable filterable style="width: 300px;padding: 3px">
-        <el-option v-for="(item,index) in reqs" :key="index" :label="item.name" :value="item.id" />
-      </el-select>
-      <el-input v-model="serchForm.word" placeholder="描述" style="display: inline-block;width: 300px;padding: 3px"></el-input>
-      <el-button type="primary" icon="el-icon-search" @click="getList">搜索</el-button>
-
       <span style="float: right;margin-right: 180px">
-        <el-button type="primary" @click="refreshData">同步实时数据</el-button>
+        <el-button type="primary" @click="getGrade">同步实时数据</el-button>
       </span>
-      <div id="historyData" class="historyCanvas"/>
+        <div class="elinkScatterBar">
+          <div id="elinkScatterPlot" class="elinkScatterPlot"></div>
+        </div>
     </div>
-    <el-dialog
-      :title="targetChartForm.title"
-      :visible.sync="dialogVisible"
-      :close-on-click-modal="false"
-      width="95%"
-      top="50px"
-      @open="open"
-      z-index="999999"
-      center
-    >
-      <span id="targetPie" class="targetPie"/>
-      <span id="targetBar" class="targetBar"/>
-    </el-dialog>
-
   </div>
 </template>
 
@@ -39,6 +40,11 @@ export default {
   name: "TargetsAnalysis",
   data() {
     return {
+      gradeList:[],
+      selectGrade:null,
+      selectCultivationId:null,
+      evaluateList:null,
+      attributeList:[],
       serchForm: {
         id: '',
         word:'',
@@ -62,20 +68,40 @@ export default {
   },
   mounted() {
     this.getList()
+    this.setCheckLinkScoreBar()
   },
   methods: {
-    getReqList(){
-      requestByClient(supplierConsumer, 'POST', 'gradRequirement/list', {
-        year: this.$store.state.settings.editYear
+    getGrade(event){
+      // eslint-disable-next-line no-console
+      console.log('trans parameters')
+      // eslint-disable-next-line no-console
+      console.log(event)
+      this.selectCultivationId=event.cultivationId
+
+      requestByClient(supplierConsumer, 'POST', 'target/listEvaluate', {
+        cultivationId: this.selectCultivationId
       }, res => {
         if (res.data.succ) {
-          this.reqs = res.data.data
+          this.evaluateList=res.data.data
+          // eslint-disable-next-line no-console
+          console.log('listEvaluate')
+          // eslint-disable-next-line no-console
+          console.log(this.evaluateList)
+          this.setCheckLinkScoreBar()
         }
       })
     },
     getList() {
       this.dialogVisible = false
-      this.getReqList()
+      requestByClient(supplierConsumer, 'POST', 'student/listGrade', { }, res => {
+        if (res.data.succ) {
+          this.gradeList = res.data.data
+          // eslint-disable-next-line no-console
+          console.log('get student grade info')
+          // eslint-disable-next-line no-console
+          console.log(res.data.data)
+        }
+      })
       requestByClient(supplierConsumer, 'POST', 'target/list', {
         year: this.$store.state.settings.editYear,
         id: this.serchForm.id,
@@ -89,6 +115,146 @@ export default {
         this.loading = false
       })
     },
+
+    open() {
+      this.$nextTick(() => {
+        this.setCheckLinkScoreBar()
+      })
+    },
+    setCheckLinkScoreBar() {
+      let chartDom = document.getElementById('elinkScatterPlot');
+      let myChart = echarts.init(chartDom);
+      let option;
+      let max_value=[]
+      let avg_value=[]
+      let min_value=[]
+      let indicator_radar=[];
+      this.evaluateList.forEach(item=>{
+        let string=item.attributeId.toString()+'.'+item.subAttributeId.toString()+' '
+        let name={
+          name: string,
+          max: 1.00
+        }
+        indicator_radar.push(name)
+        max_value.push(item.max)
+        avg_value.push(item.avg)
+        min_value.push(item.min)
+      })
+      // eslint-disable-next-line no-console
+      console.log('echarts data')
+      // eslint-disable-next-line no-console
+      console.log(max_value)
+      // eslint-disable-next-line no-console
+      console.log(avg_value)
+      // eslint-disable-next-line no-console
+      console.log(min_value)
+      // eslint-disable-next-line no-console
+      console.log(indicator_radar)
+      option = {
+        //backgroundColor: 'rgba(204,204,204,0.7)',  //配置背景色，默认无背景
+        title: {  //配置标题组件
+          text: '各教育阶段男女人数统计',
+          target: 'blank', top: '10', left: '160', textStyle: { color: 'blue', fontSize: 18, }
+        },
+        legend: {  //配置图例组件
+          show: true,  //设置是否显示图例
+          icon: 'rect',  //icon.'circle'|'rect'|'roundRect'|'triangle'|'diamond'|'pin'|'arrow'|'none'
+          top: '14',  //设置图例距离顶部边距
+          left: 430,  //设置图例距离左侧边距
+          itemWidth: 10,  //设置图例标记的图形宽度
+          itemHeight: 10,  //设置图例标记的图形高度
+          itemGap: 30,  //设置图例每项之间的间隔
+          orient: 'horizontal',  //设置图例列表的布局朝向，'horizontal'|'vertical'
+          textStyle: { fontSize: 15, color: '#fff' }, //设置图例的公用文本样式
+          data: [  //设置图例的数据数组，数组项通常为字符串，每项代表一个系列name
+            {
+              name: '最高值', icon: 'rect',
+              textStyle: { color: 'rgba(51,0,255,1)', fontWeight: 'bold' }
+            },  //设置图例项的文本样式
+            {
+              name: '最低值', icon: 'rect',
+              textStyle: { color: 'rgba(255,0,0,1)', fontWeight: 'bold' }
+            }  //'normal'|'bold'|'bolder'|'lighter'
+            ,  //设置图例项的文本样式
+            {
+              name: '平均值', icon: 'rect',
+              textStyle: { color: 'rgba(0,0,0,1)', fontWeight: 'bold' }
+            }
+          ],
+        },
+        tooltip: {  //配置详情提示框组件
+          //设置雷达图的tooltip不会超出div，也可设置position属性
+          //设置定位不会随着鼠标移动而变化
+          confine: true,  //设置是否将tooltip框限制在图表的区域内
+          enterable: true,  //设置鼠标是否可以移动到tooltip区域内
+        },
+        radar: [{  //配置雷达图坐标系组件，只适用于雷达图
+          center: ['50%', '56%'],  //设置中心坐标，数组的第1项是横坐标，第2项是纵坐标
+          radius: 160,  //设置圆的半径，数组的第一项是内半径，第二项是外半径
+          startAngle: 90,  //设置坐标系起始角度，也就是第一个指示器轴的角度
+          name: {  //设置（圆外的标签）雷达图每个指示器名称
+            formatter: '{value}',
+            textStyle: { fontSize: 15, color: '#000' }
+          },
+          nameGap: 2,  //设置指示器名称和指示器轴的距离，默认为15
+          splitNumber: 2,  //设置指示器轴的分割段数，default
+          //shape:'circle',  //设置雷达图绘制类型，支持'polygon','circle'
+          //设置坐标轴轴线设置
+          axisLine: { lineStyle: { color: '#fff', width: 1, type: 'solid', } },
+          //设置坐标轴在grid区域中的分隔线
+          splitLine: { lineStyle: { color: '#fff', width: 1, } },
+          splitArea: {
+            show: true,
+            areaStyle: { color: ['#abc', '#abc', '#abc', '#abc'] }
+          },  //设置分隔区域的样式
+          indicator: indicator_radar
+
+        }],
+        series: [{
+          name: '雷达图',  //系列名称，用于tooltip的显示，图例筛选
+          type: 'radar',  //系列类型: 雷达图
+          //拐点样式，'circle'|'rect'|'roundRect'|'triangle'|'diamond'|'pin'|'arrow'|'none'
+          symbol: 'triangle',
+          itemStyle: {  //设置折线拐点标志的样式
+            normal: { lineStyle: { width: 1 }, opacity: 0.2 },  //设置普通状态时的样式
+            emphasis: { lineStyle: { width: 5 }, opacity: 1 }  //设置高亮时的样式
+          },
+          data: [  //设置雷达图的数据是多变量(维度)
+            {   //设置第1个数据项
+              name: '最高值',  //数据项名称
+              value: max_value,  //value是具体数据
+              symbol: 'triangle',
+              symbolSize: 5,  //设置单个数据标记的大小
+              //设置拐点标志样式
+              itemStyle: { normal: { borderColor: 'blue', borderWidth: 3 } },
+              //设置单项线条样式
+              lineStyle: { normal: { color: 'red', width: 1, opacity: 0.9 } },
+              //areaStyle: {normal:{color:'red'}}  //设置单项区域填充样式
+            },
+            {   //设置第2个数据项
+              name: '最低值',
+              value: min_value,
+              symbol: 'circle',
+              symbolSize: 5,  //设置单个数据标记的大小
+              itemStyle: { normal: { borderColor: 'rgba(51,0,255,1)', borderWidth: 3, } },
+              lineStyle: { normal: { color: 'blue', width: 1, opacity: 0.9 } },
+              //areaStyle:{normal:{color:'blue'}}  //设置单项区域填充样式
+            },
+            {   //设置第2个数据项
+              name: '平均值',
+              value: avg_value,
+              symbol: 'circle',
+              symbolSize: 5,  //设置单个数据标记的大小
+              itemStyle: { normal: { borderColor: 'rgba(51,0,255,1)', borderWidth: 3, } },
+              lineStyle: { normal: { color: 'blue', width: 1, opacity: 0.9 } },
+              //areaStyle:{normal:{color:'blue'}}  //设置单项区域填充样式
+            }
+          ]
+        },]
+      }
+      myChart.setOption(option);
+    },
+
     setChartData() {
       let vue = this
       let data = this.viewingTargetsList
@@ -202,7 +368,7 @@ export default {
         vue.handleChange(vue.viewingTargetsList[params.dataIndex].id)
       });
     },
-    open() {
+    open2() {
       this.$nextTick(() => {
         this.setTargetChart()
         this.setTargetChartBar()
@@ -470,7 +636,15 @@ export default {
   height: 830px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .05)
 }
+.elinkScatterBar {
+  width: 100%;
+  height: 400px;
+}
 
+.elinkScatterPlot {
+  width: 100%;
+  height: 100%;
+}
 .historyCanvas {
   width: 100%;
   height: 700px;

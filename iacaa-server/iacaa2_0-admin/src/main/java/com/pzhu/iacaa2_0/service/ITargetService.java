@@ -1,5 +1,6 @@
 package com.pzhu.iacaa2_0.service;
 
+import com.pzhu.iacaa2_0.entity.StuObjEval;
 import com.pzhu.iacaa2_0.entity.Target;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -21,4 +22,8 @@ public interface ITargetService extends IService<Target> {
     Boolean removeByReqId(Long id);
 
     Boolean insertBatch(List<Target> targetList);
+
+    List<Target> listAttribute(Target target);
+
+    List<StuObjEval> listEvaluate(StuObjEval stuObjEval);
 }

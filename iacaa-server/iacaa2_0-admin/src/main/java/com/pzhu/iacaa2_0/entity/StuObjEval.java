@@ -27,11 +27,20 @@ public class StuObjEval extends BaseEntity {
     @TableField("courseId")
     private Long courseId;
 
+    @TableField("objectiveId")
+    private Long objectiveId;
+
+    @TableField("attributeId")
+    private Long attributeId;
+
+    @TableField("subAttributeId")
+    private Long subAttributeId;
+
     @TableField("semesterId")
     private Long semesterId;
 
-    @TableField("objectiveId")
-    private Long objectiveId;
+    @TableField("cultivationId")
+    private Integer cultivationId;
 
     @TableField("evaluate")
     private Double evaluate;
