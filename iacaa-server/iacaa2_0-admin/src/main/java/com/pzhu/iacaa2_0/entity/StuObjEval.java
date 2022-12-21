@@ -43,7 +43,7 @@ public class StuObjEval extends BaseEntity {
     private Integer cultivationId;
 
     @TableField("evaluate")
-    private Double evaluate;
+    private Double eval;
 
     @TableField("subAttributeEvaluate")
     private Double subAttributeEvaluate;

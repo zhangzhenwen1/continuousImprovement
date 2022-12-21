@@ -6,7 +6,9 @@ import com.gapache.security.annotation.AuthResource;
 import com.gapache.security.annotation.NeedAuth;
 import com.google.common.util.concurrent.AtomicDouble;
 import com.pzhu.iacaa2_0.common.ActionResult;
+import com.pzhu.iacaa2_0.entity.CourseMeasure;
 import com.pzhu.iacaa2_0.entity.CourseObjective;
+import com.pzhu.iacaa2_0.entity.StuObjEval;
 import com.pzhu.iacaa2_0.entityVo.CourseObjectiveVo;
 import com.pzhu.iacaa2_0.service.ICourseObjectiveService;
 import com.pzhu.iacaa2_0.service.IStuEvaluationService;
@@ -75,21 +77,12 @@ public class CourseObjectiveController {
         return ActionResult.ofSuccess(courseTasks);
     }
 
-    @RequestMapping("/randomlist")
-    public ActionResult randomlist(){
-        CourseObjective courseObjective = new CourseObjective();
-        int randomSize = 4;
-        List<CourseObjectiveVo> courseTasks = courseObjectiveService.randomlist(courseObjective,randomSize);
-        return ActionResult.ofSuccess(courseTasks);
-    }
-
     @RequestMapping("/delete")
     @AuthResource(scope = "delete", name = "删除单个课程目标")
     public ActionResult delete(@RequestBody CourseObjective courseObjective){
-        boolean b = courseObjectiveService.remove(courseObjective);
+        boolean b = courseObjectiveService.delete(courseObjective);
         return b ? ActionResult.ofSuccess() : ActionResult.ofFail("删除失败");
     }
-
 
     @RequestMapping("/saveOrUpdate")
     @AuthResource(scope = "saveOrUpdate", name = "保存或更新课程目标列表")
@@ -120,15 +113,18 @@ public class CourseObjectiveController {
         }
     }
 
-    @RequestMapping("/summaryCourseTask")
-    @AuthResource(scope = "summaryCourseTask", name = "同步课程目标成绩数据")
-    public ActionResult summaryCourseTask(@RequestBody CourseObjective courseObjective){
-        return ActionResult.ofSuccess(courseObjectiveService.summaryCourseTask(courseObjective.getCultivationId()));
+    @RequestMapping("updateMeasure")
+    @AuthResource(scope = "updateMeasure", name = "updateMeasure")
+    public ActionResult insertMeasure(@RequestBody CourseMeasure courseMeasure) {
+        Boolean b = courseObjectiveService.insertMeasure(courseMeasure);
+        return ActionResult.ofSuccess(b);
     }
 
-    @RequestMapping("/summaryCourseTaskByCourseId")
-    @AuthResource(scope = "summaryCourseTaskByCourseId", name = "同步课程目标成绩数据ById")
-    public ActionResult summaryCourseTaskByCourseId(@RequestBody CourseObjective courseObjective){
-        return ActionResult.ofSuccess(courseObjectiveService.summaryCourseTaskById(courseObjective));
+    @RequestMapping("listMeasure")
+    @AuthResource(scope = "listMeasure", name = "listMeasure")
+    public ActionResult listMeasure(@RequestBody CourseMeasure courseMeasure) {
+        CourseMeasure courseMeasureResult = courseObjectiveService.listMeasure(courseMeasure);
+        return ActionResult.ofSuccess(courseMeasureResult);
     }
+
 }

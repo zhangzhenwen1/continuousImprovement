@@ -78,6 +78,13 @@ public class StudentController {
         return ActionResult.ofSuccess(b);
     }
 
+    @RequestMapping("listObjectiveEvaluate")
+    @AuthResource(scope = "listObjectiveEvaluate", name = "listObjectiveEvaluate")
+    public ActionResult listObjectiveEvaluate(@RequestBody StuObjEval stuObjEval) {
+        List<StuObjEval> stuObjEvalList = studentService.listObjectiveEvaluate(stuObjEval);
+        return ActionResult.ofSuccess(stuObjEvalList);
+    }
+
     @RequestMapping("updateObjectiveEvaluate")
     @AuthResource(scope = "updateObjectiveEvaluate", name = "updateObjectiveEvaluate")
     public ActionResult insertBatch(@RequestBody List<StuObjEval> stuObjEvalList) {

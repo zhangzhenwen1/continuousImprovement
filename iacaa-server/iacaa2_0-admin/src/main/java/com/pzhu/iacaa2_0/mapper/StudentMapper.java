@@ -26,4 +26,6 @@ public interface StudentMapper extends BaseMapper<Student> {
     Boolean insertBatch(List<StuObjEval> stuObjEvalList);
 
     List<Student> listGrade();
+
+    List<StuObjEval> listObjectiveEvaluate(StuObjEval stuObjEval);
 }

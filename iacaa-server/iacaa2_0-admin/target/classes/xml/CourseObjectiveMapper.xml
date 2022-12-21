@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.pzhu.iacaa2_0.mapper.CourseObjectiveMapper">
 
-    <!-- 通用查询映射结果 -->
+    <!-- 通用查询映射结果 entity -->
     <resultMap id="BaseResultMap" type="com.pzhu.iacaa2_0.entity.CourseObjective">
         <result column="objectiveId" property="objectiveId"/>
         <result column="objectiveDescribe" property="objectiveDescribe"/>
@@ -12,7 +12,13 @@
         <result column="subAttributeId" property="subAttributeId"/>
         <result column="objectiveSupportRatio" property="objectiveSupportRatio"/>
     </resultMap>
+    <resultMap id="courseMeasureMap" type="com.pzhu.iacaa2_0.entity.CourseMeasure">
+        <result column="courseId" property="courseId"/>
+        <result column="semesterId" property="semesterId"/>
+        <result column="measure" property="measure"/>
+    </resultMap>
 
+    <!-- 通用查询映射结果 entityVo -->
     <resultMap id="voMap" type="com.pzhu.iacaa2_0.entityVo.CourseObjectiveVo">
         <result column="objectiveId" property="objectiveId"/>
         <result column="objectiveDescribe" property="objectiveDescribe"/>
@@ -23,7 +29,6 @@
         <result column="objectiveSupportRatio" property="objectiveSupportRatio"/>
         <association property="target" column="{id=subAttributeId,cultivationId=cultivationId,attributeId=attributeId}" select="com.pzhu.iacaa2_0.mapper.TargetMapper.list" autoMapping="true"/>
     </resultMap>
-
     <resultMap id="courseTargetVoMap" type="com.pzhu.iacaa2_0.entityVo.CourseObjectiveVoCourseTarget">
         <result column="objectiveId" property="objectiveId"/>
         <result column="courseId" property="courseId"/>
@@ -144,7 +149,7 @@
         objectiveSupportRatio=alias.objectiveSupportRatio
     </insert>
 
-    <delete id="remove" parameterType="com.pzhu.iacaa2_0.entity.CourseObjective">
+    <delete id="delete" parameterType="com.pzhu.iacaa2_0.entity.CourseObjective">
         delete from t_courseObjective
         <where>
             <trim prefixOverrides="AND">
@@ -173,49 +178,28 @@
         </where>
     </delete>
 
-    <update id="summaryStuScore" parameterType="java.lang.Long">
-        UPDATE t_courseObjective
-        set stu_grade = (
-            SELECT AVG(score)/5
-            FROM `t_stu_evaluation`
-            WHERE course_task = #{courseTaskId})
-        WHERE id = #{courseTaskId} and id in (select distinct(course_task) from t_stu_evaluation)
-    </update>
+    <insert id="insertMeasure"  parameterType="com.pzhu.iacaa2_0.entity.CourseMeasure">
+        INSERT INTO t_courseMeasure
+        values
+            (#{courseId},
+            #{semesterId},
+            #{measure})
+        ON DUPLICATE KEY UPDATE
+                             measure=values(measure)
+    </insert>
 
-    <update id="coverNullToZero">
-        UPDATE t_courseObjective set sys_grade = 0 WHERE isNULL(sys_grade)
-    </update>
-
-    <select id="randomlist" resultMap="voMap">
-        select
-        <include refid="Base_Column_List"></include>
-        from t_courseObjective
+    <select id="listMeasure"  parameterType="com.pzhu.iacaa2_0.entity.CourseMeasure" resultMap="courseMeasureMap">
+        select * from t_courseMeasure
         <where>
             <trim prefixOverrides="AND">
-                <if test="courseTask.courseId != null and courseTask.courseId !=''">
-                    AND course_id = #{courseTask.courseId}
+                <if test="courseId != null and courseId !=''">
+                    AND courseId = #{courseId}
                 </if>
-                <if test="courseTask.targetId != null and courseTask.targetId !=''">
-                    AND target_id = #{courseTask.targetId}
-                </if>
-                <if test="courseTask.year != null and courseTask.year !=''">
-                    AND year = #{courseTask.year}
-                </if>
-                <if test="courseTask.stuGrade != null">
-                    AND stu_grade = #{courseTask.stuGrade}
+                <if test="semesterId != null and semesterId !=''">
+                    AND semesterId = #{semesterId}
                 </if>
             </trim>
         </where>
-        order by rand() limit #{randomSize}
     </select>
-
-    <select id="getByCourseId" parameterType="java.lang.String" resultMap="BaseResultMap">
-        select
-        <include refid="Base_Column_List"></include>
-        from t_courseObjective where course_id = #{id} order by year desc, course_id asc
-    </select>
-
-
-
 
 </mapper>

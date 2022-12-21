@@ -35,22 +35,6 @@ public class StuEvaluationController {
     @Autowired
     IStuEvaluationService stuEvaluationService;
 
-    @RequestMapping("getQuestions")
-    public ActionResult getQuestions (@RequestBody CourseVo courseVo){
-        CourseObjective courseObjective = new CourseObjective();
-//        courseObjective.setYear(LocalDateTime.now().getYear());
-        int randomSize = 8;
-        List<CourseObjectiveVo> courseTasks = courseTaskService.randomlist(courseObjective,randomSize);
-        List<StuEvaluationVo> stuEvaluationVos = new ArrayList<>();
-        courseTasks.forEach(i -> {
-            StuEvaluationVo vo = new StuEvaluationVo();
-            vo.setCourseTaskVo(i);
-            vo.setScore(0D);
-            stuEvaluationVos.add(vo);
-        });
-        return ActionResult.ofSuccess(stuEvaluationVos);
-    }
-
     @RequestMapping("saveAll")
     public ActionResult saveAll (@RequestBody EvaluationsList evaluationsList, HttpServletRequest request) throws InterruptedException {
         // 为了让用户觉得系统很牛，加载一会儿

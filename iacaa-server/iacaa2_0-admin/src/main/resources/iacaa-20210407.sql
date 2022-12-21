@@ -185,6 +185,46 @@ INSERT INTO `t_course` VALUES (1, '数据结构', NULL, NULL, NULL, '2021-03-23 
 INSERT INTO `t_course` VALUES (2, '计算机组成原理', NULL, NULL, NULL, '2021-03-23 15:23:00', '2021-03-23 15:23:00');
 
 -- ----------------------------
+-- Table structure for t_semesterInfo
+-- ----------------------------
+DROP TABLE IF EXISTS `t_semesterInfo`;
+CREATE TABLE `t_semesterInfo`  (
+  `semesterId` int(8) NOT NULL UNIQUE COMMENT '学期',
+  `semesterDescribe` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '姓名',
+  `cultivationId` int(8) NOT NULL COMMENT '培养方案编制年份',
+  PRIMARY KEY (`semesterId`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of t_semesterInfo
+-- ----------------------------
+INSERT INTO `t_semesterInfo` VALUES (111, '2011～2012学年 第一学期', 2011);
+INSERT INTO `t_semesterInfo` VALUES (112, '2011～2012学年 第二学期', 2011);
+
+-- ----------------------------
+-- Table structure for t_teacherInfo
+-- ----------------------------
+DROP TABLE IF EXISTS `t_teacherInfo`;
+CREATE TABLE `t_teacherInfo`  (
+  `teacherId` int(8) NOT NULL UNIQUE COMMENT '学期',
+  `teacherName` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '姓名',
+  PRIMARY KEY (`teacherId`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for t_courseMeasure
+-- ----------------------------
+DROP TABLE IF EXISTS `t_courseMeasure`;
+CREATE TABLE `t_courseMeasure`  (
+  `courseId` int(5) NOT NULL COMMENT '唯一标识',
+  `semesterId` int(5) NOT NULL COMMENT '学期',
+  `measure` varchar(500) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '姓名',
+  PRIMARY KEY (`courseId`,`semesterId`) USING BTREE,
+  CONSTRAINT `courseId@t_courseMeasure` FOREIGN KEY (`courseId`) REFERENCES `t_course` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `semesterId@t_courseMeasure` FOREIGN KEY (`semesterId`) REFERENCES `t_semesterInfo` (`semesterId`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
 -- Table structure for t_studentInfo
 -- ----------------------------
 DROP TABLE IF EXISTS `t_studentInfo`;
@@ -201,23 +241,6 @@ CREATE TABLE `t_studentInfo`  (
 -- ----------------------------
 INSERT INTO `t_studentInfo` VALUES (111111, '张三', '2011级',2011);
 INSERT INTO `t_studentInfo` VALUES (111112, '李四', '2011级',2011);
-
--- ----------------------------
--- Table structure for t_semesterInfo
--- ----------------------------
-DROP TABLE IF EXISTS `t_semesterInfo`;
-CREATE TABLE `t_semesterInfo`  (
-  `semesterId` int(8) NOT NULL UNIQUE COMMENT '学期',
-  `semesterDescribe` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '姓名',
-  `cultivationId` int(8) NOT NULL COMMENT '培养方案编制年份',
-  PRIMARY KEY (`semesterId`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of t_semesterInfo
--- ----------------------------
-INSERT INTO `t_semesterInfo` VALUES (111, '2011～2012学年 第一学期', 2011);
-INSERT INTO `t_semesterInfo` VALUES (112, '2011～2012学年 第二学期', 2011);
 
 -- ----------------------------
 -- Table structure for t_stuScore

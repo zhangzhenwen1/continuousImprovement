@@ -1,6 +1,7 @@
 package com.pzhu.iacaa2_0.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.pzhu.iacaa2_0.entity.CourseMeasure;
 import com.pzhu.iacaa2_0.entity.CourseObjective;
 import com.pzhu.iacaa2_0.entityVo.CourseObjectiveVo;
 import com.pzhu.iacaa2_0.mapper.CourseObjectiveMapper;
@@ -42,44 +43,24 @@ public class CourseObjectiveServiceImpl extends ServiceImpl<CourseObjectiveMappe
     }
 
     @Override
+    public Boolean insertMeasure(CourseMeasure courseMeasure) {
+        return baseMapper.insertMeasure(courseMeasure);
+    }
+
+    @Override
     public Boolean insertBatch(List<CourseObjective> courseObjectiveList) {
         return baseMapper.insertBatch(courseObjectiveList);
     }
 
     @Override
-    public Boolean remove(CourseObjective courseObjective) {
-        return baseMapper.remove(courseObjective);
+    public CourseMeasure listMeasure(CourseMeasure courseMeasure) {
+        return baseMapper.listMeasure(courseMeasure);
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
-    public Boolean summaryCourseTask(Integer year){
-        QueryWrapper<CourseObjective> courseTaskQueryWrapper = new QueryWrapper<>();
-        courseTaskQueryWrapper.eq("year",year);
-        List<CourseObjective> courseObjectives = baseMapper.selectList(courseTaskQueryWrapper);
-        courseObjectives.forEach(i -> {
-            checkLinkService.summaryByCourseTaskID(i.getId(),year);
-            baseMapper.summaryStuScore(i.getId());
-        });
-        baseMapper.coverNullToZero();
-        return true;
+    public Boolean delete(CourseObjective courseObjective) {
+        return baseMapper.delete(courseObjective);
     }
 
-    @Override
-    public List<CourseObjectiveVo> randomlist(CourseObjective courseObjective, int randomSize) {
-        return baseMapper.randomlist(courseObjective,randomSize);
-    }
-
-    @Override
-    public Boolean summaryCourseTaskById(CourseObjective courseObjective) {
-        QueryWrapper<CourseObjective> courseTaskQueryWrapper = new QueryWrapper<>();
-        courseTaskQueryWrapper.eq("course_id", courseObjective.getCourseId());
-        List<CourseObjective> courseObjectives = baseMapper.selectList(courseTaskQueryWrapper);
-        courseObjectives.forEach(i -> {
-            baseMapper.summaryStuScore(i.getId());
-        });
-        baseMapper.coverNullToZero();
-        return true;
-    }
 
 }

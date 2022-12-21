@@ -1,5 +1,8 @@
 {
   "dependencies": {
+    "file-writer": "^1.0.2",
+    "html2canvas": "^1.4.1",
+    "jspdf": "^2.5.1",
     "localStorage": "^1.0.4"
   }
 }

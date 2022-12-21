@@ -48,149 +48,42 @@
         label="操作"
         width="">
         <template slot-scope="courseScope">
-          <el-button type="primary" @click="showScore(courseScope.row)">年度课程成绩分析</el-button>
-          <el-button type="primary" @click="editScore(courseScope.row)">成绩管理</el-button>
-          <span style="margin-left: 1%;display: inline-block">
-
-            <el-upload
-              class="upload-demo"
-              action=""
-              :on-preview="handlePreview"
-              :on-remove="handleRemove"
-              :before-remove="beforeRemove"
-              :limit="1"
-              show-file-list="false"
-              :on-exceed="handleExceed"
-              :file-list="fileList"
-              :http-request="importFile"
-              style="display: inline-block;margin-left: 10px">
-
-            </el-upload>
-          </span>
-          <!--          <el-button icon="el-icon-download" type="primary" @click="exportTemplate(courseScope.row.id, 2021)">下载导入模板</el-button>-->
+          <el-button type="primary" @click="openScoreEditor(courseScope.row)">成绩管理</el-button>
+          <el-button icon="" type="primary" @click="editReport(courseScope.row)" :disabled="reportButtonSituation">查看/打印达成评价报告</el-button>
         </template>
       </el-table-column>
     </el-table>
-    <el-dialog
-      :visible.sync="dialogVisible"
-      :close-on-click-modal="false"
-      :title="ckeckLinkEditForm.course.name +' '+ ckeckLinkEditForm.checkLink.name+' (目标总分：'+ckeckLinkEditForm.checkLink.targetScore+')'"
-      width="65%"
-      center>
-      <div>
-        <el-form ref="ruleForm" :model="ckeckLinkEditForm" status-icon class="demo-ruleForm">
-          <el-form-item prop="pass" style="padding: 0;margin: 0">
-            <br>
-            <el-table
-              ref="multipleTable"
-              style="width: 100%"
-              height="50"
-              tooltip-effect="dark">
-              <el-table-column
-                prop=""
-                label="学号"
-                width="300">
-              </el-table-column>
-              <el-table-column
-                prop=""
-                label="成绩"
-                width="170">
-              </el-table-column>
-              <el-table-column
-                prop=""
-                label="成绩百分比"
-                width="170">
-              </el-table-column>
-              <el-table-column
-                prop=""
-                label="创建日期"
-                width="250">
-              </el-table-column>
-              <el-table-column
-                prop=""
-                label="更新日期">
-              </el-table-column>
-            </el-table>
-            <div v-for="(item,index) in ckeckLinkEditForm.stuScores" type="text" autocomplete="off"
-                 style="height: 35px">
-              <el-input type="text" autocomplete="off" v-model="item.stuno"
-                        style="width: 25%;margin-top: 2px"></el-input>
-              <el-input type="text" autocomplete="off" v-model="item.score"
-                        style="width: 15%;margin-top: 2px"></el-input>
-              <el-button type="danger" icon="el-icon-delete" circle @click="handleDeleteChecklink(index)"></el-button>
-            </div>
-            <div>
-              <el-button type="success" icon="el-icon-plus" plain @click="addAScore" style="margin-top: 20px">添加成绩
-              </el-button>
-            </div>
-          </el-form-item>
-        </el-form>
-      </div>
-      <div slot="footer" class="dialog-footer" style="margin-left: 80%">
-        <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="submitScores">确 定</el-button>
-      </div>
-    </el-dialog>
 
-    <el-dialog
-      :visible.sync="dialogVisible2"
-      :close-on-click-modal="false"
-      :title="'课程成绩'"
-      width="65%"
-      z-index="3"
-      @open="open2"
-      center>
-      <div class="historyLabel">
-        <div id="historyData" class="historyCanvas"/>
-      </div>
-    </el-dialog>
-
-    <el-dialog
-      :title="'课程目标:' + viewingCourseTask.describes"
-      :visible.sync="dialogVisible1"
-      :close-on-click-modal="false"
-      width="75%"
-      @open="open"
-      center
-    >
-      <div class="elinkChart">
-        <div id="stuTaskScoreBar" class="stuElinkScoreBar"></div>
-        <div id="sysElinkMixPie" class="sysElinkMixPie"></div>
-      </div>
-      <div id="sysElinkScoreBar" class="sysElinkScoreBar"></div>
-    </el-dialog>
-
-    <el-dialog
-      :title="'《'+viewingCourse.name+'》 “'+semesterDescribe+'” 课程目标达成情况报告'"
-      :visible.sync="dialogVisible3"
-      :close-on-click-modal="false"
-      width="90%"
-      @open="open3"
-      center
-    >
-      <div class="elinkScatterBar">
-        <div id="elinkScatterPlot" class="elinkScatterPlot"></div>
-      </div>
-    </el-dialog>
-
+    <!-- 成绩管理页面 -->
     <el-dialog
       :visible.sync="dialogVisible_editScore"
       :close-on-click-modal="false"
-      :title="'课程成绩'"
+      :title="'《'+viewingCourse.name+'》 “'+semesterDescribe+'” 课程成绩管理'"
       width="90%"
-      z-index="3"
       center>
+      <el-form>
+        <el-form-item
+        >
+          <!-- el-button icon="el-icon-download" type="primary" @click="exportTemplate(viewingCourse)">成绩导入模板</el-button -->
+          <el-button
+            icon="el-icon-upload"
+            type="primary"
+            @click="clickUploadButton"
+          >导入成绩<input
+            type="file"
+            style="display: none;"
+            id="uploadScore"
+            ref="files"
+            @change="readExcel"
+          /></el-button
+          >
+          <el-button icon="" type="warning" @click="calculate(viewingCourse) " :disabled="calculateButtonSituation">计算达成度</el-button>
+          <el-button icon="" type="primary" @click="editReport(viewingCourse)" :disabled="reportButtonSituation">撰写达成评价报告</el-button>
+        </el-form-item>
+      </el-form>
       <div>
         {{viewingCourse.name}}  {{ semesterDescribe }}
       </div>
-      <el-form >
-        <el-form-item>
-          <el-button icon="el-icon-download" type="primary" @click="exportTemplate(viewingCourse)">成绩导入模板</el-button>
-          <el-button icon="el-icon-upload2" size="small" type="primary" @click="importFilePrefix(viewingCourse)">Excel导入成绩</el-button>
-          <el-button icon="" type="warning" @click="calculate(viewingCourse)">计算达成度</el-button>
-          <el-button icon="" type="primary" @click="editReport(viewingCourse)">撰写达成评价报告</el-button>
-        </el-form-item>
-      </el-form>
       <el-table
         ref="multipleTable"
         :data="studentScore"
@@ -219,19 +112,104 @@
           </template>
           <template v-slot="scope"> {{scope.row.score[index].score}}</template>
         </el-table-column>
-        <!-- 动态生成列结束 -->
-        <!--el-table-column
-          prop=""
-          label="操作"
-          width="">
-          <template slot-scope="checkLinkScope">
-            <el-button type="primary" @click="handleCheckLinkShowScore(checkLinkScope.row)">散点图
-            </el-button>
-            <el-button type="warning" @click="handleCheckLinkEditForm(checkLinkScope.row)">编辑成绩
-            </el-button>
+
+        <el-table-column
+          v-for="(item,index) in studentScore[0].objectiveEvaluate"
+          :key="index"
+          width="150"
+          align="center"
+        >
+          <template slot="header">
+            <div>课程目标{{ item.objectiveId }}达成度</div>
           </template>
-        </el-table-column -->
+          <template v-slot="scope"> {{scope.row.objectiveEvaluate[index].eval}}</template>
+        </el-table-column>
+        <!-- 动态生成列结束 -->
       </el-table>
+    </el-dialog>
+
+    <!-- 报告内容编辑 -->
+    <el-dialog
+      :title="'《'+viewingCourse.name+'》 “'+semesterDescribe+'” 课程目标达成情况报告'"
+      :visible.sync="dialogVisible_report_edit"
+      :close-on-click-modal="false"
+      width="90%"
+      @open="figurePlot"
+      center
+    >
+      <!-- 达成度分布图 -->
+      <div class="objectiveEvaluateFigure">
+        <div id="objectiveEvaluateChartDOM" style="width:100%;height:100%"></div>
+      </div>
+      <!-- 编辑本文 -->
+      <el-form :model="formData" ref="vForm" :rules="rules" label-position="top" label-width="80px" size="medium"
+               @submit.native.prevent>
+        <el-form-item label="课程目标达成情况分析" prop="text" style="margin-bottom: 10px;">
+          <el-button type="text" @click="edit()">  编辑内容  </el-button>
+          <el-button type="text" @click="save()">  保存  </el-button>
+          <br />
+          <dl v-if="!editing" v-html="formData.text">{{formData.text}}</dl>
+          <el-input
+            id="TextArea1"
+            type="textarea"
+            v-if="editing"
+            :value="formData.text"
+            v-model="formData.text" rows="3"
+            placeholder="输入课程目标达成情况分析"
+          ></el-input>
+
+
+        </el-form-item>
+        <el-form-item label="持续改进情况与成效" prop="text">
+          <el-button type="text" @click="edit()">  编辑内容  </el-button>
+          <el-button type="text" @click="save()">  保存  </el-button>
+          <br />
+          <div v-if="!editing">{{formData}}</div>
+          <input type="text"
+                 class="form-control"
+                 ref="input"
+                 v-if="editing"
+                 :value="formData.text"
+                 :model="formData.text"
+                 placeholder="输入持续改进情况与成效"
+          >
+
+
+        </el-form-item>
+      </el-form>
+
+
+
+
+      <el-button type="primary" @click="submitReport()">提交</el-button>
+      <el-button type="primary" @click="reportGen()">报告预览</el-button>
+
+
+    </el-dialog>
+
+    <!-- 报告预览页面 -->
+    <el-dialog
+      :visible.sync="dialogVisible_report"
+      :close-on-click-modal="false"
+      :title="'报告页面'"
+      width="90%"
+      center>
+      <el-button type="primary" @click="pdfBtn">打印/下载报告</el-button>
+      <div id="pdfDom" style="margin:0 auto;width:1200px">
+        <h1>课程目标达成情况报告</h1>
+        <h2>1．课程基本信息</h2>
+        <p>课号：{{viewingCourse.id}} 课名：{{viewingCourse.name}} 任课教师：${teacher} 授课班级：${className}</p>
+        <p>开课学期：{{ selectSemester }}  考核方式： 课程性质： 学分： 学时：</p>
+        <h2>2．课程目标达成度</h2>
+        <img :src="'data:image/jpeg;base64' + this.chartUrl" alt="">
+
+        <h2>3．学生自评目标达成情况</h2>
+
+        <h2>4．课程目标达成情况分析</h2>
+        <p>...</p>
+        <h2>5．持续改进与成效</h2>
+        <p>{{this.formData.text}}</p>
+      </div>
     </el-dialog>
 
     <el-pagination
@@ -252,17 +230,28 @@
 import {requestByClient, supplierConsumer} from "@/utils/HttpUtils";
 import axios from "axios";
 import {getToken} from "@/utils/auth";
-import echarts from "echarts";
 import {Loading} from "element-ui";
+import XLSX from 'xlsx';
+import {resumecss} from '@/styles/download.css.js';
+import htmlToPdf from '@/utils/htmlToPdf'
+import * as echarts from 'echarts'
+//const echarts = require('echarts');
 
 export default {
   name: "CheckLinkScore",
+  components: {},
+  props: {},
   data() {
     return {
+      formData: {
+        text: "",
+      },
+      editing: false,
+      rules: {},
+
       dialogVisible: false,
-      dialogVisible1: false,
-      dialogVisible2: false,
-      dialogVisible3: false,
+      dialogVisible_report_edit: false,
+      dialogVisible_report: false,
       dialogVisible_editScore: false,
       pageSize: 20,
       total: 0,
@@ -302,8 +291,30 @@ export default {
       }],
       courseScore:[],
       objectiveCalculateParameter:[],
-      studentScore:[{}],
+      studentScore:[{
+        courseId:null,
+        studentId:null,
+        studentName:null,
+        objectiveEvaluate:[{
+          objectiveId:null,
+          subAttributeEvaluate:null,
+          eval:null,
+        }],
+        score: [{
+          assessmentName:null,
+          score:null,
+        }],
+      }],
       subAttributeEvaluate:[{}],
+      upload_file: "",
+      lists: [],
+      chartUrl:null,
+      objectiveEvaluateChart:null,
+      calculateButtonSituation: false,
+      reportButtonSituation: false,
+      htmlTitle:'页面导出PDF文件名',
+      url:null,
+
     }
   },
   watch: {
@@ -311,9 +322,68 @@ export default {
   },
   mounted() {
     this.getCourseList()
-    this.setCheckLinkScoreBar()
   },
   methods: {
+    //生成PDF预览
+    pdfBtn(){
+      htmlToPdf.getPdf(this.htmlTitle);
+    },
+
+    //报告生成
+    reportGen(){
+      this.htmlTitle='《'+this.viewingCourse.name+'》 “'+this.semesterDescribe+'” 课程目标达成情况报告'
+      this.dialogVisible_report_edit=false
+      this.dialogVisible_report=true
+    },
+
+    //录入多行文本
+    submitReport() {
+      this.$refs['vForm'].validate(valid => {
+        if (!valid) return
+        // eslint-disable-next-line no-console
+        console.log( this.formData.text);
+        //TODO 增加获取并显示measure的部分
+        requestByClient(supplierConsumer, 'POST', 'courseObjective/updateMeasure', {
+          courseId: this.viewingCourse.id,
+          semesterId: this.selectSemester,
+          measure: this.formData.text.toString(),
+        }, res => {
+          if(res.data.succ===true){
+            this.$message({
+              message: '提交成功',
+              type: 'success'
+            })
+          }
+        })
+      })
+    },
+    resetForm() {
+      this.$refs['vForm'].resetFields()
+    },
+
+    edit() {
+      this.editing = true
+      this.$nextTick(function () {
+        this.$els.input.focus()
+      })
+    },
+    save() {
+      this.editing = false
+      const textArr = document.getElementById('TextArea1').value.split(/\r{0,}\n/)
+      let textHtml = ''
+      textArr.forEach(item => { if (item) textHtml += '<p>' + item + '</p>' })
+      //let placeholder = document.createElement('div');
+      //placeholder.innerHTML = textHtml;
+      //let nodes = placeholder.childNodes;
+      this.formData.text=textHtml
+      // eslint-disable-next-line no-console
+      //console.log(placeholder);
+      // eslint-disable-next-line no-console
+      console.log(this.formData.text);
+
+    },
+
+    //获取学期列表
     getSemesterList() {
       if (this.selectSemester===''){
         requestByClient(supplierConsumer, 'POST', 'course/listSemester', {
@@ -344,35 +414,102 @@ export default {
       }
     },
 
-    importFilePrefix(course){
-      this.viewingCourse = course
+    //导入EXCEL
+    clickUploadButton() {
+      this.$refs.files.click();
     },
-    handleRemove(file, fileList) {
-      console.log(file, fileList);
+    submit_form() {
+      // 给后端发送请求，更新数据
+      // eslint-disable-next-line no-console
+      console.log("假装给后端发了个请求...");
+      // eslint-disable-next-line no-console
+      console.log(this.lists);
+      this.calculateButtonSituation=false
     },
-    handlePreview(file) {
-      console.log(file);
-    },
-    handleExceed(files, fileList) {
-      this.$message.warning(`当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
-    },
-    beforeRemove(file, fileList) {
-      return this.$confirm(`确定移除 ${ file.name }？`);
+    readExcel() {
+      const loading = this.$loading({
+        lock: true,
+        text: "文件上传中...",
+        spinner: "el-icon-loading",
+        background: "rgba(0, 0, 0, 0.7)",
+      })
+      // js 获取文件对象
+      let fileObj = document.getElementById("uploadScore").files
+      let that = this;
+      // 读取表格文件
+      const files = fileObj
+      if (files.length <= 0) {
+        return false;
+      } else if (!/\.(xls|xlsx)$/.test(files[0].name.toLowerCase())) {
+        this.$message({
+          message: "上传格式不正确，请上传xls或者xlsx格式",
+          type: "warning"
+        });
+        return false;
+      } else {
+        // 更新获取文件名
+        that.upload_file = files[0].name;
+      }
+
+      const fileReader = new FileReader();
+      fileReader.onload = ev => {
+        try {
+          const data = ev.target.result;
+          const workbook = XLSX.read(data, {
+            type: "binary"
+          });
+          const sheetName = workbook.SheetNames[0]; //取第一张表
+          const workSheet = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName]); //生成json表格内容
+
+          that.lists = [];
+          // 从解析出来的数据中提取相应的数据
+          workSheet.forEach(item => {
+            if (item["__EMPTY_1"]!=="学号") {
+              if (item["__EMPTY_2"]!=="登分日期：") {
+                if (typeof (item["__EMPTY_1"])!=="undefined"){
+                  that.lists.push({
+                    studentId: item["__EMPTY_1"],
+                    studentName: item["__EMPTY_2"]
+                  })
+                } else {
+                  this.$message({
+                    message: "上传文件出错，无法读取成绩数据",
+                    type: "error"
+                  })
+                }
+              }
+            }
+          })
+          loading.close()
+          // 给后端发请求
+          this.submit_form();
+        } catch (e) {
+          return false;
+        }
+      };
+      fileReader.readAsBinaryString(files[0]);
     },
 
-    editScore(course) {
+    //打开成绩管理窗口
+    openScoreEditor(course){
       if (this.semesterCultivationId === '') {
         this.$message({
           message: '请选择学期',
           type: 'error'
         })
       } else {
-        this.dialogVisible_editScore=true
+        this.dialogVisible_editScore = true
         this.viewingCourse = course
+        this.listScore()
+      }
+    },
+
+    //加载成绩数据
+    listScore() {
         let score=[]
-        //判断是否定义考核环节
-        requestByClient(supplierConsumer, 'POST', 'checkLink/list', {
-          courseId: course.id,
+        //获取成绩列表
+        requestByClient(supplierConsumer, 'POST', 'checkLink/list', {//判断是否定义考核环节
+          courseId: this.viewingCourse.id,
           cultivationId: this.semesterCultivationId,
         }, res => {
           if (res.data.succ) {
@@ -459,6 +596,32 @@ export default {
                 console.log('3 this.studentScore')
                 // eslint-disable-next-line no-console
                 console.log(this.studentScore)
+              }).then(()=>{
+                //获取达成度列表
+                requestByClient(supplierConsumer, 'POST', 'student/listObjectiveEvaluate', {
+                  courseId: this.viewingCourse.id,
+                  semesterId: this.selectSemester,
+                }, res => {
+                  if (res.data.data.length===0) this.calculateButtonSituation=false
+                  else {
+                    this.calculateButtonSituation=true
+                    res.data.data.forEach(i=>{
+                      this.studentScore.forEach(j=>{
+                        if (i.studentId===j.studentId) {
+                          j.objectiveEvaluate.push({
+                            objectiveId: i.objectiveId,
+                            eval: i.eval,
+                            subAttributeEvaluate: i.subAttributeEvaluate,
+                          })
+                        }
+                      })
+                    })
+                  }
+                  // eslint-disable-next-line no-console
+                  console.log('3.1 listObjectiveEvaluate')
+                  // eslint-disable-next-line no-console
+                  console.log(this.studentScore)
+                })
               })
             } else {
               this.$message({
@@ -468,9 +631,9 @@ export default {
             }
           }
         })
-      }
     },
 
+    //计算达成度
     calculate(course){
       let evaluate=[] //储存课程目标达成度
       let supportSubRatio=[]//储存课程目标的支撑二级指标系数
@@ -507,15 +670,15 @@ export default {
                     courseObjectiveList = res.data.data
 
                     // eslint-disable-next-line no-console
-                    console.log('0.1 获取课程对二级指标点的支撑权重')
+                    console.log('0.1 获取课程对二级指标点的支撑权重objectiveSupportRatio')
                     // eslint-disable-next-line no-console
                     console.log(this.courseObjectiveInfo)
                     // eslint-disable-next-line no-console
-                    console.log('0.2 获取考核环节对课程目标的支撑权重')
+                    console.log('0.2 获取考核环节对课程目标的支撑权重ratio')
                     // eslint-disable-next-line no-console
                     console.log(courseTaskCheckLinkList)
                       // eslint-disable-next-line no-console
-                      console.log('0.3 获取课程目标支撑二级指标的权重')
+                      console.log('0.3 获取课程目标支撑二级指标的权重objectiveSupportRatio')
                       // eslint-disable-next-line no-console
                       console.log(courseObjectiveList)
                     resolve()
@@ -567,7 +730,7 @@ export default {
             p.objectiveEvaluate.push({
               objectiveId: n+1,
               eval: evaluate[n],
-              evaluateSubAttribute: evaluate[n]*supportSubRatio[n]*courseSupportRatio[n]
+              subAttributeEvaluate: evaluate[n]*supportSubRatio[n]*courseSupportRatio[n]
             })
             evaluate[n]=0.00
           }
@@ -594,12 +757,15 @@ export default {
               subAttributeId: subAttributeId,
               semesterId: this.selectSemester,
               cultivationId: this.semesterCultivationId,
-              evaluate: j.eval,
-              subAttributeEvaluate: j.evaluateSubAttribute
+              eval: j.eval,
+              subAttributeEvaluate: j.subAttributeEvaluate
             })
           })
         })
-
+        // eslint-disable-next-line no-console
+        console.log('this.studentScore')
+        // eslint-disable-next-line no-console
+        console.log(this.studentScore)
         // eslint-disable-next-line no-console
         console.log('data')
         // eslint-disable-next-line no-console
@@ -613,6 +779,7 @@ export default {
               message: '更新成功',
               type: '200'
             })
+            this.calculateButtonSituation=true
           }
           else {
             this.$message({
@@ -625,125 +792,87 @@ export default {
 
     },
 
-    editReport(Course){
-      this.dialogVisible3=true
-
-    },
-
-
-    getStuScore(stuNo) {
-
-    },
-    showScore(course) {
-      this.viewingCourse = course
-      const loadingInstance = Loading.service({
-        background: 'rgba(0, 0, 0, 0.7)',
-        text: '加载中，请稍后。。。',
-        target: 'document.body',
-        body: true
-      })
-      requestByClient(supplierConsumer, 'POST', 'courseObjective/summaryCourseTaskByCourseId', {
-        year: this.$store.state.settings.editYear,
-        courseId: course.id
-      }, res => {
-        // 关闭加载动画
-        this.$nextTick(() => {
-          loadingInstance.close()
+    //撰写报告
+    async editReport(course){
+      if (this.semesterCultivationId === '') {
+        this.$message({
+          message: '请选择学期',
+          type: 'error'
         })
-      })
-      requestByClient(supplierConsumer, 'POST', 'courseObjective/voList', {
-        courseId: course.id,
-        year: this.$store.state.settings.editYear
-      }, res => {
-        if (res.data.succ) {
-          this.viewCourseTasks = res.data.data
-          if (this.viewCourseTasks.length > 0) {
-            this.dialogVisible2 = true
-          } else {
-            this.$message({
-              message: '暂无成绩',
-              type: 'warning'
-            });
-          }
+      } else {
+        if(this.viewingCourse!==course){
+          this.viewingCourse=course
+          await this.listScore()
         }
-        this.loading = false
-      })
-    },
-    handleCheckLinkShowScore(checkLink) {
-      this.viewingCheckLink = checkLink
-      requestByClient(supplierConsumer, 'POST', 'stuScore/list', {
-        checkLinkId: this.viewingCheckLink.id
-      }, res => {
-        if (res.data.succ) {
-          this.viewingStuScore = res.data.data
-          if (this.viewingStuScore.length > 0) {
-            this.dialogVisible3 = true
-          } else {
-            this.$message({
-              message: '暂无成绩',
-              type: 'warning'
-            });
-          }
-        }
-      });
-    },
-    open() {
-      this.$nextTick(() => {
-        this.setStuTaskScoreBar()
-        this.setsysElinkMixPie()
-      })
-    },
-    open2() {
-      this.$nextTick(() => {
-        this.setChartData()
-      })
-    },
-    open3() {
-      this.$nextTick(() => {
-        this.setCheckLinkScoreBar()
-      })
-    },
-    setCheckLinkScoreBar() {
-      let chartDom = document.getElementById('elinkScatterPlot');
-      let myChart = echarts.init(chartDom);
-      let option;
-      let name=[]
-      let data = []
-      for (let n=0; n< this.studentScore[0].objectiveEvaluate.length; n++) {
-        data[n]=[]
-        name[n]=this.studentScore[0].objectiveEvaluate[n].objectiveId
-        for (let i = 0; i < this.studentScore.length; i++) {
-          let step = [this.studentScore[i].studentId]
-          step.push(this.studentScore[i].objectiveEvaluate[n].eval)
-          data[n].push(step)
-        }
+
+        await requestByClient(supplierConsumer, 'POST', 'courseObjective/listMeasure', {
+            courseId: this.viewingCourse.id,
+            semesterId: this.selectSemester,
+          }, res => {
+            if (res.data.succ === true) {
+              // eslint-disable-next-line no-console
+              console.log('editReport(Course)');
+              // eslint-disable-next-line no-console
+              console.log(res.data.data);
+              this.formData.text = res.data.data.measure
+            }
+          })
+
+        this.dialogVisible_report_edit = true
       }
-      // eslint-disable-next-line no-console
-      console.log('echarts data')
-      // eslint-disable-next-line no-console
-      console.log(data)
-      option = {
-        color: ['red', 'green'],
-        title: { x: 33, text: '《'+this.viewingCourse.name+'》课程目标达成度分布', subtext: this.semesterDescribe },
-        tooltip: {},
-        xAxis: {
-          type: 'category',
-          scale: true,
-          axisLabel:{
-            rotate: 45
+    },
+
+    //图表打开
+    figurePlot() {
+      this.$nextTick(() => {
+        this.setEvaluateFigurePlot()
+        this.chartUrl = this.objectiveEvaluateChart.getDataURL({
+          pixelRatio: 1,
+          backgroundColor: 'white'
+        });
+      })
+    },
+    //图表参数设置
+    setEvaluateFigurePlot() {
+      const chartDom = document.getElementById('objectiveEvaluateChartDOM')
+      if (chartDom) {
+        this.objectiveEvaluateChart = echarts.init(chartDom);
+        let option,
+          name = [],
+          data = [];
+
+        for (let n = 0; n < this.studentScore[0].objectiveEvaluate.length; n++) {
+          data[n] = []
+          name[n] = this.studentScore[0].objectiveEvaluate[n].objectiveId
+          for (let i = 0; i < this.studentScore.length; i++) {
+            let step = [this.studentScore[i].studentId]
+            step.push(this.studentScore[i].objectiveEvaluate[n].eval)
+            data[n].push(step)
           }
-        },
-        yAxis: {},
-        series:[],
-        legend: {
-          orient:'vertical',
-          top: 'center',
-          right: -5
-        },
-      };
-      data.forEach((item,index)=>{
-        option.series.push({
-          name:'课程目标'+name[index],
+        }
+        option = {
+          animation: false,
+          color: ['red', 'green'],
+          title: {x: 33, text: '《' + this.viewingCourse.name + '》课程目标达成度分布', subtext: this.semesterDescribe},
+          tooltip: {},
+          xAxis: {
+            type: 'category',
+            scale: true,
+            axisLabel: {
+              rotate: 45
+            }
+          },
+          yAxis: {},
+          series: [],
+          legend: {
+            orient: 'vertical',
+            top: 'center',
+            right: -5
+          },
+        };
+        data.forEach((item, index) => {
+          option.series.push({
+            name: '课程目标' + name[index],
             symbolSize: 10,
             data: item,
             type: 'scatter',
@@ -752,276 +881,17 @@ export default {
                 {type: 'average', name: '平均值'}
               ]
             },
-          markPoint: { data: [{ type: 'max', name: '最大值' }, { type: 'min', name: '最小值' }],}
+            markPoint: {data: [{type: 'max', name: '最大值'}, {type: 'min', name: '最小值'}],}
+          })
         })
-      })
-      option && myChart.setOption(option);
-    },
-    setStuTaskScoreBar() {
-      requestByClient(supplierConsumer, 'POST', 'stuEvaluation/statisticsByCourseTaskId', {
-        id: this.viewingCourseTask.id
-      }, res => {
-        let data = res.data.data
-        let options = ['很差', '差', '一般', '好', '很好']
-        let nams = data.map(i => {
-          return options[i.score - 1]
-        })
-        let counts = data.map(i => {
-          return i.count
-        })
-        let chartDom1 = document.getElementById('stuTaskScoreBar');
-        let myChart1 = echarts.init(chartDom1);
-        let option1;
-        option1 = {
-          title: {
-            text: '学生评价成绩分布',
-            subtext: ''
-          },
-          tooltip: {
-            trigger: 'axis',
-            axisPointer: {
-              type: 'shadow'
-            }
-          },
-          xAxis: {
-            type: 'value',
-            show: false
-          },
-          yAxis: {
-            type: 'category',
-            data: nams
-          },
-          series: [
-            {
-              name: '评价次数:',
-              type: 'bar',
-              data: counts,
-              itemStyle: {
-                normal: {
-                  color: '#017180'
-                }
-              },
-            }
-          ]
-        };
-        option1 && myChart1.setOption(option1);
-      })
-    },
-    setsysElinkMixPie() {
-      requestByClient(supplierConsumer, 'POST', 'courseTaskCheckLink/voList', {
-        courseTaskId: this.viewingCourseTask.id
-      }, res => {
-        let data = res.data.data
-        let nams = data.map(i => {
-          return i.checkLink.name
-        })
-        let counts = data.map(i => {
-          return ((i.checkLink.averageScore / i.checkLink.targetScore) * 100).toFixed(2)
-        })
-        let chartDom1 = document.getElementById('sysElinkScoreBar');
-        let myChart1 = echarts.init(chartDom1);
-        let option1;
-        option1 = {
-          title: {
-            text: '考核环节成绩分布',
-            subtext: ''
-          },
-          tooltip: {
-            trigger: 'axis',
-            axisPointer: {
-              type: 'shadow'
-            }
-          },
-          yAxis: {
-            type: 'value',
-            boundaryGap: [0, 0.01],
-            max: 100
-          },
-          xAxis: {
-            type: 'category',
-            data: nams,
-          },
-          series: [
-            {
-              name: '',
-              type: 'bar',
-              data: counts,
-              itemStyle: {
-                normal: {
-                  color: '#32006a'
-                }
-              },
-            }
-          ]
-        };
-        option1 && myChart1.setOption(option1);
-
-
-        let chartDom2 = document.getElementById('sysElinkMixPie');
-        let myChart2 = echarts.init(chartDom2);
-        let option2;
-        let pieData = data.map(i => {
-          return {
-            value: i.mix,
-            name: i.checkLink.name
-          }
-        })
-
-        option2 = {
-          title: {
-            text: '此课程目标各考核环节权重',
-            subtext: '',
-            left: 'center'
-          },
-          tooltip: {
-            trigger: 'item'
-          },
-          legend: {
-            orient: 'vertical',
-            left: 'left',
-          },
-          series: [
-            {
-              name: '',
-              type: 'pie',
-              radius: '50%',
-              data: pieData,
-              emphasis: {
-                itemStyle: {
-                  shadowBlur: 10,
-                  shadowOffsetX: 0,
-                  shadowColor: 'rgba(0, 0, 0, 0.5)'
-                }
-              }
-            }
-          ]
-        };
-
-        option2 && myChart2.setOption(option2);
-      })
-    },
-    setChartData() {
-      let data = this.viewCourseTasks
-      let vue = this
-      let courseTasksName = data.map(i => {
-        return (i.course.name + ':' + i.describes)
-      })
-      let sysScores = data.map(i => {
-        return i.sysGrade ? (i.sysGrade).toFixed(2) * 100 : 0
-      })
-      let stuScores = data.map(i => {
-        return i.stuGrade ? (i.stuGrade).toFixed(2) * 100 : 0
-      })
-      const chartDom = document.getElementById('historyData')
-      const myChart = echarts.init(chartDom)
-      let option
-      option = {
-        tooltip: {
-          trigger: 'axis',
-          axisPointer: {
-            type: 'cross',
-            crossStyle: {
-              color: '#999'
-            }
-          }
-        },
-        dataZoom: [
-          {
-            id: 'dataZoomX',
-            type: 'slider',
-            xAxisIndex: [0],
-            filterMode: 'filter'
-          }
-        ],
-        toolbox: {
-          show: true,
-          feature: {
-            magicType: {show: true, type: ['line', 'bar']},
-            restore: {show: true},
-            saveAsImage: {show: true}
-          }
-        },
-        calculable: true,
-        title: {
-          text: '课程目标成绩对比分析',
-          subtext: ''
-        },
-        xAxis: {
-          type: 'category',
-          data: courseTasksName,
-          axisLabel: {
-            interval: 0,
-            rotate: 90
-          }
-        },
-        yAxis: {
-          type: 'value',
-          max: 100
-        },
-        series: [{
-          name: '系统成绩',
-          data: sysScores,
-          barGap: 0,
-          type: 'bar',
-          itemStyle: {
-            normal: {
-              color: '#ff1272'
-            }
-          },
-          showBackground: true,
-          backgroundStyle: {
-            color: 'rgba(180,180,180,0.2)'
-          },
-          markPoint: {
-            data: [
-              {type: 'max', name: '最大值'}
-            ]
-          },
-          markLine: {
-            data: [
-              {type: 'average', name: '平均值'}
-            ]
-          }
-        }, {
-          name: '学生评价',
-          data: stuScores,
-          type: 'bar',
-          itemStyle: {
-            normal: {
-              color: '#0e4fff'
-            }
-          },
-          showBackground: true,
-          backgroundStyle: {
-            color: 'rgba(180,180,180,0.2)'
-          },
-          markPoint: {
-            data: [
-              {type: 'max', name: '最大值'}
-            ]
-          },
-          markLine: {
-            data: [
-              {type: 'average', name: '平均值'}
-            ]
-          }
-        }
-        ]
+        // eslint-disable-next-line no-console
+        console.log('echarts data')
+        // eslint-disable-next-line no-console
+        console.log(option.series)
+        this.objectiveEvaluateChart.setOption(option)
       }
-      option && myChart.setOption(option)
-      //点击事件
-      myChart.on('click', function (params) {
-        vue.selectOneCourseTask(vue.viewCourseTasks[params.dataIndex].id)
-      });
     },
-    selectOneCourseTask(id) {
-      requestByClient(supplierConsumer, 'POST', 'courseObjective/getOne', {
-        id: id
-      }, res => {
-        this.viewingCourseTask = res.data.data
-        this.dialogVisible1 = true
-      })
-    },
+
     exportTemplate(course) {
       if (this.semesterCultivationId===''){
         this.$message({
@@ -1121,9 +991,7 @@ export default {
     },
     getCourseList() {
       this.dialogVisible = false
-      this.dialogVisible1 = false
-      this.dialogVisible2 = false
-      this.dialogVisible3 = false
+      this.dialogVisible_report_edit = false
       this.dialogVisible_editScore = false
       requestByClient(supplierConsumer, 'POST', 'course/list', {
         pageNum: this.currentPage,
@@ -1161,83 +1029,13 @@ export default {
       this.currentPage = val
       this.getCourseList()
     },
-    deleteDiscribe(index) {
-      var check = this.ckeckLinkEditForm.checkLinks[index]
-      if (check.id) {
-        requestByClient(supplierConsumer, 'POST', 'checkLink/delete', {
-          id: check.id
-        }, res => {
-          if (res.data.succ) {
-            this.$message({
-              message: '已删除',
-              type: 'success'
-            });
-          } else {
-            this.$message.error(res.data.msg);
-          }
-          this.loading = false
-        })
-      }
-      this.ckeckLinkEditForm.checkLinks.splice(index, 1)
-    },
-    handleAddCheckLink() {
-      this.ckeckLinkEditForm.checkLinks.push({
-        name: '',
-        mix: '',
-        targetScore: '',
-        taskId: this.ckeckLinkEditForm.courseObjective.id
-      })
-    },
-    importFile(params) {
-      const _file = params.file
-      let formData = new FormData()
-      // 添加参数
-      formData.append('file', _file, _file.name)
-      formData.append('course.id',this.viewingCourse.id)
-      formData.append('year',this.$store.state.settings.editYear)
-      this.loading = true
-      requestByClient(supplierConsumer, 'POST', 'stuScore/importScore', formData, res => {
-        if (res.data.succ) {
-          this.$message({
-            message: '上传成功',
-            type: 'success'
-          });
-        } else {
-          this.$message.error(res.data.msg);
-        }
-        this.loading = false
-      })
-    },
-    submitCheckLinksForm() {
-      let checkLinks = this.ckeckLinkEditForm.checkLinks
-      for (let checkLink of checkLinks) {
-        if (checkLink.averageScore === '') {
-          this.$message({
-            message: '平均成绩不得为空',
-            type: 'error'
-          });
-          return false
-        }
-      }
-      this.loading = true
-      requestByClient(supplierConsumer, 'POST', 'checkLink/saveOrUpdate', this.ckeckLinkEditForm.checkLinks, res => {
-        if (res.data.succ) {
-          this.dialogVisible = false;
-          this.$message({
-            message: '修改成功',
-            type: 'success'
-          });
-        } else {
-          this.$message.error(res.data.msg);
-        }
-        this.loading = false
-      })
-    }
+
   }
 }
 </script>
 
 <style scoped>
+
 .historyLabel {
   width: 97%;
   height: 550px;
@@ -1269,8 +1067,7 @@ export default {
   height: 600px;
 }
 
-.elinkScatterBar {
-  width: 100%;
+.objectiveEvaluateFigure {
   height: 400px;
 }
 
@@ -1278,4 +1075,27 @@ export default {
   width: 100%;
   height: 100%;
 }
+
+.container {
+  border: none;
+  border-radius: 4px;
+  background-color: #409eff;
+  height: 40px;
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 15px;
+  min-width: 80px;
+  *zoom: 1;
+}
+
+.upload_file {
+  font-size: 20px;
+  opacity: 0;
+  position: absolute;
+  filter: alpha(opacity=0);
+  width: 60px;
+}
+
 </style>

@@ -24,6 +24,9 @@ public class Course extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
 
+    @TableField("id")
+    private Long id;
+
     /**
      * 内容
      */

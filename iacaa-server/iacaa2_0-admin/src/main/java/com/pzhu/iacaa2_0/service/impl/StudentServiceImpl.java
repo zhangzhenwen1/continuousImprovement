@@ -44,4 +44,9 @@ public class StudentServiceImpl extends ServiceImpl<StudentMapper, Student> impl
         return baseMapper.insertBatch(stuObjEvalList);
     }
 
+    @Override
+    public List<StuObjEval>  listObjectiveEvaluate(StuObjEval stuObjEval) {
+        return baseMapper.listObjectiveEvaluate(stuObjEval);
+    }
+
 }

@@ -1,5 +1,6 @@
 package com.pzhu.iacaa2_0.mapper;
 
+import com.pzhu.iacaa2_0.entity.CourseMeasure;
 import com.pzhu.iacaa2_0.entity.CourseObjective;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.pzhu.iacaa2_0.entityVo.CourseObjectiveVo;
@@ -24,14 +25,11 @@ public interface CourseObjectiveMapper extends BaseMapper<CourseObjective> {
 
     Boolean insertBatch(List<CourseObjective> courseObjectiveList);
 
-    Boolean remove(CourseObjective courseObjective);
+    Boolean insertMeasure(CourseMeasure courseMeasure);
 
-    List<CourseObjectiveVo> randomlist(@Param("courseObjective") CourseObjective courseObjective, @Param("randomSize") int randomSize);
-
-    Boolean summaryStuScore(Long courseTaskId);
-
-    void coverNullToZero();
-
+    CourseMeasure listMeasure(CourseMeasure courseMeasure);
 
     List<CourseObjective> CourseTargetvoList(CourseObjective courseObjective);
+
+    Boolean delete(CourseObjective courseObjective);
 }

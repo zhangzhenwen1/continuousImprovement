@@ -10,6 +10,13 @@
         <result column="grade" property="grade" />
     </resultMap>
 
+    <resultMap id="EvaluateResultMap" type="com.pzhu.iacaa2_0.entity.StuObjEval">
+        <result column="studentId" property="studentId" />
+        <result column="courseId" property="courseId" />
+        <result column="semesterId" property="semesterId" />
+        <result column="evaluate" property="eval" />
+    </resultMap>
+
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
         studentId, studentName, cultivationId, grade
@@ -76,12 +83,37 @@
         where studentId = #{studentId}
     </update>
 
+    <select id="listObjectiveEvaluate" resultMap="EvaluateResultMap" parameterType="com.pzhu.iacaa2_0.entity.StuObjEval">
+        select
+        *
+        from t_objectiveEvaluate
+        <where>
+            <trim prefixOverrides="AND">
+                <if test="studentId != null and studentId !=''">
+                    AND studentId = #{studentId}
+                </if>
+                <if test="objectiveId != null and objectiveId !=''">
+                    AND objectiveId = #{objectiveId}
+                </if>
+                <if test="cultivationId != null and cultivationId !=''">
+                    AND cultivationId = #{cultivationId}
+                </if>
+                <if test="courseId != null and courseId !=''">
+                    AND courseId = #{courseId}
+                </if>
+                <if test="semesterId != null and semesterId !=''">
+                    AND semesterId = #{semesterId}
+                </if>
+            </trim>
+        </where>
+    </select>
+
     <insert id="insertBatch"  parameterType="com.pzhu.iacaa2_0.entity.StuObjEval">
         INSERT INTO t_objectiveEvaluate
         values
         <foreach collection="list" item="item" separator=",">
             (#{item.studentId}, #{item.courseId}, #{item.objectiveId},#{item.attributeId},  #{item.subAttributeId},
-             #{item.semesterId}, #{item.cultivationId},#{item.evaluate}, #{item.subAttributeEvaluate})
+             #{item.semesterId}, #{item.cultivationId},#{item.eval}, #{item.subAttributeEvaluate})
         </foreach>
         ON DUPLICATE KEY UPDATE
         evaluate=values(evaluate),
