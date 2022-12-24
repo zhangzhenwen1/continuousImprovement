@@ -51,5 +51,15 @@
         </where>
     </select>
 
+    <insert id="insertBatchScore"  parameterType="com.pzhu.iacaa2_0.entity.StuScore">
+        INSERT INTO t_stuScore
+        values
+        <foreach collection="list" item="item" separator=",">
+            (#{item.studentId}, #{item.courseId},#{item.semesterId},#{item.assessmentName},#{item.score})
+        </foreach>
+        ON DUPLICATE KEY UPDATE
+        assessmentName=values(assessmentName),
+        score=values(score)
+    </insert>
 
 </mapper>

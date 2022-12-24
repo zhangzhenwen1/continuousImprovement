@@ -77,6 +77,12 @@ public class StudentController {
         Boolean b = studentService.updateInfo(student);
         return ActionResult.ofSuccess(b);
     }
+    @RequestMapping("insertBatchInfo")
+    @AuthResource(scope = "insertBatchInfo", name = "insertBatchInfo")
+    public ActionResult insertBatchInfo(@RequestBody List<Student> studentList) {
+        Boolean b = studentService.insertBatchInfo(studentList);
+        return ActionResult.ofSuccess(b);
+    }
 
     @RequestMapping("listObjectiveEvaluate")
     @AuthResource(scope = "listObjectiveEvaluate", name = "listObjectiveEvaluate")

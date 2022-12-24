@@ -69,7 +69,7 @@
             icon="el-icon-upload"
             type="primary"
             @click="clickUploadButton"
-          >导入成绩<input
+          >导入教务系统成绩<input
             type="file"
             style="display: none;"
             id="uploadScore"
@@ -130,9 +130,9 @@
 
     <!-- 报告内容编辑 -->
     <el-dialog
-      :title="'《'+viewingCourse.name+'》 “'+semesterDescribe+'” 课程目标达成情况报告'"
       :visible.sync="dialogVisible_report_edit"
       :close-on-click-modal="false"
+      :title="'《'+viewingCourse.name+'》 “'+semesterDescribe+'” 课程目标达成情况报告'"
       width="90%"
       @open="figurePlot"
       center
@@ -247,8 +247,6 @@ export default {
         text: "",
       },
       editing: false,
-      rules: {},
-
       dialogVisible: false,
       dialogVisible_report_edit: false,
       dialogVisible_report: false,
@@ -314,7 +312,7 @@ export default {
       reportButtonSituation: false,
       htmlTitle:'页面导出PDF文件名',
       url:null,
-
+      rules:[{}]
     }
   },
   watch: {
@@ -418,14 +416,6 @@ export default {
     clickUploadButton() {
       this.$refs.files.click();
     },
-    submit_form() {
-      // 给后端发送请求，更新数据
-      // eslint-disable-next-line no-console
-      console.log("假装给后端发了个请求...");
-      // eslint-disable-next-line no-console
-      console.log(this.lists);
-      this.calculateButtonSituation=false
-    },
     readExcel() {
       const loading = this.$loading({
         lock: true,
@@ -450,7 +440,8 @@ export default {
         // 更新获取文件名
         that.upload_file = files[0].name;
       }
-
+      // eslint-disable-next-line no-console
+      console.log(that.upload_file);
       const fileReader = new FileReader();
       fileReader.onload = ev => {
         try {
@@ -464,33 +455,91 @@ export default {
           that.lists = [];
           // 从解析出来的数据中提取相应的数据
           workSheet.forEach(item => {
+            // eslint-disable-next-line no-console
+            //console.log(item)
             if (item["__EMPTY_1"]!=="学号") {
               if (item["__EMPTY_2"]!=="登分日期：") {
                 if (typeof (item["__EMPTY_1"])!=="undefined"){
-                  that.lists.push({
-                    studentId: item["__EMPTY_1"],
-                    studentName: item["__EMPTY_2"]
-                  })
+                  if (typeof (item["__EMPTY_3"])!=="undefined"){
+                    that.lists.push({
+                      studentId: item["__EMPTY_1"],
+                      studentName: item["__EMPTY_2"],
+                      assessmentName: "期中考试",
+                      score: item["__EMPTY_3"],
+                      courseId: this.viewingCourse.id,
+                      semesterId: this.selectSemester,
+                    })
+                  }
+                  if (typeof (item["__EMPTY_4"])!=="undefined"){
+                    that.lists.push({
+                      studentId: item["__EMPTY_1"],
+                      studentName: item["__EMPTY_2"],
+                      assessmentName: "课程报告",
+                      score: item["__EMPTY_4"],
+                      courseId: this.viewingCourse.id,
+                      semesterId: this.selectSemester,
+                    })
+                  }
+                  if (typeof (item["__EMPTY_5"])!=="undefined") {
+                    that.lists.push({
+                      studentId: item["__EMPTY_1"],
+                      studentName: item["__EMPTY_2"],
+                      assessmentName: "实验成绩",
+                      score: item["__EMPTY_5"],
+                      courseId: this.viewingCourse.id,
+                      semesterId: this.selectSemester,
+                    })
+                  }
+                  if (typeof (item["__EMPTY_6"])!=="undefined") {
+                    that.lists.push({
+                      studentId: item["__EMPTY_1"],
+                      studentName: item["__EMPTY_2"],
+                      assessmentName: "期末考试",
+                      score: item["__EMPTY_6"],
+                      courseId: this.viewingCourse.id,
+                      semesterId: this.selectSemester,
+                    })
+                  }
+                }
                 } else {
-                  this.$message({
+                this.$message({
                     message: "上传文件出错，无法读取成绩数据",
                     type: "error"
-                  })
-                }
+                })
               }
             }
           })
           loading.close()
           // 给后端发请求
-          this.submit_form();
+          this.submitImport();
         } catch (e) {
           return false;
         }
       };
       fileReader.readAsBinaryString(files[0]);
     },
+    submitImport() {
+      // 给后端发送请求，更新数据
+      // eslint-disable-next-line no-console
+      console.log("假装给后端发了个请求...");
+      // eslint-disable-next-line no-console
+      console.log(this.lists);
+
+      requestByClient(supplierConsumer, 'POST', 'stuScore/insertBatchScore', this.lists,res => {
+        if (res.data.succ) {
+          this.$message({
+            message: '修改成功',
+            type: 'success'
+          })
+          this.listScore()
+          this.calculateButtonSituation = false
+        }
+      })
+        this.loading = false
+    },
 
     //打开成绩管理窗口
+    //TODO 培养方案基本信息中增加“定义/编辑考核环节”的功能
     openScoreEditor(course){
       if (this.semesterCultivationId === '') {
         this.$message({
@@ -534,6 +583,7 @@ export default {
               //以下顺序执行
               new Promise((resolve)=> {
                 //初始化学生成绩列表JSON
+                let temp = []
                 requestByClient(supplierConsumer, 'POST', 'stuScore/list', {
                   //按score[0].assessmentName的考核环节查询学生信息
                   assessmentName: score[0].assessmentName,
@@ -543,7 +593,6 @@ export default {
                 }, res => {
                   if (res.data.succ) {
                     if (typeof (this.studentScore.studentId) === 'undefined') {
-                      let temp = []
                       res.data.data.forEach(p => {
                         //JSON列表中根据查询结果插入学生信息，但插入成绩为空
                         temp.push({
@@ -554,15 +603,15 @@ export default {
                           objectiveEvaluate:[],
                         })
                       })
-                      this.studentScore = temp
-                      // eslint-disable-next-line no-console
-                      console.log('1.1 this.studentScore')
-                      // eslint-disable-next-line no-console
-                      console.log(res.data.data)
-                      resolve()
                     }
                   }
                 })
+                this.studentScore = temp
+                // eslint-disable-next-line no-console
+                console.log('1.1 this.studentScore')
+                // eslint-disable-next-line no-console
+                console.log(temp)
+                resolve()
               }).then(()=> {
                 // eslint-disable-next-line no-console
                 console.log('1.2 this.studentScore')
@@ -793,6 +842,7 @@ export default {
     },
 
     //撰写报告
+    //TODO debug 第一次打开查看报告无法显示分布图
     async editReport(course){
       if (this.semesterCultivationId === '') {
         this.$message({
@@ -924,71 +974,7 @@ export default {
         })
       }
     },
-    submitScores() {
-      requestByClient(supplierConsumer, 'POST', 'stuScore/saveOrUpdate', this.ckeckLinkEditForm.stuScores, res => {
-        if (res.data.succ) {
-          this.$message({
-            message: '修改成功',
-            type: 'success'
-          });
-          this.dialogVisible = false
-        }
-      })
-    },
-    addAScore() {
-      this.ckeckLinkEditForm.stuScores.push({stuno: '', score: '', checkLinkId: this.ckeckLinkEditForm.checkLink.id})
-    },
-    handleDeleteChecklink(index) {
-      var checkLink = this.ckeckLinkEditForm.stuScores[index]
-      if (checkLink.id) {
-        this.$confirm('确定删除此条成绩?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          requestByClient(supplierConsumer, 'POST', 'stuScore/delete', {
-            id: checkLink.id
-          }, res => {
-            if (res.data.succ) {
-              this.$message({
-                message: '已删除',
-                type: 'success'
-              });
-            } else {
-              this.$message.error(res.data.msg);
-            }
-            this.loading = false
-          })
-          this.ckeckLinkEditForm.stuScores.splice(index, 1)
-        }).catch(() => {
-        });
-      } else {
-        this.ckeckLinkEditForm.stuScores.splice(index, 1)
-      }
-    },
-    inputScore() {
-      requestByClient(supplierConsumer, 'POST', 'voList/voList', {
-        pageNum: this.currentPage,
-        pageSize: this.pageSize,
-        word: this.searchForm.word
-      }, res => {
-        if (res.data.succ) {
-          this.courses = res.data.data.list
-          this.total = res.data.data.total
-          this.pageSize = res.data.data.pageSize
-          this.currentPage = res.data.data.pageNum
-        }
-      })
-    },
-    checkAvgScore(avg, target, index) {
-      if (avg > target || avg < 0) {
-        this.$message({
-          message: '平均成绩不得大于目标成绩且不小于零',
-          type: 'error'
-        });
-        this.ckeckLinkEditForm.checkLinks[index].averageScore = ''
-      }
-    },
+
     getCourseList() {
       this.dialogVisible = false
       this.dialogVisible_report_edit = false
@@ -1007,19 +993,7 @@ export default {
         this.getSemesterList()
       })
     },
-    handleCheckLinkEditForm(checkLink) {
-      this.dialogVisible = true
-      this.ckeckLinkEditForm.checkLink = checkLink
-      this.ckeckLinkEditForm.course = this.viewingCourse
-      requestByClient(supplierConsumer, 'POST', 'stuScore/list', {
-        checkLinkId: checkLink.id
-      }, res => {
-        if (res.data.succ) {
-          this.ckeckLinkEditForm.stuScores = res.data.data
-        }
-        this.loading = false
-      })
-    },
+
     handleSizeChange(val) {
       this.pageSize = val
       this.currentPage = 1
@@ -1029,7 +1003,6 @@ export default {
       this.currentPage = val
       this.getCourseList()
     },
-
   }
 }
 </script>

@@ -157,12 +157,6 @@ export const asyncRoutes = [
     meta: { title: '课程管理', icon: 'list', affix: true, roles: ['adminExclusive', 'Iacaa20Server:Menue:Score']},
     children: [
       {
-        path: 'StudentInfo',
-        component: () => import('@/views/score/StudentInfo'),
-        name: 'StudentInfo',
-        meta: { title: '学生信息管理', icon: 'list', affix: true }
-      },
-      {
         path: 'CheckLinkScore',
         component: () => import('@/views/score/CheckLinkScore'),
         name: 'CheckLinkScore',
@@ -183,6 +177,16 @@ export const asyncRoutes = [
     },
     children: [
       {
+        path: 'StudentInfo',
+        component: () => import('@/views/Main/StudentInfo.vue'),
+        name: 'StudentInfo',
+        meta: { title: '学生信息管理', icon: 'list', affix: true }
+      }, {
+        path: 'TeacherInfo',
+        component: () => import('@/views/Main/TeacherInfo'),
+        name: 'TeacherInfo',
+        meta: { title: '教师信息管理', icon: 'list', affix: true }
+      },{
         path: 'company',
         component: () => import('@/views/user-manage/company/index'),
         name: 'company',

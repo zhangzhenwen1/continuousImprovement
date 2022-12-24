@@ -83,6 +83,17 @@
         where studentId = #{studentId}
     </update>
 
+    <insert id="insertBatchInfo"  parameterType="com.pzhu.iacaa2_0.entity.Student">
+        INSERT INTO t_studentInfo
+        values
+        <foreach collection="list" item="item" separator=",">
+            (#{item.studentId}, #{item.studentName},#{item.grade},#{item.cultivationId})
+        </foreach>
+        ON DUPLICATE KEY UPDATE
+        grade=values(grade),
+        cultivationId=values(cultivationId)
+    </insert>
+
     <select id="listObjectiveEvaluate" resultMap="EvaluateResultMap" parameterType="com.pzhu.iacaa2_0.entity.StuObjEval">
         select
         *

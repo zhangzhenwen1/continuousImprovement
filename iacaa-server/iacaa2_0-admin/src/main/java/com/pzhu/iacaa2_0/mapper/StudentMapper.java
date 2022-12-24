@@ -22,6 +22,7 @@ public interface StudentMapper extends BaseMapper<Student> {
     Boolean deleteOne(Student student);
 
     Boolean updateInfo(Student student);
+    Boolean insertBatchInfo(List<Student> studentList);
 
     Boolean insertBatch(List<StuObjEval> stuObjEvalList);
 

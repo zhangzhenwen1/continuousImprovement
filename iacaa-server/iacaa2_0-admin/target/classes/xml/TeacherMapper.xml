@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pzhu.iacaa2_0.mapper.TeacherMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.pzhu.iacaa2_0.entity.Teacher">
+        <result column="teacherId" property="teacherId" />
+        <result column="teacherName" property="teacherName" />
+        <result column="teacherGender" property="teacherGender" />
+        <result column="teacherBirthDate" property="teacherBirthDate" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        teacherId, teacherName, teacherGender, teacherBirthDate
+    </sql>
+
+    <select id="listInfo" resultMap="BaseResultMap" parameterType="com.pzhu.iacaa2_0.entity.Teacher">
+        select
+            *
+        from t_teacherInfo
+        <where>
+            <trim prefixOverrides="AND">
+                <if test="word != null and word !=''">
+                    AND (teacherName like CONCAT(CONCAT('%',#{word}),'%'))
+                </if>
+                <if test="teacherId != null and teacherId !=''">
+                    AND teacherId = #{teacherId}
+                </if>
+                <if test="teacherName != null and teacherName !=''">
+                    AND teacherName = #{teacherName}
+                </if>
+                <if test="teacherGender != null and teacherGender !=''">
+                    AND teacherGender = #{teacherGender}
+                </if>
+                <if test="teacherBirthDate != null and teacherBirthDate !=''">
+                    AND teacherBirthDate = #{teacherBirthDate}
+                </if>
+            </trim>
+        </where>
+    </select>
+
+    <delete id="deleteOne" parameterType="com.pzhu.iacaa2_0.entity.Teacher">
+        delete
+        from t_teacherInfo
+        <where>
+            <trim prefixOverrides="AND">
+                <if test="teacherId != null and teacherId !=''">
+                    AND teacherId = #{teacherId}
+                </if>
+                <if test="teacherName != null and teacherName !=''">
+                    AND teacherName = #{teacherName}
+                </if>
+                <if test="teacherGender != null and teacherGender !=''">
+                    AND teacherGender = #{teacherGender}
+                </if>
+                <if test="teacherBirthDate != null and teacherBirthDate !=''">
+                    AND teacherBirthDate = #{teacherBirthDate}
+                </if>
+            </trim>
+        </where>
+    </delete>
+
+    <insert id="updateInfo"  parameterType="com.pzhu.iacaa2_0.entity.Teacher">
+        INSERT INTO t_teacherInfo
+        values
+            (#{teacherId}, #{teacherName}, #{teacherGender},#{teacherBirthDate})
+        ON DUPLICATE KEY UPDATE
+        teacherGender=values(teacherGender),
+        teacherBirthDate=values(teacherBirthDate)
+    </insert>
+
+    <insert id="insertBatch"  parameterType="com.pzhu.iacaa2_0.entity.Teacher">
+        INSERT INTO t_teacherInfo
+        values
+        <foreach collection="list" item="item" separator=",">
+            (#{item.teacherId}, #{item.teacherName}, #{item.teacherGender},#{item.teacherBirthDate})
+        </foreach>
+        ON DUPLICATE KEY UPDATE
+        teacherGender=values(teacherGender),
+        teacherBirthDate=values(teacherBirthDate)
+    </insert>
+
+</mapper>

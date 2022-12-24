@@ -20,6 +20,20 @@
           @click="getList()"
         >查询/全部显示</el-button>
       </el-form-item>
+      <el-form-item label="">
+        <el-button
+          icon="el-icon-upload"
+          type="primary"
+          @click="handleImport()"
+        >批量导入<input
+          type="file"
+          style="display: none;"
+          id="upload"
+          ref="files"
+          @change="readExcel"
+        /></el-button>
+      </el-form-item>
+
       <!--下拉组件-->
       <span style="float: right;margin-right: 400px">
         <el-form-item>
@@ -155,10 +169,7 @@ import { requestByClient } from '@/utils/HttpUtils'
 import { supplierConsumer } from '@/utils/HttpUtils'
 
 //下拉组件引入
-import Vue from 'vue'
-import { Select,Option } from 'element-ui'
-Vue.use(Select)
-Vue.use(Option)
+import XLSX from 'xlsx';
 
 export default {
   name: 'StudentInfo',
@@ -180,6 +191,8 @@ export default {
       },
       selectCultivation: '',
       options: [],
+      upload_file: "",
+      lists: [],
     }
   },
   watch: {
@@ -276,6 +289,84 @@ export default {
             type: 'success'
           })
           this.dialogVisible = false
+          this.getList()
+        }
+        this.loading = false
+      })
+    },
+
+    handleImport() {
+      if (this.selectCultivation==='') {
+        this.$message({
+          message: "请选择导入学生信息所属培养方案版本",
+          type: "warning"
+        });
+      } else {
+        this.$refs.files.click();
+      }
+    },
+    readExcel() {
+      const loading = this.$loading({
+        lock: true,
+        text: "文件上传中...",
+        spinner: "el-icon-loading",
+        background: "rgba(0, 0, 0, 0.7)",
+      })
+      // js 获取文件对象
+      let fileObj = document.getElementById("upload").files
+      let that = this;
+      // 读取表格文件
+      const files = fileObj
+      if (files.length <= 0) {
+        return false;
+      } else if (!/\.(xls|xlsx)$/.test(files[0].name.toLowerCase())) {
+        this.$message({
+          message: "上传格式不正确，请上传xls或者xlsx格式",
+          type: "warning"
+        });
+        return false;
+      } else {
+        // 更新获取文件名
+        that.upload_file = files[0].name;
+        // eslint-disable-next-line no-console
+        console.log(that.upload_file);
+      }
+      const fileReader = new FileReader();
+      fileReader.onload = ev => {
+        try {
+          const data = ev.target.result;
+          const workbook = XLSX.read(data, {
+            type: "binary"
+          });
+          const sheetName = workbook.SheetNames[0]; //取第一张表
+          const workSheet = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName]); //生成json表格内容
+          that.lists = [];
+          // 从解析出来的数据中提取相应的数据
+          workSheet.forEach(item => {
+            that.lists.push({
+              studentId: item["学号"],
+              studentName: item["姓名"],
+              grade: item["现在年级"],
+              cultivationId: this.selectCultivation
+            })
+          })
+          loading.close()
+          // 给后端发请求
+          this.submitImport();
+        } catch (e) {
+          return false;
+        }
+      };
+      fileReader.readAsBinaryString(files[0]);
+    },
+    submitImport() {
+      // 给后端发送请求，更新数据
+      requestByClient(supplierConsumer, 'POST', 'student/insertBatchInfo', this.lists,res => {
+        if (res.data.succ) {
+          this.$message({
+            message: '修改成功',
+            type: 'success'
+          })
           this.getList()
         }
         this.loading = false

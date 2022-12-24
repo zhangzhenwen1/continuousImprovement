@@ -54,4 +54,9 @@ public class StuScoreServiceImpl extends ServiceImpl<StuScoreMapper, StuScore> i
     public List<StuScoreVo> listVo(StuScore stuScore) {
         return baseMapper.listVo(stuScore);
     }
+
+    @Override
+    public Boolean insertBatchScore(List<StuScore> stuScoreList) {
+        return baseMapper.insertBatchScore(stuScoreList);
+    }
 }

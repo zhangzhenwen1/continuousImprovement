@@ -33,11 +33,11 @@ public class StudentServiceImpl extends ServiceImpl<StudentMapper, Student> impl
     public Boolean deleteOne(Student student) {
         return baseMapper.deleteOne(student);
     }
-
     @Override
     public Boolean updateInfo(Student student) {
         return baseMapper.updateInfo(student);
     }
+    public Boolean insertBatchInfo(List<Student> studentList) {return baseMapper.insertBatchInfo(studentList);}
 
     @Override
     public Boolean insertBatch(List<StuObjEval> stuObjEvalList) {

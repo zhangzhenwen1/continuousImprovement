@@ -160,7 +160,7 @@ CREATE TABLE `t_course_task_check_link`  (
   CONSTRAINT `courseId@assessObjective` FOREIGN KEY (`courseId`) REFERENCES `t_course` (`id`),
   CONSTRAINT `cultivationIdKey@assessObjective` FOREIGN KEY (`cultivationId`) REFERENCES `t_cultivation` (`id`),
   CONSTRAINT `objectiveIdKey@assessObjective` FOREIGN KEY (`objectiveId`) REFERENCES `t_courseObjective` (`objectiveId`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `assessmentNameKey@assessObjective` FOREIGN KEY (`assessmentName`) REFERENCES `t_check_link` (`assessmentName`)
+  CONSTRAINT `assessmentNameKey@assessObjective` FOREIGN KEY (`assessmentName`) REFERENCES `t_check_link` (`assessmentName`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = InnoDB AUTO_INCREMENT = 62 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
@@ -206,10 +206,12 @@ INSERT INTO `t_semesterInfo` VALUES (112, '2011～2012学年 第二学期', 2011
 -- ----------------------------
 DROP TABLE IF EXISTS `t_teacherInfo`;
 CREATE TABLE `t_teacherInfo`  (
-  `teacherId` int(8) NOT NULL UNIQUE COMMENT '学期',
-  `teacherName` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '姓名',
+  `teacherId` int(8) NOT NULL AUTO_INCREMENT COMMENT '学期',
+  `teacherName` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '姓名',
+  `teacherGender` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '姓名',
+  `teacherBirthDate` DATE NULL DEFAULT NULL COMMENT '姓名',
   PRIMARY KEY (`teacherId`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT=1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for t_courseMeasure
@@ -254,7 +256,7 @@ CREATE TABLE `t_stuScore`  (
   `score` double NULL DEFAULT NULL COMMENT '占比',
   PRIMARY KEY (`studentId`, `courseId`, `assessmentName`,`semesterId`) USING BTREE,
   CONSTRAINT `studentId@t_stu_score` FOREIGN KEY (`studentId`) REFERENCES `t_studentInfo` (`studentId`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `assessmentNameKey@t_stuScore` FOREIGN KEY (`assessmentName`) REFERENCES `t_check_link` (`assessmentName`)
+  CONSTRAINT `assessmentNameKey@t_stuScore` FOREIGN KEY (`assessmentName`) REFERENCES `t_check_link` (`assessmentName`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------

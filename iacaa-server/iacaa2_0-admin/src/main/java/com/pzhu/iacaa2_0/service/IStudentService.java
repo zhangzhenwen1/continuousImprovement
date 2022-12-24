@@ -27,4 +27,6 @@ public interface IStudentService extends IService<Student> {
     Boolean insertBatch(List<StuObjEval> stuObjEvalList);
 
     List<StuObjEval> listObjectiveEvaluate(StuObjEval stuObjEval);
+
+    Boolean insertBatchInfo(List<Student> studentList);
 }
