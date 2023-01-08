@@ -56,7 +56,7 @@ public class CourseTaskCheckLinkController {
         AtomicReference<Double> totalMix = new AtomicReference<>(0d);
         Map<Long,Double> checkMap = new HashMap<>(list.size());
         list.forEach(i -> {
-            if(checkMap.get(i.getId())==null){
+            if(checkMap.get(i.getCourseId())==null){
                 checkMap.put(i.getObjectiveId(),i.getRatio());
             }else {
                  iflegal.set(false);

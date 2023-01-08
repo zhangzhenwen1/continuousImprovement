@@ -59,6 +59,14 @@ public class CourseController{
         PageInfo page = new PageInfo(list);
         return ActionResult.ofSuccess(page);
     }
+    @RequestMapping("/insertBatch")
+    @AuthResource(scope = "insertBatch", name = "insertBatch")
+    public ActionResult insertBatch(@RequestBody List<Course> courseList) throws Exception{
+        Boolean b = courseService.insertBatch(courseList);
+        return ActionResult.ofSuccess(b);
+    }
+
+
 
     @RequestMapping("/authList")
     @AuthResource(scope = "authList", name = "权限课程列表")
@@ -88,8 +96,6 @@ public class CourseController{
     @RequestMapping("/save")
     @AuthResource(scope = "save", name = "保存单个课程")
     public ActionResult save(@RequestBody Course course){
-        course.setCreatedDate(LocalDateTime.now());
-        course.setUpdateDate(LocalDateTime.now());
         boolean update = courseService.save(course);
         return ActionResult.ofSuccess();
     }
@@ -97,7 +103,6 @@ public class CourseController{
     @RequestMapping("/update")
     @AuthResource(scope = "update", name = "更新课程ByID")
     public ActionResult update(@RequestBody Course course){
-        course.setUpdateDate(LocalDateTime.now());
         boolean update = courseService.updateById(course);
         return ActionResult.ofSuccess();
     }
@@ -106,7 +111,6 @@ public class CourseController{
     @AuthResource(scope = "changeEditStatus", name = "改变课程编辑状态")
     public ActionResult changeEditStatus(@RequestBody Course course){
         Course byId = courseService.getById(course.getId());
-        byId.setUpdateDate(LocalDateTime.now());
         byId.setEditStatus(Math.abs(byId.getEditStatus()-1));
         courseService.saveOrUpdate(byId);
         return ActionResult.ofSuccess();

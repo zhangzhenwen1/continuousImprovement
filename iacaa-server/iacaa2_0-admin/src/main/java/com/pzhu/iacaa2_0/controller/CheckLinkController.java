@@ -40,13 +40,6 @@ public class CheckLinkController {
         return ActionResult.ofSuccess(list);
     }
 
-    @RequestMapping("/listBySourseTask")
-    @AuthResource(scope = "listBySourseTask", name = "单个课程目标的考核环节列表")
-    public ActionResult listBySourseTask(@RequestBody CourseObjective courseObjective) throws Exception{
-        List<CheckLink> list = checkLinkService.listBySourseTask(courseObjective.getId());
-        return ActionResult.ofSuccess(list);
-    }
-
     @RequestMapping("/delete")
     @AuthResource(scope = "delete", name = "删除单个考核环节")
     public ActionResult delete(@RequestBody CheckLink checkLink){

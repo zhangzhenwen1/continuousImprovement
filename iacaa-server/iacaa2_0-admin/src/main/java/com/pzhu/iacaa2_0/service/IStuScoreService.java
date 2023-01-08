@@ -18,10 +18,6 @@ public interface IStuScoreService extends IService<StuScore> {
 
     List<StuScore> list(StuScore stuScore);
 
-    Boolean summaryAllCheckLinksScore(Integer year);
-
-    Boolean summaryCheckLinkScoreById(Long id);
-
     List<StuScoreVo> listVo(StuScore stuScore);
 
     Boolean insertBatchScore(List<StuScore> stuScoreList);

@@ -1,5 +1,29 @@
 <template>
   <div style="padding: 20px">
+    <el-form
+      :inline="true"
+      :model="searchForm"
+      class="demo-form-inline"
+      style="height: 40px;padding: 10px"
+    >
+      <el-form-item>
+        选择培养方案版本
+      </el-form-item>
+      <el-form-item>
+        <el-select
+          v-model="cultivationId"
+          placeholder="选择培养方案版本"
+          @change="getCultivationIdList(cultivationId)"
+        >
+          <el-option
+            v-for="item in cultivationList"
+            :key="item.id"
+            :label="item.cultivationName"
+            :value="item.id"
+          />
+        </el-select>
+      </el-form-item>
+    </el-form>
     <el-table
       ref="multipleTable"
       :data="tableData"
@@ -49,8 +73,13 @@
                 courseName
               }}</div>
           </el-form-item>
+          <el-form-item label="培养方案版本" prop="pass">
+            <div style="font-size: 18px;color: #1a1a1a">{{
+                cultivationId
+              }}</div>
+          </el-form-item>
           <!--下拉组件-->
-          <el-form-item label="选择培养方案版本" prop="pass">
+          <el-form-item label="选择培养方案版本" prop="cultivationId">
             <!--选项数据来源：
                   cultivationList: [{
                     value: '选项1',
@@ -96,11 +125,12 @@
             </el-table>
             <span v-for="(item,index) in assessmentList" type="text" autocomplete="off">
               <el-select v-model="item.assessmentName" placeholder="课程目标" clearable filterable style="width: 40%;margin-top: 10px">
-                <el-option label="期末考试" value="期末考试" />
-                <el-option label="期中考试" value="期中考试" />
-                <el-option label="日常作业" value="日常作业" />
-                <el-option label="课堂表现" value="课堂表现" />
-                <el-option label="日常考勤" value="日常考勤" />
+                <el-option
+                  v-for="p in assessmentOptions"
+                  :key="p.assessmentName"
+                  :label="p.assessmentName"
+                  :value="p.assessmentName"
+                />
               </el-select>
               <el-input type="text" autocomplete="off" v-model="item.totalScore" style="width: 25%;margin-top: 10px" />
               <el-input type="text" autocomplete="off" v-model="item.scoreRatio" style="width: 25%;margin-top: 10px" />
@@ -139,7 +169,7 @@
             </div>
           </el-form-item>
           <!--下拉组件-->
-          <el-form-item label="选择培养方案版本" prop="pass">
+          <el-form-item label="选择培养方案版本" prop="cultivationId">
             <!--选项数据来源：
                   cultivationList: [{
                     value: '选项1',
@@ -355,6 +385,7 @@ export default {
   name: "Assessment",
   mounted() {
     this.getList()
+    this.getCultivationIdList()
   },
   data() {
     return {
@@ -390,7 +421,10 @@ export default {
           assessmentName:'',
           ratio: 1.00
         }],
+
       selectAssessmentSession:'',
+      selectCultivation:'',
+      assessmentOptions:[],
 
       cultivationList: [],
       subAttributeList:[{
@@ -403,6 +437,21 @@ export default {
 
   },
   methods: {
+    //获取定义的考核环节
+    getAssessmentOptions(){
+      // eslint-disable-next-line no-console
+      console.log(this.cultivationId)
+      requestByClient(supplierConsumer, 'POST','cultivation/listAssessmentInfo', {
+          cultivationId: this.cultivationId
+        }
+        , res => {
+          if (res.data.succ) {
+            // eslint-disable-next-line no-console
+            console.log(res.data.data)
+            this.assessmentOptions=res.data.data
+          }
+        })
+    },
     //获取课程的考核环节
     getAssessmentList(courseId, cultivationId){
       requestByClient(supplierConsumer, 'POST', 'checkLink/list', {
@@ -461,23 +510,28 @@ export default {
     },
     //获取下拉菜单数据及getAssessmentList,getRelationList,getSubAttributeList
     getCultivationIdList(val) {
+      // eslint-disable-next-line no-console
+      console.log(this.cultivationId)
       if (this.cultivationId===''){
         requestByClient(supplierConsumer, 'POST', 'cultivation/list', {
           pageNum: this.currentPage,
           pageSize: this.pageSize,
         },res => {
           if (res.data.succ) {
+            // eslint-disable-next-line no-console
+            console.log('init cultivation options')
             this.cultivationList = res.data.data
           }
         })
       }
       else {
         if(this.type==='editForm'){
-          this.cultivationId=val
+          //this.cultivationId=val
           this.getAssessmentList(this.courseId,val)
+
         }
         else if(this.type==='editObjective'){
-          this.cultivationId=val
+          //this.cultivationId=val
           this.getSubAttributeList()
           this.getAssessmentList(this.courseId, this.cultivationId)
           requestByClient(supplierConsumer, 'POST', 'courseObjective/voList', {
@@ -505,7 +559,12 @@ export default {
               console.log('END 选择方案版本')
             }
           })
+        } else {
+          this.cultivationId = val
+          // eslint-disable-next-line no-console
+          console.log(this.cultivationId)
         }
+        this.getAssessmentOptions()
       }
     },
 

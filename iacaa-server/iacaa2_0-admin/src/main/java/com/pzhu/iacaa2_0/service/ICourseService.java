@@ -31,4 +31,5 @@ public interface ICourseService extends IService<Course> {
 
     List<Semester> listSemester(Semester semester);
 
+    Boolean insertBatch(List<Course> courseList);
 }

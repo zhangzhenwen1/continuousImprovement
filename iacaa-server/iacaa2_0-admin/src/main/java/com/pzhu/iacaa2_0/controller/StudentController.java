@@ -1,39 +1,18 @@
 package com.pzhu.iacaa2_0.controller;
 
 
-import com.alibaba.excel.EasyExcel;
-import com.alibaba.excel.EasyExcelFactory;
-import com.alibaba.excel.ExcelWriter;
-import com.alibaba.excel.metadata.Sheet;
-import com.alibaba.excel.metadata.Table;
 import com.gapache.security.annotation.AuthResource;
 import com.gapache.security.annotation.NeedAuth;
 import com.pzhu.iacaa2_0.common.ActionResult;
-import com.pzhu.iacaa2_0.easyexcel.NoModelDataListener;
-import com.pzhu.iacaa2_0.entity.CheckLink;
 import com.pzhu.iacaa2_0.entity.StuObjEval;
-import com.pzhu.iacaa2_0.entity.StuScore;
 import com.pzhu.iacaa2_0.entity.Student;
-import com.pzhu.iacaa2_0.entityVo.CheckLinkVo;
-import com.pzhu.iacaa2_0.entityVo.FileUploadVo;
-import com.pzhu.iacaa2_0.entityVo.StuScoreVo;
-import com.pzhu.iacaa2_0.service.ICheckLinkService;
-import com.pzhu.iacaa2_0.service.IStuScoreService;
 import com.pzhu.iacaa2_0.service.IStudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletResponse;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * <p>

@@ -15,23 +15,23 @@ public class BaseEntity {
      * 唯一标识
      */
     // 去除Myatisplus生成id
-    @ExcelProperty(value = "id", index = 0)
-    @TableId(value = "id",type = IdType.AUTO)
-    private Long id;
+    //@ExcelProperty(value = "id", index = 0)
+    //@TableId(value = "id",type = IdType.AUTO)
+    //private Long id;
 
     /**
      * 创建时间
      */
-    @ExcelProperty(value = "created_date", index = 6,converter = LocalDateTimeConverter.class)
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @TableField("created_date")
-    private LocalDateTime createdDate;
+    //@ExcelProperty(value = "created_date", index = 6,converter = LocalDateTimeConverter.class)
+    //@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    //@TableField("created_date")
+    //private LocalDateTime createdDate;
 
     /**
      * 更新时间
      */
-    @ExcelProperty(value = "update_date", index = 7,converter = LocalDateTimeConverter.class)
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @TableField("update_date")
-    private LocalDateTime updateDate;
+    //@ExcelProperty(value = "update_date", index = 7,converter = LocalDateTimeConverter.class)
+    //@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    //@TableField("update_date")
+    //private LocalDateTime updateDate;
 }

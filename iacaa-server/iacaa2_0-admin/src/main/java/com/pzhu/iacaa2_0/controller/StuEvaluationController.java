@@ -50,10 +50,4 @@ public class StuEvaluationController {
         return b ? ActionResult.ofSuccess() : ActionResult.ofFail("保存失败");
     }
 
-    @RequestMapping("statisticsByCourseTaskId")
-    public ActionResult statisticsByCourseTaskId (@RequestBody CourseObjective courseObjective){
-        List<StuEvaluationStatisticsVo> stuEvaluationStatisticsVos = stuEvaluationService.statisticsByCourseTaskId(courseObjective.getId());
-        return ActionResult.ofSuccess(stuEvaluationStatisticsVos);
-    }
-
 }

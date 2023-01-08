@@ -25,30 +25,27 @@ public class Course extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
     @TableField("id")
-    private Long id;
+    private String id;
 
     /**
      * 内容
      */
     @TableField("name")
     private String name;
-
     /**
      * 图片地址
      */
-    @TableField("image")
-    private String image;
-
+    @TableField("courseType")
+    private String courseType;
+    @TableField("credits")
+    private Integer credits;
+    @TableField("creditHours")
+    private Integer creditHours;
     /**
      * 管理账户
      */
     @TableField("edit_user_id")
     private Integer editUserId;
-
-
-    /**
-     * 课程编辑状态
-     */
     @TableField("edit_status")
     private Integer editStatus;
 

@@ -16,6 +16,12 @@
         <association property="targets" column="id" select="com.pzhu.iacaa2_0.mapper.TargetMapper.getByReqId"></association>
     </resultMap>
 
+    <resultMap id="AssessmentInfoResultMap" type="com.pzhu.iacaa2_0.entity.AssessmentInfo">
+        <result column="cultivationId" property="cultivationId" />
+        <result column="assessmentName" property="assessmentName" />
+        <result column="assessmentDescribe" property="assessmentDescribe" />
+    </resultMap>
+
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
         id, cultivationName, cultivationDescribe
@@ -65,5 +71,44 @@
         </where>
     </select>
 
+    <select id="listAssessmentInfo" resultMap="AssessmentInfoResultMap" parameterType="com.pzhu.iacaa2_0.entity.AssessmentInfo">
+        select
+            *
+        from t_assessmentInfo
+        <where>
+            <trim prefixOverrides="AND">
+                <if test="assessmentName != null and assessmentName !=''">
+                    AND assessmentName = #{assessmentName}
+                </if>
+                <if test="cultivationId != null and cultivationId !=''">
+                    AND cultivationId = #{cultivationId}
+                </if>
+                <if test="assessmentDescribe != null and assessmentDescribe !=''">
+                    AND assessmentDescribe = #{assessmentDescribe}
+                </if>
+            </trim>
+        </where>
+    </select>
 
+    <delete id="delAssessmentInfo" parameterType="com.pzhu.iacaa2_0.entity.AssessmentInfo">
+        delete from t_assessmentInfo
+        <where>
+            <trim prefixOverrides="AND">
+                <if test="assessmentName != null and assessmentName !=''">
+                    AND assessmentName = #{assessmentName}
+                </if>
+                <if test="cultivationId != null and cultivationId !=''">
+                    AND cultivationId = #{cultivationId}
+                </if>
+            </trim>
+        </where>
+    </delete>
+
+    <insert id="updateAssessmentInfo"  parameterType="com.pzhu.iacaa2_0.entity.AssessmentInfo">
+        INSERT INTO t_assessmentInfo
+        values
+            (#{assessmentName}, #{cultivationId},#{assessmentDescribe})
+        ON DUPLICATE KEY UPDATE
+            assessmentDescribe=values(assessmentDescribe)
+    </insert>
 </mapper>

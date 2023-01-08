@@ -66,4 +66,23 @@ public class CultivationController {
         boolean b = cultivationService.removeByIds(ids.getIds());
         return b ? ActionResult.ofSuccess() : ActionResult.ofFail("删除失败");
     }
+
+    @RequestMapping("/listAssessmentInfo")
+    @AuthResource(scope = "listAssessmentInfo", name = "listAssessmentInfo")
+    public ActionResult listAssessmentInfo(@RequestBody AssessmentInfo assessmentInfo) {
+        List<AssessmentInfo> list = cultivationService.listAssessmentInfo(assessmentInfo);
+        return ActionResult.ofSuccess(list);
+    }
+    @RequestMapping("/delAssessmentInfo")
+    @AuthResource(scope = "delAssessmentInfo", name = "delAssessmentInfo")
+    public ActionResult delAssessmentInfo(@RequestBody AssessmentInfo assessmentInfo){
+        boolean b = cultivationService.delAssessmentInfo(assessmentInfo);
+        return b ? ActionResult.ofSuccess() : ActionResult.ofFail("删除失败");
+    }
+    @RequestMapping("/updateAssessmentInfo")
+    @AuthResource(scope = "updateAssessmentInfo", name = "updateAssessmentInfo")
+    public ActionResult updateAssessmentInfo(@RequestBody AssessmentInfo assessmentInfo){
+        boolean b = cultivationService.updateAssessmentInfo(assessmentInfo);
+        return b ? ActionResult.ofSuccess() : ActionResult.ofFail("更新失败");
+    }
 }

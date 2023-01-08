@@ -6,11 +6,11 @@
     <resultMap id="BaseResultMap" type="com.pzhu.iacaa2_0.entity.Course">
         <result column="id" property="id" />
         <result column="name" property="name" />
-        <result column="image" property="image" />
+        <result column="courseType" property="courseType" />
         <result column="edit_user_id" property="editUserId" />
         <result column="edit_status" property="editStatus" />
-        <result column="created_date" property="createdDate" />
-        <result column="update_date" property="updateDate" />
+        <result column="credits" property="credits" />
+        <result column="creditHours" property="creditHours" />
     </resultMap>
 
     <!-- 通用查询映射结果 -->
@@ -23,11 +23,11 @@
     <resultMap id="voMap" type="com.pzhu.iacaa2_0.entityVo.CourseVo">
         <result column="id" property="id" />
         <result column="name" property="name" />
-        <result column="image" property="image" />
+        <result column="courseType" property="courseType" />
         <result column="edit_user_id" property="editUserId" />
         <result column="edit_status" property="editStatus" />
-        <result column="created_date" property="createdDate" />
-        <result column="update_date" property="updateDate" />
+        <result column="credits" property="credits" />
+        <result column="creditHours" property="creditHours" />
         <association property="courseTasks" column="id"
                      select="com.pzhu.iacaa2_0.mapper.CourseTaskMapper.getByCourseId"/>
         <association property="checkLinks" column="id"
@@ -36,7 +36,7 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, name, image, edit_user_id, edit_status, created_date, update_date
+        id, name, courseType, edit_user_id, edit_status, credits, creditHours
     </sql>
     <sql id="Semester_List">
         semesterId, semesterDescribe, cultivationId
@@ -76,6 +76,21 @@
         </where>
         ORDER by id
     </select>
+
+    <insert id="insertBatch" parameterType="com.pzhu.iacaa2_0.entity.Course">
+        INSERT INTO t_course
+        values
+        <foreach collection="list" item="item" separator=",">
+            (#{item.id}, #{item.name}, #{item.courseType},#{item.credits},#{item.creditHours},
+             #{item.editUserId}, #{item.editStatus})
+        </foreach>
+        ON DUPLICATE KEY UPDATE
+        courseType=courseType,
+        credits=credits,
+        creditHours=creditHours,
+        edit_user_id=edit_user_id,
+        edit_status=edit_status
+    </insert>
 
     <select id="listSemester" resultMap="SemesterMap" parameterType="com.pzhu.iacaa2_0.entity.Semester">
         select <include refid="Semester_List"></include>

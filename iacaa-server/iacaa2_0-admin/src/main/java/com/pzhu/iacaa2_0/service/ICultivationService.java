@@ -1,6 +1,7 @@
 package com.pzhu.iacaa2_0.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.pzhu.iacaa2_0.entity.AssessmentInfo;
 import com.pzhu.iacaa2_0.entity.Cultivation;
 import com.pzhu.iacaa2_0.entityVo.CultivationVo;
 
@@ -27,5 +28,9 @@ public interface ICultivationService extends IService<Cultivation> {
 
     List<Cultivation> list(CultivationVo vo);
 
+    List<AssessmentInfo> listAssessmentInfo(AssessmentInfo assessmentInfo);
 
+    boolean delAssessmentInfo(AssessmentInfo assessmentInfo);
+
+    boolean updateAssessmentInfo(AssessmentInfo assessmentInfo);
 }

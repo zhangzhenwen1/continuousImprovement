@@ -76,10 +76,16 @@
           >
             编辑毕业要求
           </el-button>
+          <el-button
+            type="primary"
+            @click="handleAssessmentInfo(scope.row)"
+          >
+            设置考核环节
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
-
+    <!-- 编辑培养方案 -->
     <el-dialog
       title="编辑培养方案详情"
       :visible.sync="dialogVisible"
@@ -138,7 +144,7 @@
         >确 定</el-button>
       </div>
     </el-dialog>
-
+    <!-- 添加培养方案 -->
     <el-dialog
       title="添加培养方案"
       :visible.sync="dialogVisible1"
@@ -196,7 +202,7 @@
         >确 定</el-button>
       </div>
     </el-dialog>
-
+    <!-- 添加毕业要求 -->
     <el-dialog
       title="添加毕业要求"
       :visible.sync="dialogVisible2"
@@ -243,6 +249,135 @@
         >确 定</el-button>
       </div>
     </el-dialog>
+    <!-- 编辑考核环节 -->
+    <el-dialog
+      title="设置培养方案的考核环节"
+      :visible.sync="dialogVisibleAssessmentInfo"
+      :close-on-click-modal="false"
+      width="70%"
+      center
+    >
+          <el-button
+            type="warning"
+            @click="addAssessmentInfo()"
+          >新增</el-button>
+      <div>
+        <el-table
+          ref="multipleTable"
+          :data="assessmentInfo"
+          style="width: 98%; margin: 30px"
+          height="750"
+          tooltip-effect="dark"
+        >
+          <el-table-column
+            prop="assessmentName"
+            label="考核环节名称"
+            width="150"
+          />
+          <el-table-column
+            prop="assessmentDescribe"
+            label="考核环节描述"
+            width="200"
+          />
+          <el-table-column label="操作">
+        <template slot-scope="scope">
+        <el-button
+          type="primary"
+          @click="editAssessmentInfo(scope.row)"
+        >
+            编辑
+          </el-button><el-button
+          type="danger"
+          @click="deleteAssessmentInfo(scope.row)"
+        >删除</el-button>
+        </template>
+          </el-table-column>
+        </el-table>
+      </div>
+    </el-dialog>
+    <!-- 修改考核环节描述 -->
+    <el-dialog
+      title="修改考核环节描述"
+      :visible.sync="dialogVisibleEditAssessmentInfo"
+      :close-on-click-modal="false"
+      width="70%"
+      center
+    >
+      <div>
+        <el-form
+          ref="ruleForm"
+          :model="viewingAssessment"
+          status-icon
+          class="demo-ruleForm"
+        >
+          <el-form-item label="考核环节" prop="name" >
+            {{ viewingAssessment.assessmentName }}
+          </el-form-item>
+          <el-form-item label="考核环节描述" prop="describe">
+            <el-input v-model="viewingAssessment.assessmentDescribe" type="text" autocomplete="off" style="width: 90%;margin-top: 10px" />
+          </el-form-item>
+          <el-button type="danger" icon="el-icon-delete" circle @click="deleteAssessmentInfo(viewingAssessment)" />
+        </el-form>
+      </div>
+      <div
+        slot="footer"
+        class="dialog-footer"
+      >
+        <el-button @click="dialogVisibleEditAssessmentInfo = false">取 消</el-button>
+        <el-button
+          type="primary"
+          @click="updateAssessmentInfo()"
+        >确 定</el-button>
+      </div>
+    </el-dialog>
+    <!-- 增加考核环节 -->
+    <el-dialog
+      title="增加考核环节"
+      :visible.sync="dialogVisibleAddAssessmentInfo"
+      :close-on-click-modal="false"
+      width="70%"
+      center
+    >
+      <div>
+        <el-form
+          ref="ruleForm"
+          :model="viewingAssessment"
+          status-icon
+          class="demo-ruleForm"
+        >
+          <el-form-item
+            label="增加考核环节名称"
+            prop="cultivationName"
+          >
+            <el-input
+              v-model="viewingAssessment.assessmentName"
+              type="text"
+              autocomplete="off"
+            />
+          </el-form-item>
+          <el-form-item
+            label="增加考核环节描述"
+            prop="pass"
+          >
+            <el-input
+              v-model="viewingAssessment.assessmentDescribe"
+              type="text"
+              autocomplete="off"
+            />
+          </el-form-item>
+        </el-form>
+      </div>
+      <div
+        slot="footer"
+        class="dialog-footer"
+      >
+        <el-button @click="dialogVisibleAddAssessmentInfo = false">取 消</el-button>
+        <el-button
+          type="primary"
+          @click="updateAssessmentInfo()"
+        >确 定</el-button>
+      </div>
+    </el-dialog>
 
     <el-pagination
       :current-page="currentPage"
@@ -259,6 +394,7 @@
 <script>
 import { requestByClient } from '@/utils/HttpUtils'
 import { supplierConsumer } from '@/utils/HttpUtils'
+import cultivationEdit from "@/views/Cultivation/CultivationEdit.vue";
 
 export default {
   name: 'Cultivation',
@@ -270,6 +406,9 @@ export default {
       dialogVisible: false,
       dialogVisible1: false,
       dialogVisible2: false,
+      dialogVisibleAssessmentInfo: false,
+      dialogVisibleEditAssessmentInfo: false,
+      dialogVisibleAddAssessmentInfo: false,
       visible: false,
       tableData: [],
       pageSize: 20,
@@ -292,6 +431,13 @@ export default {
         cultivationId: '',
         attributes: []
       },
+      assessmentInfo:[],
+      viewingAssessment:{
+        assessmentName:'',
+        assessmentDescribe:'',
+        cultivationId:'',
+      },
+      viewingCultivationId:'',
       ids: []
     }
   },
@@ -310,6 +456,8 @@ export default {
       this.dialogVisible = false
       this.dialogVisible1 = false
       this.dialogVisible2 = false
+      this.dialogVisibleAssessmentInfo=false
+      this.dialogVisibleEditAssessmentInfo=false
       this.loading = true
       requestByClient(supplierConsumer, 'POST', 'cultivation/list', {
         pageNum: this.currentPage,
@@ -401,6 +549,88 @@ export default {
             this.loading = false
           })
     },
+
+    handleAssessmentInfo(record) {
+      this.dialogVisibleAssessmentInfo = true
+      this.viewingCultivationId=record.id
+      requestByClient(supplierConsumer, 'POST','cultivation/listAssessmentInfo', {
+          cultivationId: record.id
+        }
+        , res => {
+          if (res.data.succ) {
+            // eslint-disable-next-line no-console
+            console.log(res.data.data)
+            this.assessmentInfo=res.data.data
+          }
+          this.loading = false
+        })
+    },
+    deleteAssessmentInfo(record) {
+      this.$confirm('此操作将删除其培养方案, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        requestByClient(supplierConsumer, 'POST','cultivation/delAssessmentInfo', {
+          assessmentName: record.assessmentName,
+          cultivationId: record.cultivationId
+        }, res => {
+          if (res.data.succ) {
+            this.$message({
+              message: '删除成功',
+              type: 'success'
+            })
+            this.dialogVisibleAssessmentInfo=false
+            this.dialogVisibleEditAssessmentInfo=false
+          }
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        });
+      });
+    },
+    editAssessmentInfo(record) {
+      this.viewingAssessment=record
+      // eslint-disable-next-line no-console
+      console.log(this.viewingAssessment)
+      this.dialogVisibleEditAssessmentInfo = true
+    },
+    updateAssessmentInfo(){
+      if (this.viewingAssessment.assessmentName === '') {
+        this.$message({
+          message: '考核环节名称不能为空',
+          type: 'error'
+        })
+      } else {
+        requestByClient(supplierConsumer, 'POST', 'cultivation/updateAssessmentInfo', this.viewingAssessment
+          , res => {
+            if (res.data.succ) {
+              this.$message({
+                message: '更新成功',
+                type: 'success'
+              })
+
+            } else {
+              this.$message({
+                message: '更新出错',
+                type: 'error'
+              })
+            }
+
+            this.dialogVisibleEditAssessmentInfo = false
+            this.dialogVisibleAddAssessmentInfo = false
+            this.$data = this.$options.data();
+            this.loading = false
+          })
+      }
+    },
+    addAssessmentInfo() {
+      this.dialogVisibleAddAssessmentInfo = true
+      this.viewingAssessment.cultivationId=this.viewingCultivationId
+    },
+
     deleteDescribe(index) {
       let attributes = this.addAttributes.attributes[index]
       if(attributes.id){

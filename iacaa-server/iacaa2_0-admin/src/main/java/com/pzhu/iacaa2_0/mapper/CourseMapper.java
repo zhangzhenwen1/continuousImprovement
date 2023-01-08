@@ -33,4 +33,6 @@ public interface CourseMapper extends BaseMapper<Course> {
     List<Course> list(CourseVo vo);
 
     List<Semester> listSemester(Semester semester);
+
+    Boolean insertBatch(List<Course> courseList);
 }

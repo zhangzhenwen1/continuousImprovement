@@ -44,19 +44,10 @@ public class Target extends BaseEntity {
     @TableField("attributeId")
     private Long attributeId;
 
-    //@TableField(exist = false)
-    //private GradRequirement gradRequirement;
-
     /**
      * 年份
      */
     @TableField("cultivationId")
     private Integer cultivationId;
-
-    //@TableField("created_date")
-    //private LocalDateTime created_date;
-
-    //@TableField("update_date")
-    //private LocalDateTime update_date;
 
 }

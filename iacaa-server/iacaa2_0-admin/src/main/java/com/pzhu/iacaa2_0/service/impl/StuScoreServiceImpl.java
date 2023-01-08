@@ -32,24 +32,6 @@ public class StuScoreServiceImpl extends ServiceImpl<StuScoreMapper, StuScore> i
         return baseMapper.list(stuScore);
     }
 
-    @Transactional(rollbackFor = Exception.class)
-    @Override
-    public Boolean summaryAllCheckLinksScore(Integer year) {
-        CheckLinkVo vo = new CheckLinkVo();
-        vo.setCultivationId(year);
-        List<CheckLink> list = checkLinkService.list(vo);
-        list.forEach(checkLink -> {
-            baseMapper.summaryByCheckLinkId(checkLink.getId());
-        });
-        checkLinkService.coverNullToZero();
-        return null;
-    }
-
-    @Override
-    public Boolean summaryCheckLinkScoreById(Long id) {
-        return baseMapper.summaryCheckLinkScoreById(id);
-    }
-
     @Override
     public List<StuScoreVo> listVo(StuScore stuScore) {
         return baseMapper.listVo(stuScore);

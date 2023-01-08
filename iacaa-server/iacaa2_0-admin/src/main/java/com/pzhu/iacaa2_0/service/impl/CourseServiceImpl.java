@@ -33,4 +33,9 @@ public class CourseServiceImpl extends ServiceImpl<CourseMapper, Course> impleme
     public List<Semester> listSemester(Semester semester) {
         return baseMapper.listSemester(semester);
     }
+
+    @Override
+    public Boolean insertBatch(List<Course> courseList) {
+        return baseMapper.insertBatch(courseList);
+    }
 }

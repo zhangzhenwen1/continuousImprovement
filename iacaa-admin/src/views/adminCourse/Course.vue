@@ -1,13 +1,26 @@
 <template>
   <div style="padding: 25px">
-    <el-form :inline="true" :model="serchForm" class="demo-form-inline" style="height: 50px">
+    <el-form :inline="true" :model="searchForm" class="demo-form-inline" style="height: 50px">
       <el-form-item label="">
-        <el-input v-model="serchForm.word" placeholder="名称" clearable></el-input>
+        <el-input v-model="searchForm.word" placeholder="名称" clearable></el-input>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="getList()">查询</el-button>
       </el-form-item>
       <span style="float: right;margin-right: 30px">
+        <el-form-item label="">
+        <el-button
+          icon="el-icon-upload"
+          type="primary"
+          @click="handleImport()"
+        >批量导入<input
+          type="file"
+          style="display: none;"
+          id="upload"
+          ref="files"
+          @change="readExcel"
+        /></el-button>
+      </el-form-item>
         <el-form-item>
           <el-button type="warning" icon="el-icon-plus" @click="handleAddCourse()">新增课程</el-button>
         </el-form-item>
@@ -122,6 +135,7 @@
 
 <script>
 import {requestByClient, supplierConsumer, User} from "@/utils/HttpUtils";
+import XLSX from 'xlsx';
 
 export default {
   name: "Course",
@@ -137,7 +151,7 @@ export default {
       currentPage: 1,
       editAbles: [],
       tableData: [],
-      serchForm: {
+      searchForm: {
         word: ''
       },
       addForm: {
@@ -149,9 +163,97 @@ export default {
         editStatus: true
       },
       ids: [],
-      teachers: []
+      teachers: [],
+      upload_file: "",
+      courseLists:[],
     }
   }, methods: {
+    handleImport() {
+      this.$refs.files.click();
+    },
+    readExcel() {
+      const loading = this.$loading({
+        lock: true,
+        text: "文件上传中...",
+        spinner: "el-icon-loading",
+        background: "rgba(0, 0, 0, 0.7)",
+      })
+      // js 获取文件对象
+      let fileObj = document.getElementById("upload").files
+      let that = this;
+      // 读取表格文件
+      const files = fileObj
+      if (files.length <= 0) {
+        return false;
+      } else if (!/\.(xls|xlsx)$/.test(files[0].name.toLowerCase())) {
+        this.$message({
+          message: "上传格式不正确，请上传xls或者xlsx格式",
+          type: "warning"
+        });
+        return false;
+      } else {
+        // 更新获取文件名
+        that.upload_file = files[0].name;
+        // eslint-disable-next-line no-console
+        console.log(that.upload_file);
+      }
+      const fileReader = new FileReader();
+      const paragraph = 'The quick brown fox jumps over the lazy dog. It barked.';
+      const regex = /[0-9]{2}[0-9A-Z]{5}/g;
+      fileReader.onload = ev => {
+        try {
+          const data = ev.target.result;
+          const workbook = XLSX.read(data, {
+            type: "binary"
+          });
+          const sheetName = workbook.SheetNames[0]; //取第一张表
+          const workSheet = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName]); //生成json表格内容
+          that.courseLists = [];
+          // 从解析出来的数据中提取相应的数据
+          workSheet.forEach(item => {
+            if (typeof(item['__EMPTY'])!=="undefined"){
+              if(item['__EMPTY'].match(regex)!==null){
+                // eslint-disable-next-line no-console
+                console.log(item['__EMPTY_1'].match(/.(\S*)/));
+                that.courseLists.push({
+                  id: item['__EMPTY'].match(regex)[0],
+                  name: item['__EMPTY_1'].match(/.(\S*)/)[0],
+                  courseType: '',
+                  credits:'2',
+                  creditHours:'2',
+                  editUserId: '',
+                  editStatus: '',
+                })
+              }
+            }
+            // eslint-disable-next-line no-console
+            //console.log(item['__EMPTY']);
+          })
+          loading.close()
+          // 给后端发请求
+          this.submitImport();
+        } catch (e) {
+          return false;
+        }
+      };
+      fileReader.readAsBinaryString(files[0]);
+    },
+    submitImport() {
+      // 给后端发送请求，更新数据
+      // eslint-disable-next-line no-console
+      console.log(this.courseLists);
+      requestByClient(supplierConsumer, 'POST', 'course/insertBatch', this.courseLists,res => {
+        if (res.data.succ) {
+          this.$message({
+            message: '修改成功',
+            type: 'success'
+          })
+          this.getList()
+        }
+      })
+    },
+
+
     submitAddForm() {
       if(this.addForm.title === '添加课程'){
         requestByClient(supplierConsumer, 'POST', 'course/save', {
@@ -247,7 +349,7 @@ export default {
       requestByClient(supplierConsumer, 'POST', 'course/adminList', {
         pageNum: this.currentPage,
         pageSize: this.pageSize,
-        word: this.serchForm.word
+        word: this.searchForm.word
       }, res => {
         if (res.data.succ) {
           this.tableData = res.data.data.list

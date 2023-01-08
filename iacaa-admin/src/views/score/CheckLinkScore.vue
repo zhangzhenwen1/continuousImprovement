@@ -555,6 +555,8 @@ export default {
 
     //加载成绩数据
     listScore() {
+      // eslint-disable-next-line no-console
+      console.log('START listScore');
         let score=[]
         //获取成绩列表
         requestByClient(supplierConsumer, 'POST', 'checkLink/list', {//判断是否定义考核环节
@@ -853,22 +855,26 @@ export default {
         if(this.viewingCourse!==course){
           this.viewingCourse=course
           await this.listScore()
-        }
-
-        await requestByClient(supplierConsumer, 'POST', 'courseObjective/listMeasure', {
+          await requestByClient(supplierConsumer, 'POST', 'courseObjective/listMeasure', {
             courseId: this.viewingCourse.id,
             semesterId: this.selectSemester,
           }, res => {
             if (res.data.succ === true) {
-              // eslint-disable-next-line no-console
-              console.log('editReport(Course)');
-              // eslint-disable-next-line no-console
-              console.log(res.data.data);
               this.formData.text = res.data.data.measure
             }
           })
-
-        this.dialogVisible_report_edit = true
+          this.dialogVisible_report_edit = true
+        } else {
+          await requestByClient(supplierConsumer, 'POST', 'courseObjective/listMeasure', {
+            courseId: this.viewingCourse.id,
+            semesterId: this.selectSemester,
+          }, res => {
+            if (res.data.succ === true) {
+              this.formData.text = res.data.data.measure
+            }
+          })
+          this.dialogVisible_report_edit = true
+        }
       }
     },
 
@@ -879,11 +885,14 @@ export default {
         this.chartUrl = this.objectiveEvaluateChart.getDataURL({
           pixelRatio: 1,
           backgroundColor: 'white'
-        });
+        })
       })
     },
     //图表参数设置
     setEvaluateFigurePlot() {
+      // eslint-disable-next-line no-console
+      console.log('START setEvaluateFigurePlot');
+
       const chartDom = document.getElementById('objectiveEvaluateChartDOM')
       if (chartDom) {
         this.objectiveEvaluateChart = echarts.init(chartDom);

@@ -61,21 +61,21 @@ public class CourseObjectiveController {
         return ActionResult.ofSuccess(courseObjectives);
     }
 
-    @RequestMapping("/getOne")
-    @AuthResource(scope = "getOne", name = "获取单个课程目标")
-    public ActionResult getOne(@RequestBody CourseObjective courseObjective){
-        QueryWrapper<CourseObjective> queryWrapper = new QueryWrapper<CourseObjective>();
-        if(courseObjective.getId() != null){
-            queryWrapper.eq("id", courseObjective.getId());
-        }
-        if(courseObjective.getCourseId() != null){
-            queryWrapper.eq("course_id", courseObjective.getCourseId());
-        }
+    //@RequestMapping("/getOne")
+    //@AuthResource(scope = "getOne", name = "获取单个课程目标")
+    //public ActionResult getOne(@RequestBody CourseObjective courseObjective){
+    //    QueryWrapper<CourseObjective> queryWrapper = new QueryWrapper<CourseObjective>();
+    //    if(courseObjective.getId() != null){
+    //        queryWrapper.eq("id", courseObjective.getId());
+    //    }
+    //    if(courseObjective.getCourseId() != null){
+    //        queryWrapper.eq("course_id", courseObjective.getCourseId());
+    //    }
 
-        CourseObjective courseTasks = courseObjectiveService.getOne(queryWrapper);
-
-        return ActionResult.ofSuccess(courseTasks);
-    }
+    //    CourseObjective courseTasks = courseObjectiveService.getOne(queryWrapper);
+    //
+    //    return ActionResult.ofSuccess(courseTasks);
+    //}
 
     @RequestMapping("/delete")
     @AuthResource(scope = "delete", name = "删除单个课程目标")
