@@ -85,7 +85,7 @@ export default {
       }
     }
     const validatePassword = (rule, value, callback) => {
-      if (value.length < 6) {
+      if (value.length < 1) {
         callback(new Error('密码至少有6位'))
       } else {
         callback()
@@ -157,22 +157,35 @@ export default {
       })
     },
     handleLogin() {
+      // eslint-disable-next-line no-console
+      console.log('handleLogin')
       this.$refs.loginForm.validate(valid => {
+        // eslint-disable-next-line no-console
+        console.log('validate')
         if (valid) {
+          // eslint-disable-next-line no-console
+          console.log('validate success')
           this.loading = true
           this.$store.dispatch('user/login', this.loginForm)
             .then(() => {
+              // eslint-disable-next-line no-console
+              console.log('validate then')
               this.$router.push({ path: '/Main'})
               this.$router.go(0)
-              this.loading = false
+              //this.loading = false
               this.$emit('already_login')
             })
             .catch(error => {
+              // eslint-disable-next-line no-console
+              console.log(error)
               Message.error(error || 'Has Error')
               this.loading = false
             })
+          this.loading = false
           return true
         } else {
+          // eslint-disable-next-line no-console
+          console.log('valid fail')
           return false
         }
       })

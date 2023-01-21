@@ -238,7 +238,7 @@ public class UserServiceImpl implements UserService, ApplicationListener<VertxCr
         } else {
             JsonResult<UserVO> result = userServerFeign.findByUsername(dto.getUsername(), dto.getClientId());
             if (!result.requestSuccess()) {
-                throw new SecurityException(SecurityError.LOGIN_FAIL);
+                throw new SecurityException(SecurityError.USER_NOT_FOUND);
             }
 
             UserVO userEntity = result.getData();
@@ -246,22 +246,23 @@ public class UserServiceImpl implements UserService, ApplicationListener<VertxCr
             // 检查密码是否正确
             boolean passwordMatches = passwordEncoder.matches(dto.getPassword(), userEntity.getPassword());
             if (!passwordMatches) {
-                throw new SecurityException(SecurityError.LOGIN_FAIL);
+                throw new SecurityException(SecurityError.LOGIN_FAIL_2);
             }
 
             // 校验client和user的关系是否正确
             if (StringUtils.isNotBlank(dto.getClientId())) {
+                log.warn("标注信息标注信息标注信息标注信息：!!!! clientId is {} ", dto.getClientId());
                 ClientEntity clientEntity = clientRepository.findByClientId(dto.getClientId());
                 if (clientEntity == null) {
-                    throw new SecurityException(SecurityError.LOGIN_FAIL);
+                    throw new SecurityException(SecurityError.CLIENT_NOT_EXISTED);
                 }
 
                 Boolean existsByUserIdAndClientId = userClientRelationRepository.existsByUserIdAndClientId(userEntity.getId(), clientEntity.getId());
                 if (!existsByUserIdAndClientId) {
-                    throw new SecurityException(SecurityError.LOGIN_FAIL);
+                    throw new SecurityException(SecurityError.USER_CLIENT_RELATION_NOT_EXISTED);
                 }
             }
-
+            log.warn("标注信息标注信息标注信息标注信息：!!!! clientId relation done ");
             String customizeInfo = userEntity.getCustomizeInfo();
             JSONObject jsonObject = StringUtils.isNotBlank(customizeInfo) ?
                     JSON.parseObject(customizeInfo) : new JSONObject();
@@ -282,19 +283,22 @@ public class UserServiceImpl implements UserService, ApplicationListener<VertxCr
             UserInfoDTO userInfoDTO = new UserInfoDTO();
             userInfoDTO.setToken(token);
             userInfoDTO.setName(userEntity.getUsername());
-
+            log.warn("标注信息标注信息标注信息标注信息：!!!! generateToken DONE");
             // 设置描述
             userInfoDTO.setIntroduction(jsonObject.getString("introduction"));
+
             // 设置角色
             List<ResourceEntity> allResource = resourceRepository.findAllResource(userEntity.getId());
+            log.warn("标注信息标注信息标注信息标注信息：!!!! 设置角色 DONE");
             // 如果是角色组权限的成员则不给用户页面和角色页面的权限
-            roleRepository.findById(userRoleEntity.getRoleId())
-                    .ifPresent(role -> {
-                        if (role.getGroupId() != null && !role.getIsManager()) {
-                            allResource.removeIf(resourceEntity -> StringUtils.startsWithIgnoreCase(resourceEntity.getScope(), "User")
-                                    || StringUtils.startsWithIgnoreCase(resourceEntity.getScope(), "Role"));
-                        }
-                    });
+            //roleRepository.findById(userRoleEntity.getRoleId())
+            //        .ifPresent(role -> {
+            //            if (role.getGroupId() != null && !role.getIsManager()) {
+            //                allResource.removeIf(resourceEntity -> StringUtils.startsWithIgnoreCase(resourceEntity.getScope(), "User")
+            //                        || StringUtils.startsWithIgnoreCase(resourceEntity.getScope(), "Role"));
+            //            }
+            //        });
+            log.warn("标注信息标注信息标注信息标注信息：!!!! 如果是角色组权限的成员则不给用户页面和角色页面的权限 BUG");
             if (CollectionUtils.isNotEmpty(allResource)) {
                 userInfoDTO.setRoles(allResource.stream().map(ResourceEntity::fullScopeName).collect(Collectors.toList()));
             } else {
@@ -303,7 +307,9 @@ public class UserServiceImpl implements UserService, ApplicationListener<VertxCr
             // 设置头像
             userInfoDTO.setAvatar(jsonObject.containsKey("avatar") ? jsonObject.getString("avatar") : "https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif");
             userInfoDTO.setId(userEntity.getId());
+            log.warn("标注信息标注信息标注信息标注信息：!!!! setAvatar DONE");
             authorizeInfoManager.save(userEntity.getId(), token, securityProperties.getTimeout(), JSON.parseObject(customizeInfo, CustomerInfo.class), Lists.newArrayList());
+            log.warn("WARN WARN WARN !!!! LOGIN PROCEDURE DONE ");
             return userInfoDTO;
         }
     }
@@ -314,7 +320,7 @@ public class UserServiceImpl implements UserService, ApplicationListener<VertxCr
         String avatar = DynamicPropertyUtils.getString("admin.avatar");
 
         if (!StringUtils.equals(password, dto.getPassword())) {
-            throw new SecurityException(SecurityError.LOGIN_FAIL);
+            throw new SecurityException(SecurityError.LOGIN_FAIL_2);
         }
 
         CertificationImpl certification = new CertificationImpl(0L, null, dto.getUsername(), dto.getClientId(), false);
@@ -491,6 +497,7 @@ public class UserServiceImpl implements UserService, ApplicationListener<VertxCr
     @Override
     public Long findUserRoleId(Long userId) {
         UserRoleEntity userRoleEntity = userRoleRepository.findByUserId(userId);
+        log.warn("标注信息标注信息标注信息标注信息：!!!! userRoleEntity {}",userRoleEntity.toString());
         return userRoleEntity == null ? null : userRoleEntity.getRoleId();
     }
 

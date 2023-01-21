@@ -43,11 +43,19 @@ const mutations = {
 export const actions = {
   // user login
   login({ commit }, userInfo) {
+    // eslint-disable-next-line no-console
+    console.log('goto user.js login')
     const { username, password } = userInfo
+    // eslint-disable-next-line no-console
+    console.log('username '+username)
+    // eslint-disable-next-line no-console
+    console.log('password '+password)
     return new Promise((resolve, reject) => {
-      requestByClient(authCenterServer, 'post', '/auth/login', { username: username, password: password, clientId: 'IACAA3' }, resp => {
+      requestByClient(authCenterServer, 'post', '/auth/login', { username: username, password: password, clientId: 'Iacaa20Server' }, resp => {
         const respJson = resp.data
         const { code, data } = respJson
+        // eslint-disable-next-line no-console
+        console.log(resp)
         if (code === 0) {
           commit('SET_TOKEN', data.token)
           commit('SET_JUST_LOGIN', true)
@@ -58,8 +66,12 @@ export const actions = {
           storageInfo.avatar = data.avatar
           storageInfo.roles = data.roles
           localStorage.setItem('info', JSON.stringify(storageInfo))
+          // eslint-disable-next-line no-console
+          console.log('Promise done')
           resolve()
         } else {
+          // eslint-disable-next-line no-console
+          console.log(respJson.error)
           reject(respJson.error)
         }
       })

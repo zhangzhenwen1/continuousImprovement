@@ -49,6 +49,8 @@ supplierConsumer.interceptors.response.use(response => {
 
 
 export function requestByClient(client, method, url, data, then, errorCall) {
+  // eslint-disable-next-line no-console
+  //console.log('requestByClient start')
   let headers = {}
   if (getToken()) {
     headers = {

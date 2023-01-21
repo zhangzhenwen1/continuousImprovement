@@ -24,8 +24,8 @@ export default {
   },
   data() {
     return {
-      title: 'IACAA2.0',
-      logo: 'https://images6211.oss-cn-beijing.aliyuncs.com/logo.png'
+      title: '宁波大学土木工程',
+      logo: ''
     }
   }
 }

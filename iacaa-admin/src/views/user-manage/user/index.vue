@@ -19,7 +19,7 @@
       style="width: 100%;"
       @sort-change="sortChange"
     >
-      <el-table-column label="ID" align="center" width="150">
+      <el-table-column label="ID" align="center" width="50">
         <template slot-scope="scope">
           <span>{{ scope.row.id }}</span>
         </template>
@@ -29,34 +29,9 @@
           <span>{{ scope.row.username }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="邮箱" prop="email" align="center">
-        <template slot-scope="scope">
-          <span>{{ scope.row.customizeInfo.email }}</span>
-        </template>
-      </el-table-column>
       <el-table-column label="说明" prop="email" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.customizeInfo.introduction }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="创建时间" prop="createTime" align="center" sortable="custom" :class-name="getSortClass('createTime')">
-        <template slot-scope="scope">
-          <span>{{ scope.row.createTime }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="创建人" align="center">
-        <template slot-scope="scope">
-          <span>{{ scope.row.createBy === 0 ? '认证中心' : scope.row.createBy }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="最近修改时间" prop="lastModifiedTime" align="center" sortable="custom" :class-name="getSortClass('lastModifiedTime')">
-        <template slot-scope="scope">
-          <span>{{ scope.row.lastModifiedTime }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="最近修改人" align="center">
-        <template slot-scope="scope">
-          <span>{{ scope.row.lastModifiedBy === 0 ? '认证中心' : scope.row.lastModifiedBy }}</span>
         </template>
       </el-table-column>
       <el-table-column label="是否启用" align="center">
@@ -82,7 +57,13 @@
 
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.number" @pagination="getList" />
 
-    <el-dialog :visible.sync="dialogVisible" :title="dialogType==='edit'?'编辑用户':'新用户'">
+    <el-dialog
+      :title="dialogType==='edit'?'编辑用户':'新用户'"
+      :visible.sync="dialogVisible"
+      :close-on-click-modal="false"
+      width="70%"
+      center
+    >
       <el-form :model="user" label-width="80px" label-position="left">
         <el-form-item label="用户名">
           <el-input v-model="user.username" :disabled="dialogType==='edit'" placeholder="请输入用户名" />
@@ -93,12 +74,6 @@
         <el-form-item v-show="dialogType!=='edit'" label="重复密码">
           <el-input v-model="user.rPassword" show-password placeholder="请重复输入密码" />
         </el-form-item>
-        <el-form-item label="邮箱">
-          <el-input v-model="user.customizeInfo.email" placeholder="请输入邮箱" />
-        </el-form-item>
-        <el-form-item label="头像">
-          <el-input v-model="user.customizeInfo.avatar" placeholder="请输入头像uri" />
-        </el-form-item>
         <el-form-item label="是否启用">
           <el-switch
             v-model="user.customizeInfo.isEnabled"
@@ -108,36 +83,6 @@
             active-text="启用"
             inactive-text="禁用"
           />
-        </el-form-item>
-        <el-form-item v-if="positions.length > 0" label="职位">
-          <el-select
-            v-model="user.customizeInfo.positionId"
-            style="width: 400px;"
-            placeholder="请选择职位"
-            @change="positionChange"
-          >
-            <el-option
-              v-for="item in positions"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id"
-            />
-          </el-select>
-        </el-form-item>
-        <el-form-item v-if="positionUsers.length > 0" label="上级">
-          <el-select
-            v-model="user.customizeInfo.superiorId"
-            style="width: 400px;"
-            placeholder="请选择上级"
-            @change="positionChange"
-          >
-            <el-option
-              v-for="item in positionUsers"
-              :key="item.id"
-              :label="item.username"
-              :value="item.id"
-            />
-          </el-select>
         </el-form-item>
         <el-form-item label="角色">
           <el-select
@@ -167,9 +112,17 @@
           />
         </el-form-item>
       </el-form>
-      <div style="text-align:right;">
-        <el-button type="danger" @click="dialogVisible=false">取消</el-button>
-        <el-button type="primary" @click="confirmData">提交</el-button>
+      <div
+        slot="footer"
+        class="dialog-footer"
+      >
+        <el-button
+          @click="dialogVisible = false"
+        >取 消</el-button>
+        <el-button
+          type="primary"
+          @click="confirmData"
+        >提交</el-button>
       </div>
     </el-dialog>
   </div>
@@ -187,13 +140,11 @@ const defaultUser = {
   username: '',
   password: '',
   rPassword: '',
+  isEnabled: false,
+  introduction: '',
   customizeInfo: {
     isEnabled: false,
     introduction: '',
-    email: '',
-    avatar: '',
-    positionId: null,
-    superiorId: null
   },
   createTime: '',
   lastModifiedTime: '',
@@ -211,7 +162,24 @@ export default {
   },
   data() {
     return {
-      user: Object.assign({}, defaultUser),
+      user: {
+        id: '',
+        username: '',
+        password: '',
+        rPassword: '',
+        isEnabled: false,
+        introduction: '',
+        customizeInfo: {
+          isEnabled: false,
+          introduction: '',
+        },
+        createTime: '',
+        lastModifiedTime: '',
+        createBy: null,
+        lastModifiedBy: null,
+        client: '',
+        roleId: null
+      },
       tableKey: 0,
       list: null,
       total: 0,
@@ -266,8 +234,12 @@ export default {
   },
   methods: {
     positionChange() {
-      if (this.user.customizeInfo.positionId && this.user.customizeInfo.positionId !== '') {
+      if (this.user.customizeInfo.positionId !== '') {
+        // eslint-disable-next-line no-console
+        console.log('positionChange()')
         requestByClient(Auth, 'get', '/api/user/findAllByPositionIdBetween/' + this.user.customizeInfo.positionId, null, resp => {
+          // eslint-disable-next-line no-console
+          console.log(resp.data)
           const { code, data } = resp.data
           if (code === 0 && data) {
             this.positionUsers = data
@@ -279,12 +251,15 @@ export default {
       this.loading = true
       requestByClient(Auth, 'get', '/api/role/findAllByName?name=' + query, null, resp => {
         const respJson = resp.data
+        // eslint-disable-next-line no-console
+        console.log(respJson)
         const { code, data } = respJson
         if (code === 0) {
           this.roles = data
         }
         this.loading = false
       }, error => {
+        // eslint-disable-next-line no-console
         console.error(error)
         this.loading = false
       })
@@ -300,6 +275,8 @@ export default {
             item.customizeInfo = JSON.parse(item.customizeInfo)
           })
           this.total = respJson.data.total
+          // eslint-disable-next-line no-console
+          console.log(this.list)
         }
         this.listLoading = false
       })
@@ -460,33 +437,47 @@ export default {
       })
     },
     handleEdit(scope) {
-      const clientId = this.$store.getters.clientId
-      requestByClient(User, 'get', '/api/user/' + scope.row.id + '?clientId=' + clientId, null, resp => {
-        const respJson = resp.data
-        const { code } = respJson
-        if (code === 0) {
-          requestByClient(Auth, 'get', '/api/user/findUserRoleId/' + scope.row.id, null, resp => {
-            if (resp.data.code === 0) {
-              this.user.id = respJson.data.id
-              this.user.username = respJson.data.username
-              this.user.introduction = respJson.data.introduction
-              // this.user.email = respJson.data.email
-              this.user.isEnabled = respJson.data.isEnabled
-              this.user.customizeInfo = JSON.parse(respJson.data.customizeInfo)
-              this.user.roleId = resp.data.data
-              requestByClient(Auth, 'get', '/api/position/findAll', null, resp => {
-                const { code, data } = resp.data
-                if (code === 0) {
-                  this.positions = data
-                  this.positionChange()
-                  this.dialogType = 'edit'
-                  this.dialogVisible = true
-                }
-              })
-            }
-          })
+      //const clientId = this.$store.getters.clientId
+      // eslint-disable-next-line no-console
+      console.log(scope.row.customizeInfo.isEnabled)
+      this.user.id = scope.row.id
+      this.user.username = scope.row.username
+      this.user.customizeInfo.introduction = scope.row.customizeInfo.introduction
+      this.user.customizeInfo.isEnabled = scope.row.customizeInfo.isEnabled
+      //this.user.customizeInfo = JSON.parse(scope.row.customizeInfo)
+      requestByClient(Auth, 'get', '/api/user/findUserRoleId/' + scope.row.id, null, resp => {
+        //eslint-disable-next-line no-console
+        console.log('roleId '+resp.data.data)
+        if (resp.data.code === 0) {
+          this.user.roleId = resp.data.data
         }
       })
+
+      this.dialogType = 'edit'
+      this.dialogVisible = true
+
+      //requestByClient(User, 'get', '/api/user/' + scope.row.id + '?clientId=' + clientId, null, resp => {
+      //  const respJson = resp.data
+      //  this.user.id = respJson.data.id
+      //  this.user.username = respJson.data.username
+      //  this.user.introduction = respJson.data.introduction
+      //  this.user.isEnabled = respJson.data.isEnabled
+      //  this.user.customizeInfo = JSON.parse(respJson.data.customizeInfo)
+        // eslint-disable-next-line no-console
+      //  console.log(this.user)
+      //  const { code } = respJson
+      //  if (code === 0) {
+      //    requestByClient(Auth, 'get', '/api/user/findUserRoleId/' + scope.row.id, null, resp => {
+      //       eslint-disable-next-line no-console
+      //      console.log('roleId '+resp.data.data)
+      //      if (resp.data.code === 0) {
+      //        this.user.roleId = resp.data.data
+      //        this.dialogType = 'edit'
+      //        this.dialogVisible = true
+      //      }
+      //    })
+      //  }
+      //})
     },
     handleDelete({ row }) {
       this.$confirm('确认要删除该用户?', '警告', {
@@ -573,14 +564,18 @@ export default {
         type: 'success'
       })
     },
-    async confirmData() {
+    confirmData() {
+      // eslint-disable-next-line no-console
+      console.log('add')
       const isEdit = this.dialogType === 'edit'
-      this.user.client = 'vea-admin'
+      this.user.client = 'user123456user'
       this.user.customizeInfo = JSON.stringify(this.user.customizeInfo)
       if (isEdit) {
-        requestByClient(User, 'put', '/api/user  ', this.user, resp => {
+        requestByClient(User, 'put', '/api/user', this.user, resp => {
           const respJson = resp.data
           const { code } = respJson
+          // eslint-disable-next-line no-console
+          console.log(respJson)
           if (code === 0) {
             if (this.user.roleId) {
               requestByClient(Auth, 'post', '/api/user/setUserRole', {
@@ -606,6 +601,8 @@ export default {
         requestByClient(Auth, 'post', '/api/user', this.user, resp => {
           const respJson = resp.data
           const { code } = respJson
+          // eslint-disable-next-line no-console
+          console.log(respJson)
           if (code === 0) {
             this.getList()
             this.showSuccess()
@@ -638,3 +635,26 @@ export default {
   }
 }
 </script>
+<style scoped>
+.el-table__header tr,
+.el-table__header th {
+  padding: 0;
+  height: 40px;
+  line-height: 50px;
+}
+.el-table__body tr,
+.el-table__body td {
+  padding: 0;
+  height: 40px;
+  line-height: 30px;
+}
+.el-pagination{
+  text-align: right;
+}
+.el-form{
+  text-align: left;
+}
+.dialog-footer{
+  margin-top: 0px;
+}
+</style>

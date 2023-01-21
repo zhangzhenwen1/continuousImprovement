@@ -405,6 +405,7 @@ export default {
     },
     submitImport() {
       // 上传数据
+      //TODO import the matrix into database
       requestByClient(supplierConsumer, 'POST', 'course/i', this.supportRatioMatrix, res => {
         if (res.data.succ) {
           this.$message({

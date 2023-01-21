@@ -1,5 +1,6 @@
 package com.gapache.cloud.auth.server.service;
 
+import com.gapache.cloud.auth.server.dao.entity.UserRoleEntity;
 import com.gapache.cloud.auth.server.model.UserDetailsImpl;
 import com.gapache.security.model.SetUserRoleDTO;
 import com.gapache.security.model.UserLoginDTO;
@@ -41,4 +42,5 @@ public interface UserService extends UserDetailsService {
     List<UserVO> findAllByPositionIdBetween(Long lowPositionId);
 
     UserVO findSuperior(Long userId);
+
 }

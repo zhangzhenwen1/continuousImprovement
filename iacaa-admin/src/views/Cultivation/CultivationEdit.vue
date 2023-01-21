@@ -464,6 +464,8 @@ export default {
         pageSize: this.pageSize,
         word: this.searchForm.word,
       },res => {
+        // eslint-disable-next-line no-console
+        console.log(res)
         if (res.data.succ) {
           this.tableData = res.data.data
           // this.total = res.data.data.total

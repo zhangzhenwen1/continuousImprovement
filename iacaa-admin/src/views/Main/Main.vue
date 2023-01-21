@@ -2,8 +2,8 @@
   <div style="background:gray;">
 
 
-        <div class="medium1">welcome ...</div>
-        <div class="medium">IACAA - 2.0</div>
+        <div class="medium1">宁波大学土木工程</div>
+        <div class="medium">本科人才培养质量评价系统</div>
 
   </div>
 </template>
@@ -28,7 +28,7 @@ export default {
   color: white;
   font-family: STFangsong;
   margin-top: 5%;
-  margin-left: 35%;
+  margin-left: 15%;
 }
 .el-carousel__item:nth-child(2n) {
   background:-webkit-linear-gradient(#5200cd, #8901d4);

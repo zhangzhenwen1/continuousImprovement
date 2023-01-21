@@ -10,13 +10,16 @@ import lombok.Getter;
 @Getter
 public enum SecurityError implements Error {
     //
-    LOGIN_FAIL(10403, "username or password wrong"),
+    LOGIN_FAIL(10403, "username or password wrong !"),
+    LOGIN_FAIL_2(10413, "password wrong"),
     ERROR_CODE(10503, "mode of authorization_code's code invalid"),
     CLIENT_ERROR(10504, "client auth error"),
     NOT_SUPPORT(10505, "not support"),
     CLIENT_EXISTED(10506, "client id was existed"),
+    CLIENT_NOT_EXISTED(10516, "client id was NOT existed"),
     USER_EXISTED(10507, "username was existed"),
     USER_CLIENT_RELATION_EXISTED(10508, "user client relation was existed"),
+    USER_CLIENT_RELATION_NOT_EXISTED(10518, "user client relation was NOT existed"),
     NEED_REFRESH_TOKEN(10509, "need refresh token"),
     REFRESH_TOKEN_EXPIRED(10510, "refresh token expired"),
     PLEASE_LOGIN(10511, "please login"),
@@ -34,7 +37,8 @@ public enum SecurityError implements Error {
     COMPANY_NOT_FOUND(10523, "company not found"),
     ROLE_PERMISSION_DENY(10524, "role permission deny"),
     POSITION_PERMISSION_DENY(10525, "position permission deny"),
-    CLIENT_NOT_FOUND(10526, "client not found");
+    CLIENT_NOT_FOUND(10526, "client not found"),
+    CustomerInfo_NOT_FOUND(10527, "CustomerInfo not found");
 
     SecurityError(Integer code, String error) {
         this.code = code;

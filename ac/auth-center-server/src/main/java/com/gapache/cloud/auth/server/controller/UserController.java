@@ -1,5 +1,6 @@
 package com.gapache.cloud.auth.server.controller;
 
+import com.gapache.cloud.auth.server.dao.entity.UserRoleEntity;
 import com.gapache.cloud.auth.server.service.UserService;
 import com.gapache.commons.model.JsonResult;
 import com.gapache.security.annotation.AuthResource;

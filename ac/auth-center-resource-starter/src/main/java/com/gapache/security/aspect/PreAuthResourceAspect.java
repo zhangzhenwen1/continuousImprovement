@@ -23,6 +23,7 @@ public class PreAuthResourceAspect {
 
     @Before("@annotation(authResource)")
     public void before(AuthResource authResource) {
+        log.warn("标记标记标记 authResource check start");
         AccessCard accessCard = AccessCardHolder.getContext();
         if (accessCard == null) {
             log.warn("accessCard is null");
@@ -32,15 +33,22 @@ public class PreAuthResourceAspect {
         if (accessCard.getUserId() != null && accessCard.getUserId() == 0) {
             return;
         }
+        log.warn("标记标记标记 校验权限 start");
         // 校验权限
         String fullScope = AuthResourceCache.checkFullScope(authResource);
         if (!accessCard.getAuthorities().contains(fullScope)) {
             throw new SecurityException(SecurityError.FORBIDDEN);
         }
+        log.warn("标记标记标记 校验用户是否已被禁用 start");
         // 校验用户是否已被禁用
-        Object isEnabled = accessCard.getCustomerInfo().get(AuthConstants.IS_ENABLED);
-        if (authResource.checkEnabled() && isEnabled != null && !(Boolean) isEnabled) {
-            throw new SecurityException(SecurityError.USER_DISABLED);
+        if (accessCard.getCustomerInfo()==null) {
+            throw new SecurityException(SecurityError.CustomerInfo_NOT_FOUND);
+        } else {
+            Object isEnabled = accessCard.getCustomerInfo().get(AuthConstants.IS_ENABLED);
+            if (authResource.checkEnabled() && isEnabled != null && !(Boolean) isEnabled) {
+                throw new SecurityException(SecurityError.USER_DISABLED);
+            }
+            log.warn("标记标记标记 authResource check END");
         }
     }
 }
